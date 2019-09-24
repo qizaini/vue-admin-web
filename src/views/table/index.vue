@@ -42,12 +42,12 @@
         </template>
       </el-table-column>
       <el-table-column  lang="cn" class-name="status-col" label="状态" width="110" align="center"
-                        :filters="[{ text: '备份', value: '备份' },
-                        { text: '运行', value: '备用' },
-                        { text: '错误', value: '错误' },
-                        { text: '异常', value: '异常' },
-                        { text: '升级', value: '升级' },
-                        { text: '停止', value: '停止' },
+                        :filters="[{ text: 'backups', value: '备用' },
+                        { text: 'running', value: '运行' },
+                        { text: 'warning', value: '警告' },
+                        { text: 'exception', value: '异常' },
+                        { text: 'update', value: '升级' },
+                        { text: 'stop', value: '停止' },
                         ]"
                         :filter-method="filterTag"
 
@@ -78,10 +78,18 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
           </el-button>
+          <el-button type="success" size="mini" @click="handleUpdate(row)">
+            Add
+          </el-button>
+          <el-button type="danger" size="mini" @click="handleUpdate(row)">
+            Export
+          </el-button>
         </template>
       </el-table-column>
 
     </el-table>
+
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
@@ -118,22 +126,35 @@
       </div>
     </el-dialog>
 
+    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
+      <el-table :data="pvData" border fit highlight-current-row style=" width: 100%">
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/table'
+import Pagination from '@/components/Pagination'
 
 export default {
+  components: { Pagination },
   filters: {
     statusFilter(status) {
+      // '运行running', '备用backups', '警告warning','停止stop','异常exception'，'升级update'
       const statusMap = {
         运行: 'success',
-        升级: 'gray',
-        异常: 'danger',
-        备份: '',
-        停止: 'info',
-        警告: 'warning'
+        update: 'primary',
+        exception: 'danger',
+        backups: 'plain',
+        stop: 'info',
+        warning: 'warning'
       }
       return statusMap[status]
     }
