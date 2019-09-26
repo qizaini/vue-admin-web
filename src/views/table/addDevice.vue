@@ -3,7 +3,7 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="激励器固件版本" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
+        </el-form-item><!--运营商-->
         <el-form-item label="运营商" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
