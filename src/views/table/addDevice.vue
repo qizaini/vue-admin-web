@@ -6,7 +6,7 @@
         </el-form-item>
         <el-form-item label="运营商" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
+        </el-form-item><!--working-->
         <el-form-item label="工作频点" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
