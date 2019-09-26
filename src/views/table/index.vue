@@ -4,16 +4,17 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.title" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.deployAdress" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
-          <el-select v-model="listQuery.importance" placeholder="" size="medium" clearable style="width: 170px" class="filter-item">
+          <el-select v-model="listQuery.status" placeholder="" size="medium" clearable style="width: 170px" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-col>
 
         <el-col :xs="24" :sm="24" :lg="12">
+
             <span class="demonstration">部署时间</span>&nbsp;
             <el-date-picker
               v-model="value2"
@@ -51,14 +52,14 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column align="center" label="序号" width="70" style="display: none">
+      <el-table-column v-if="" align="center" label="序号" width="70" ><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column label="部署地点" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.use_address }}</span>
+          <span>{{ scope.row.deployAdress }}</span>
         </template>
       </el-table-column>
       <el-table-column label="频点(MHz)" align="center">
@@ -74,14 +75,14 @@
       </el-table-column>
       <el-table-column label="业务模式" width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.form_code }}</span>
+          <span>{{ scope.row.businessModel }}</span>
         </template>
       </el-table-column>
       <!--<el-table-column align="center"  sortable prop="created_at" label="部署时间" width="200">-->
       <el-table-column align="center"  sortable prop="display_time" label="部署时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.deployTime }}</span>
         </template>
       </el-table-column>
       <el-table-column  lang="cn" class-name="status-col" label="状态" width="110" align="center"
@@ -136,16 +137,30 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="90px" style="width: 400px; margin-left:50px;">
+        <!--<el-form-item label="部署地点" prop="deployAdress">
+          <el-col :span="12">
+            <el-autocomplete
+              v-model="deployAdress"
+              :fetch-suggestions="querySearch"
+              @select="handleSelect"
+            ></el-autocomplete>
+          </el-col>
+        </el-form-item>-->
         <el-form-item label="部署地点" prop="deployAdress">
-          <el-select v-model="temp.deployAdress" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
+          <el-autocomplete style="width: 100%"
+            class="inline-input"
+            v-model="deployAdress"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          ></el-autocomplete>
         </el-form-item>
         <el-form-item label="部署时间" prop="deployTime">
-          <el-date-picker v-model="temp.deployTime" type="datetime" placeholder="Please pick a date" />
+          <el-date-picker v-model="temp.deployTime" type="datetime" placeholder="Please pick a date" style="width: 100%" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.status" class="filter-item" placeholder="Please select" style="width: 100%">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
@@ -185,10 +200,13 @@
 <script>
   import { fetchList, createArticle, updateArticle } from '@/api/article'
   import { getList } from '@/api/table'
-import Pagination from '@/components/Pagination'
+  import waves from '@/directive/waves'
+  import { parseTime } from '@/utils'
+  import Pagination from '@/components/Pagination'
 
 export default {
   components: { Pagination },
+  directives: { waves },
   filters: {
     statusFilter(status) {
       // '运行running', '备用backups', '警告warning','停止stop','异常exception'，'升级update'
@@ -205,6 +223,12 @@ export default {
   },
   data() {
     return {
+      restaurants: [
+          { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
+        ],
+      deployAdress: '',
       tableKey: 0,
       list: null,
       total: 0,
@@ -212,12 +236,13 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        frequency: "",
+        businessModel: '',
+        deployTime: new Date(),
+        power: '',
+        deployAdress: '',
+        status: ''
       },
-      importanceOptions: [1, 2, 3],
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       // statusOptions: ['update', 'backups', 'stop', 'running', 'exception', "warning"],
       statusOptions: ["运行", "升级", "异常", "备用", "停止", "警告"],
@@ -240,7 +265,7 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        deployAdress: [{ required: true, message: 'deployAdress is required', trigger: 'change' }],
+        deployAdress: [{ required: true, message: 'deployAdress is required', trigger: 'blur' }],
         deployTime: [{ type: 'date', required: true, message: 'deployTime is required', trigger: 'blur' }],
         power: [{ required: true, message: 'power is required', trigger: 'blur' }],
         status: [{ required: true, message: 'status is required', trigger: 'blur' }],
@@ -277,12 +302,39 @@ export default {
       },
       value1: '',
       value2: ''
-    }
+    };
   },
   created() {
     this.fetchData()
   },
   methods: {
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      console.log(restaurants);
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      console.log(results);
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
+      };
+    },
+ /*   loadAll() {
+      return [
+        { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+        { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+        { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
+      ];
+    },
+    handleSelect(item) {
+      console.log(item);
+    },
+  mounted() {
+    this.restaurants = this.loadAll();
+  },*/
+
     fetchData() {
       this.listLoading = true
       getList().then(response => {
@@ -301,6 +353,20 @@ export default {
         }, 1.5 * 1000)
         // this.fetchData()
       })
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter()
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -374,13 +440,37 @@ export default {
 
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
+      this.temp.deployTime = new Date(this.temp.deployTime)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-    }
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['部署地点', '部署时间', '功率', '业务模式', '频点', '状态']
+        const filterVal = ['deployAdress', 'deployTime', 'power', 'businessModel', 'status', 'frequency']
+        console.log(filterVal);
+        const data = this.formatJson(filterVal, this.list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: '资源列表'
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'deployTime') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    },
   }
 }
 </script>
