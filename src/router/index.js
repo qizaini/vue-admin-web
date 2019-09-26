@@ -78,6 +78,12 @@ export const constantRoutes = [
         name: 'Tree',
         component: () => import('@/views/table/addDevice'),
         meta: { title: '添加设备', icon: 'coupon-5-line' }
+      },
+      {
+        path: 'list',
+        name: 'list',
+        component: () => import('@/views/tab/index'),
+        meta: { title: '综合table', icon: 'coupon-5-line' }
       }
     ]
   },
