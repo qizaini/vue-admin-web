@@ -52,7 +52,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column v-if="" align="center" label="序号" width="70" ><!--v-if="false" 隐藏列-->
+      <el-table-column v-if="false" align="center" label="序号" width="70" ><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -78,7 +78,6 @@
           <span>{{ scope.row.businessModel }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column align="center"  sortable prop="created_at" label="部署时间" width="200">-->
       <el-table-column align="center"  sortable prop="display_time" label="部署时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
@@ -137,35 +136,7 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px" >
-        <!--<el-form-item label="部署地点" prop="deployAdress">
-          <el-col :span="12">
-            <el-autocomplete
-              v-model="deployAdress"
-              :fetch-suggestions="querySearch"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </el-col>
-        </el-form-item>-->
-
-        <!--<el-form-item label="部署地点" prop="deployAdress">
-          <el-autocomplete style="width: 100%"
-            class="inline-input"
-            v-model="deployAdress"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="false"
-            @select="handleSelect"
-          ></el-autocomplete>
-        </el-form-item>
-        <el-form-item label="部署时间" prop="deployTime">
-          <el-date-picker v-model="temp.deployTime" type="datetime" placeholder="Please pick a date" style="width: 100%" />
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select" style="width: 100%">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="功率" prop="power">
+        <!--<el-form-item label="功率" prop="power">
           <el-input v-model="temp.power" />
         </el-form-item>
         <el-form-item label="业务模式" prop="businessModel">
@@ -185,18 +156,37 @@
               <el-form-item label="输出频率" prop="universal">
                 <el-input v-model="temp.universal" style="width: 80%" />
               </el-form-item>
-              <el-form-item label="通道" prop="frequency">
-                <el-select v-model="temp.frequency" placeholder="请选择通道类型" style="width: 80%">
-                  <el-option label="通道0" value="shanghai"></el-option>
-                  <el-option label="通道1" value="shanghai"></el-option>
-                  <el-option label="通道2" value="shanghai"></el-option>
-                  <el-option label="通道3" value="shanghai"></el-option>
-                  <el-option label="通道4" value="shanghai"></el-option>
-                </el-select>
-              </el-form-item>
+            <el-form-item label="部署地点" prop="deployAdress">
+              <el-autocomplete style="width: 80%"
+                               class="inline-input"
+                               v-model="deployAdress"
+                               :fetch-suggestions="querySearch"
+                               placeholder="请输入内容"
+                               :trigger-on-focus="false"
+                               @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+            <el-form-item label="部署时间" prop="deployTime">
+              <el-date-picker v-model="temp.deployTime" type="datetime" placeholder="Please pick a date" style="width: 80%" />
+            </el-form-item>
+
           </el-col>
 
           <el-col :xs="24" :sm="24" :lg="12">
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+                <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="通道" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择通道类型">
+                <el-option label="通道0" value="shanghai"></el-option>
+                <el-option label="通道1" value="shanghai"></el-option>
+                <el-option label="通道2" value="shanghai"></el-option>
+                <el-option label="通道3" value="shanghai"></el-option>
+                <el-option label="通道4" value="shanghai"></el-option>
+              </el-select>
+            </el-form-item>
               <el-form-item label="频谱模式" prop="frequency">
                 <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
                   <el-option label="模式1" value="shanghai"></el-option>
