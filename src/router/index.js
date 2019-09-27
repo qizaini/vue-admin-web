@@ -60,7 +60,7 @@ export const constantRoutes = [
     }]
   },
 
-  {
+  /*{
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -86,10 +86,23 @@ export const constantRoutes = [
         meta: { title: '综合table', icon: 'coupon-5-line' }
       }
     ]
+  },*/
+
+  {
+    path: '/example',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/table/index'),
+        meta: { title: '资源监控', icon: 'example' }
+      }
+    ]
   },
 
   {
-    path: '/form',
+    path: '/formApply',
     component: Layout,
     children: [
       {
@@ -132,13 +145,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: '产品中心', icon: 'home page' },
+    meta: { title: '产品服务', icon: 'home page' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: '广播RDK', icon: 'table' }
+        meta: { title: '广播RTK', icon: 'table' }
       },
       {
         path: 'tree',
@@ -150,7 +163,7 @@ export const constantRoutes = [
         path: 'tree2',
         name: 'Tree2',
         component: () => import('@/views/table/index'),
-        meta: { title: '互联网位置监控', icon: 'price-tag-2-fill' }
+        meta: { title: '物联网位置监控', icon: 'price-tag-2-fill' }
       },
       {
         path: 'table',
@@ -168,65 +181,20 @@ export const constantRoutes = [
         path: 'tree2',
         name: 'Tree2',
         component: () => import('@/views/table/index'),
-        meta: { title: '组件xxx网', icon: 'example' }
+        meta: { title: '基合COS网服务', icon: 'example' }
       }
     ]
   },
 
   {
-    path: '/nested',
+    path: '/formAdress',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: '位置服务',
-      icon: 'address'
-    },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: '位置服务', icon: 'address' }
       }
     ]
   },

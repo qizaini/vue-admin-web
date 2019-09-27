@@ -1,7 +1,7 @@
 <template>
     <div>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="激励器固件版本" prop="name">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+        <el-form-item label="激励器固件版本" prop="name" >
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="运营商" prop="name">
@@ -15,7 +15,7 @@
         </el-form-item>
 
         <el-form-item label="频谱模式" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择差分类型">
+          <el-select v-model="ruleForm.region" placeholder="请选择频谱模式">
             <el-option label="模式1" value="shanghai"></el-option>
             <el-option label="模式2" value="beijing"></el-option>
             <el-option label="模式3" value="beijing"></el-option>
@@ -24,14 +24,14 @@
         </el-form-item>
 
         <el-form-item label="数据格式" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择差分类型">
+          <el-select v-model="ruleForm.region" placeholder="请选择数据格式">
             <el-option label="RTCM23_GPS" value="shanghai"></el-option>
             <el-option label="RTCM32_GGB" value="beijing"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="通道" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择差分类型">
+          <el-select v-model="ruleForm.region" placeholder="请选择通道类型">
             <el-option label="通道0" value="shanghai"></el-option>
             <el-option label="通道1" value="shanghai"></el-option>
             <el-option label="通道2" value="shanghai"></el-option>
