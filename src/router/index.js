@@ -169,7 +169,7 @@ export const constantRoutes = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: '基合静态毫米', icon: 'dashboard' }
+        meta: { title: '基合静态毫米', icon: 'coupon-5-line' }
       },
       {
         path: 'tree',
