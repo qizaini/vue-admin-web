@@ -148,21 +148,21 @@ export const constantRoutes = [
     meta: { title: '产品服务', icon: 'home page' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
+        path: 'broadcast',
+        name: 'broadcast',
+        component: () => import('@/views/form/broadcast'),
         meta: { title: '广播RTK', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/table/index'),
-        meta: { title: '网络RDK', icon: 'tree' }
+        path: 'network',
+        name: 'network',
+        component: () => import('@/views/form/network'),
+        meta: { title: '网络RTK', icon: 'tree' }
       },
       {
-        path: 'tree2',
-        name: 'Tree2',
-        component: () => import('@/views/table/index'),
+        path: 'monitoring',
+        name: 'monitoring',
+        component: () => import('@/views/form/monitoring'),
         meta: { title: '物联网位置监控', icon: 'price-tag-2-fill' }
       },
       {
@@ -181,7 +181,7 @@ export const constantRoutes = [
         path: 'tree2',
         name: 'Tree2',
         component: () => import('@/views/table/index'),
-        meta: { title: '基合COS网服务', icon: 'example' }
+        meta: { title: '基合CORS网服务', icon: 'example' }
       }
     ]
   },
