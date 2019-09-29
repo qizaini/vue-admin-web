@@ -179,8 +179,18 @@ h3.title {
 .doc-section{
   margin: 10px 30px;
   background: #dcffd8;
+  border-radius: 20px;
 }
-
+.doc-section .title{
+  line-height: 65px;
+}
+.x-container-fluid{
+  background: #d5ebc6;
+  height: 60px;
+  text-align: center;
+  line-height: 63px;
+  margin: -180px 0 0 0;
+}
 
 
 
