@@ -27,15 +27,9 @@
               end-placeholder="结束日期"
               :picker-options="pickerOptions">
             </el-date-picker>&nbsp;&nbsp;&nbsp;
-            <el-button v-waves class="filter-item" size="medium"type="primary" icon="el-icon-search" @click="handleFilter">
-              搜索
-            </el-button>
-            <el-button class="filter-item" size="medium" style="margin-left: 10px;size: landscape" type="primary" icon="el-icon-edit" @click="handleCreate">
-              添加
-            </el-button>
-            <el-button v-waves :loading="downloadLoading" size="medium" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-              导出
-            </el-button>
+          <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-edit" @click="dialogFormVisible = true">添加</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
         </el-col>
 
       </el-row>
@@ -507,7 +501,7 @@ export default {
       })
     },
 
-    handleUpdate(row) {
+   /* handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.deployTime = new Date(this.temp.deployTime)
       this.dialogStatus = 'update'
@@ -515,7 +509,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-    },
+    },*/
 
     handleDownload() {
       this.downloadLoading = true
