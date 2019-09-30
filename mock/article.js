@@ -9,7 +9,7 @@ const image_uri = 'https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
-    timestamp: +Mock.Random.date('T'),
+    deployTime: +Mock.Random.date('T'),
     author: '@first',
     reviewer: '@first',
     title: '@title(5, 10)',

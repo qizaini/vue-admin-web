@@ -4,7 +4,7 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.deployAdress" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.deployAddress" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
@@ -53,12 +53,12 @@
       </el-table-column>
       <el-table-column label="部署地点" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.deployAdress }}</span>
+          <span>{{ scope.row.deployAddress }}</span>
         </template>
       </el-table-column>
       <el-table-column label="频点(MHz)" align="center">
         <template slot-scope="scope">
-          {{ scope.row.frequency }}
+          {{ scope.row.workingFrequency }}
         </template>
       </el-table-column>
 
@@ -129,18 +129,18 @@
     <!--查看详情-->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
-        <el-table-column property="date" label="控件版本"></el-table-column>
-        <el-table-column property="name" label="运营商"></el-table-column>
-        <el-table-column property="address" label="工作频点"></el-table-column>
-        <el-table-column property="date" label="输出频率"></el-table-column>
-        <el-table-column property="name" label="部署地点"></el-table-column>
-        <el-table-column property="address" label="部署时间"></el-table-column>
-        <el-table-column property="name" label="通道"></el-table-column>
-        <el-table-column property="address" label="频谱模式"></el-table-column>
-        <el-table-column property="address" label="数据格式"></el-table-column>
-        <el-table-column property="date" label="复用类型"></el-table-column>
-        <el-table-column property="name" label="通道"></el-table-column>
-        <el-table-column property="date" label="状态"></el-table-column>
+        <el-table-column property="power" label="控件版本"></el-table-column>
+        <el-table-column property="businessModel" label="运营商"></el-table-column>
+        <el-table-column property="businessModel" label="工作频点"></el-table-column>
+        <el-table-column property="outputFrequency" label="输出频率"></el-table-column>
+        <el-table-column property="deployAddress" label="部署地点"></el-table-column>
+        <el-table-column property="deployTime" label="部署时间"></el-table-column>
+        <el-table-column property="gallery" label="通道"></el-table-column>
+        <el-table-column property="spectrumPattern" label="频谱模式"></el-table-column>
+        <el-table-column property="dataFormat" label="数据格式"></el-table-column>
+        <el-table-column property="reuseType" label="复用类型"></el-table-column>
+        <el-table-column property="differentialData" label="差分数据"></el-table-column>
+        <el-table-column property="status" label="状态"></el-table-column>
       </el-table>
     </el-dialog>
 
@@ -149,22 +149,22 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px" >
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="11">
-            <el-form-item label="控件版本" prop="universal">
+            <el-form-item label="控件版本" prop="power">
               <el-input v-model="temp.power" style="width: 80%"/>
             </el-form-item>
-            <el-form-item label="运营商" prop="universal">
+            <el-form-item label="运营商" prop="power">
               <el-input v-model="temp.businessModel" style="width: 80%" />
             </el-form-item>
-            <el-form-item label="工作频点" prop="universal">
-              <el-input v-model="temp.universal" style="width: 80%" />
+            <el-form-item label="工作频点" prop="power">
+              <el-input v-model="temp.workingFrequency" style="width: 80%" />
             </el-form-item>
-            <el-form-item label="输出频率" prop="universal">
-              <el-input v-model="temp.universal" style="width: 80%" />
+            <el-form-item label="输出频率" prop="power">
+              <el-input v-model="temp.outputFrequency" style="width: 80%" />
             </el-form-item>
-            <el-form-item label="部署地点" prop="deployAdress">
+            <el-form-item label="部署地点" prop="power">
               <el-autocomplete style="width: 80%"
                                class="inline-input"
-                               v-model="deployAdress"
+                               v-model="deployAddress"
                                :fetch-suggestions="querySearch"
                                placeholder="请输入内容"
                                :trigger-on-focus="false"
@@ -178,13 +178,13 @@
           </el-col>
 
           <el-col :xs="24" :sm="24" :lg="12">
-            <el-form-item label="状态" prop="status">
+            <el-form-item label="状态" prop="power">
               <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
                 <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
               </el-select>
             </el-form-item>
-            <el-form-item label="通道" prop="frequency">
-              <el-select v-model="temp.frequency" placeholder="请选择通道类型">
+            <el-form-item label="通道" prop="power">
+              <el-select v-model="temp.gallery" placeholder="请选择通道类型">
                 <el-option label="通道0" value="shanghai"></el-option>
                 <el-option label="通道1" value="shanghai"></el-option>
                 <el-option label="通道2" value="shanghai"></el-option>
@@ -192,28 +192,28 @@
                 <el-option label="通道4" value="shanghai"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="频谱模式" prop="frequency">
-              <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
+            <el-form-item label="频谱模式" prop="power">
+              <el-select v-model="temp.spectrumPattern" placeholder="请选择频谱模式">
                 <el-option label="模式1" value="shanghai"></el-option>
                 <el-option label="模式2" value="beijing"></el-option>
                 <el-option label="模式3" value="beijing"></el-option>
                 <el-option label="模式4" value="beijing"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="数据格式" prop="frequency">
-              <el-select v-model="temp.frequency" placeholder="请选择数据格式">
+            <el-form-item label="数据格式" prop="power">
+              <el-select v-model="temp.dataFormat" placeholder="请选择数据格式">
                 <el-option label="RTCM23_GPS" value="shanghai"></el-option>
                 <el-option label="RTCM32_GGB" value="beijing"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="差分类型" prop="frequency">
-              <el-select v-model="temp.frequency" placeholder="请选择差分类型">
+            <el-form-item label="差分类型" prop="power">
+              <el-select v-model="temp.differentialData" placeholder="请选择差分类型">
                 <el-option label="RTK" value="shanghai"></el-option>
                 <el-option label="RTD" value="beijing"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="复用类型" prop="frequency">
-              <el-select v-model="temp.frequency" placeholder="请选择复用类型">
+            <el-form-item label="复用类型" prop="power">
+              <el-select v-model="temp.reuseType" placeholder="请选择复用类型">
                 <el-option label="CDMA" value="shanghai"></el-option>
                 <el-option label="TDMA" value="beijing"></el-option>
               </el-select>
@@ -277,7 +277,7 @@ export default {
           { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
           { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
         ],
-      deployAdress: '',
+      deployAddress: '',
       dialogVisible: false,
       tableKey: 0,
       list: null,
@@ -286,11 +286,11 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        frequency: "",
+        workingFrequency: "",
         businessModel: '',
         deployTime: new Date(),
         power: '',
-        deployAdress: '',
+        deployAddress: '',
         status: ''
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -299,11 +299,12 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        frequency: "",
+        workingFrequency: "",
+        outputFrequency: "",
         businessModel: '',
         deployTime: new Date(),
         power: '',
-        deployAdress: '',
+        deployAddress: '',
         status: ''
       },
       dialogFormVisible: false,
@@ -327,13 +328,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        deployAdress: [{ required: true, message: 'deployAdress is required', trigger: 'blur' }],
         deployTime: [{ type: 'date', required: true, message: 'deployTime is required', trigger: 'blur' }],
-        power: [{ required: true, message: 'power is required', trigger: 'blur' }],
+        power: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
         status: [{ required: true, message: 'status is required', trigger: 'blur' }],
-        businessModel: [{ required: true, message: 'businessModel is required', trigger: 'blur'}],
-        frequency: [{ required: true, message: '请选择活动区域', trigger: 'change' }],
-        universal: [{ required: true, message: '必填项', trigger: 'blur' }]
+        businessModel: [{ required: true, message: 'businessModel is required', trigger: 'blur'}]
       },
       downloadLoading: false,
       pickerOptions: {
@@ -452,6 +450,7 @@ export default {
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
+        console.log(this.$refs['dataForm']);
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
@@ -515,7 +514,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['部署地点', '部署时间', '功率', '业务模式', '频点', '状态']
-        const filterVal = ['deployAdress', 'deployTime', 'power', 'businessModel', 'status', 'frequency']
+        const filterVal = ['deployAddress', 'deployTime', 'power', 'businessModel', 'workingFrequency', 'status']
         console.log(filterVal);
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel({
