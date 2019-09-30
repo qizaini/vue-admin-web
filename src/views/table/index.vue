@@ -118,15 +118,12 @@
 
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button type="danger" size="mini">
+          <el-button type="danger" size="mini" style="display: none">
             删除
           </el-button>
-          <el-button type="warning" size="mini">
-            导出
-          </el-button>
+          <el-button type="primary" size="mini" @click="dialogFormVisible = true">编辑</el-button>
+          <el-button type="success" size="mini" @click="dialogTableVisible = true">查看详情</el-button>
+
         </template>
       </el-table-column>
 
@@ -134,28 +131,24 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+
+    <!--查看详情-->
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px" >
-        <!--<el-form-item label="功率" prop="power">
-          <el-input v-model="temp.power" />
-        </el-form-item>
-        <el-form-item label="业务模式" prop="businessModel">
-          <el-input v-model="temp.businessModel" />
-        </el-form-item>-->
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="11">
-              <el-form-item label="控件版本" prop="universal">
-                <el-input v-model="temp.power" style="width: 80%"/>
-              </el-form-item>
-              <el-form-item label="运营商" prop="universal">
-                <el-input v-model="temp.businessModel" style="width: 80%" />
-              </el-form-item>
-              <el-form-item label="工作频点" prop="universal">
-                <el-input v-model="temp.universal" style="width: 80%" />
-              </el-form-item>
-              <el-form-item label="输出频率" prop="universal">
-                <el-input v-model="temp.universal" style="width: 80%" />
-              </el-form-item>
+            <el-form-item label="控件版本" prop="universal">
+              <el-input v-model="temp.power" style="width: 80%"/>
+            </el-form-item>
+            <el-form-item label="运营商" prop="universal">
+              <el-input v-model="temp.businessModel" style="width: 80%" />
+            </el-form-item>
+            <el-form-item label="工作频点" prop="universal">
+              <el-input v-model="temp.universal" style="width: 80%" />
+            </el-form-item>
+            <el-form-item label="输出频率" prop="universal">
+              <el-input v-model="temp.universal" style="width: 80%" />
+            </el-form-item>
             <el-form-item label="部署地点" prop="deployAdress">
               <el-autocomplete style="width: 80%"
                                class="inline-input"
@@ -187,40 +180,127 @@
                 <el-option label="通道4" value="shanghai"></el-option>
               </el-select>
             </el-form-item>
-              <el-form-item label="频谱模式" prop="frequency">
-                <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
-                  <el-option label="模式1" value="shanghai"></el-option>
-                  <el-option label="模式2" value="beijing"></el-option>
-                  <el-option label="模式3" value="beijing"></el-option>
-                  <el-option label="模式4" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="数据格式" prop="frequency">
-                <el-select v-model="temp.frequency" placeholder="请选择数据格式">
-                  <el-option label="RTCM23_GPS" value="shanghai"></el-option>
-                  <el-option label="RTCM32_GGB" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="差分类型" prop="frequency">
-                <el-select v-model="temp.frequency" placeholder="请选择差分类型">
-                  <el-option label="RTK" value="shanghai"></el-option>
-                  <el-option label="RTD" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="复用类型" prop="frequency">
-                <el-select v-model="temp.frequency" placeholder="请选择复用类型">
-                  <el-option label="CDMA" value="shanghai"></el-option>
-                  <el-option label="TDMA" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="频谱模式" prop="frequency">
-                <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
-                  <el-option label="模式1" value="shanghai"></el-option>
-                  <el-option label="模式2" value="beijing"></el-option>
-                  <el-option label="模式3" value="beijing"></el-option>
-                  <el-option label="模式4" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
+            <el-form-item label="频谱模式" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
+                <el-option label="模式1" value="shanghai"></el-option>
+                <el-option label="模式2" value="beijing"></el-option>
+                <el-option label="模式3" value="beijing"></el-option>
+                <el-option label="模式4" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="数据格式" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择数据格式">
+                <el-option label="RTCM23_GPS" value="shanghai"></el-option>
+                <el-option label="RTCM32_GGB" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="差分类型" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择差分类型">
+                <el-option label="RTK" value="shanghai"></el-option>
+                <el-option label="RTD" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="复用类型" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择复用类型">
+                <el-option label="CDMA" value="shanghai"></el-option>
+                <el-option label="TDMA" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="频谱模式" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
+                <el-option label="模式1" value="shanghai"></el-option>
+                <el-option label="模式2" value="beijing"></el-option>
+                <el-option label="模式3" value="beijing"></el-option>
+                <el-option label="模式4" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+
+    <!--编辑-->
+    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px" >
+        <el-row :gutter="32">
+          <el-col :xs="24" :sm="24" :lg="11">
+            <el-form-item label="控件版本" prop="universal">
+              <el-input v-model="temp.power" style="width: 80%"/>
+            </el-form-item>
+            <el-form-item label="运营商" prop="universal">
+              <el-input v-model="temp.businessModel" style="width: 80%" />
+            </el-form-item>
+            <el-form-item label="工作频点" prop="universal">
+              <el-input v-model="temp.universal" style="width: 80%" />
+            </el-form-item>
+            <el-form-item label="输出频率" prop="universal">
+              <el-input v-model="temp.universal" style="width: 80%" />
+            </el-form-item>
+            <el-form-item label="部署地点" prop="deployAdress">
+              <el-autocomplete style="width: 80%"
+                               class="inline-input"
+                               v-model="deployAdress"
+                               :fetch-suggestions="querySearch"
+                               placeholder="请输入内容"
+                               :trigger-on-focus="false"
+                               @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+            <el-form-item label="部署时间" prop="deployTime">
+              <el-date-picker v-model="temp.deployTime" type="datetime" placeholder="Please pick a date" style="width: 80%" />
+            </el-form-item>
+
+          </el-col>
+
+          <el-col :xs="24" :sm="24" :lg="12">
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+                <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="通道" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择通道类型">
+                <el-option label="通道0" value="shanghai"></el-option>
+                <el-option label="通道1" value="shanghai"></el-option>
+                <el-option label="通道2" value="shanghai"></el-option>
+                <el-option label="通道3" value="shanghai"></el-option>
+                <el-option label="通道4" value="shanghai"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="频谱模式" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
+                <el-option label="模式1" value="shanghai"></el-option>
+                <el-option label="模式2" value="beijing"></el-option>
+                <el-option label="模式3" value="beijing"></el-option>
+                <el-option label="模式4" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="数据格式" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择数据格式">
+                <el-option label="RTCM23_GPS" value="shanghai"></el-option>
+                <el-option label="RTCM32_GGB" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="差分类型" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择差分类型">
+                <el-option label="RTK" value="shanghai"></el-option>
+                <el-option label="RTD" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="复用类型" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择复用类型">
+                <el-option label="CDMA" value="shanghai"></el-option>
+                <el-option label="TDMA" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="频谱模式" prop="frequency">
+              <el-select v-model="temp.frequency" placeholder="请选择频谱模式">
+                <el-option label="模式1" value="shanghai"></el-option>
+                <el-option label="模式2" value="beijing"></el-option>
+                <el-option label="模式3" value="beijing"></el-option>
+                <el-option label="模式4" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -233,6 +313,7 @@
         </el-button>
       </div>
     </el-dialog>
+
 
     <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
       <el-table :data="pvData" border fit highlight-current-row style=" width: 100%">
@@ -279,6 +360,7 @@ export default {
           { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
         ],
       deployAdress: '',
+      dialogVisible: false,
       tableKey: 0,
       list: null,
       total: 0,
@@ -307,11 +389,23 @@ export default {
         status: ''
       },
       dialogFormVisible: false,
-      dialogStatus: '',
+      dialogTableVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+     /* dialogStatus: '',
       textMap: {
         update: '编辑',
-        create: '添加'
-      },
+        create: '添加',
+        detail: '查看详情'
+      },*/
       dialogPvVisible: false,
       pvData: [],
       rules: {
@@ -445,7 +539,7 @@ export default {
           this.temp.author = 'vue-element-admin'
           createArticle(this.temp).then(() => {
             this.list.unshift(this.temp)
-            this.dialogFormVisible = false
+            this.dialogFormVisible = f
             this.$notify({
               title: 'Success',
               message: 'Created Successfully',
@@ -498,6 +592,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
