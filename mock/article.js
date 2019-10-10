@@ -6,7 +6,7 @@ const count = 100
 const baseContent = '<p>I am testing data, I am testing data.</p><p><img src="https://wpimg.wallstcn.com/4c69009c-0fd4-4153-b112-6cb53d1cf943"></p>'
 const image_uri = 'https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70b3'
 
-for (let i = 0; i < count; i++) {
+/*for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
     deployTime: +Mock.Random.date('T'),
@@ -25,10 +25,36 @@ for (let i = 0; i < count; i++) {
     image_uri,
     platforms: ['a-platform']
   }))
-}
+}*/
 
 export default [
   {
+    url: '/article/list',
+    type: 'get',
+    response: config => {
+      const { location, avgPower, freq, businessModel, txState, sort } = config.query
+
+      let mockList = List.filter(item => {
+        if (location && item.location !== +location) return false
+        if (avgPower && item.avgPower !== avgPower) return false
+        if (freq && item.freq.indexOf(freq) < 0) return false
+        return true
+      })
+
+      if (sort === '-id') {
+        mockList = mockList.reverse()
+      }
+
+      return {
+        code: 20000,
+        data: {
+          total: mockList.length
+        }
+      }
+    }
+  },
+
+  /*{
     url: '/article/list',
     type: 'get',
     response: config => {
@@ -56,6 +82,7 @@ export default [
       }
     }
   },
+*/
 
   {
     url: '/article/detail',

@@ -28,6 +28,10 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
+// 通过环境变量来判断是否需要加载启用
+if (process.env.NODE_ENV === 'development') {
+  mockXHR() // simulation data
+}
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 

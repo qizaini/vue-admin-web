@@ -46,39 +46,39 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column v-if="false" align="center" label="序号" width="70" ><!--v-if="false" 隐藏列-->
+      <el-table-column v-if="" align="center" label="序号" width="70" ><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="部署地点" align="center">
+      <el-table-column prop="location" label="部署地点" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.deployAddress }}</span>
+          <span>{{ scope.row.location }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="频点(MHz)" align="center">
+      <el-table-column prop="avgPower" label="频点(MHz)" align="center">
         <template slot-scope="scope">
-          {{ scope.row.workingFrequency }}
+          {{ scope.row.avgPower }}
         </template>
       </el-table-column>
 
-      <el-table-column label="功率(w)" width="110" align="center">
+      <el-table-column prop="freq" label="功率(w)" width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.power }}</span>
+          <span>{{ scope.row.freq }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="业务模式" width="110" align="center">
+      <el-table-column prop="businessModel" label="业务模式" width="110" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.businessModel }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center"  sortable prop="display_time" label="部署时间" width="200">
+      <el-table-column prop="updateTime" align="center"  sortable label="部署时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.deployTime }}</span>
+          <span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column  lang="cn" class-name="status-col" label="状态" width="110" align="center"
+      <el-table-column prop="txState"  lang="cn" class-name="status-col" label="状态" width="110" align="center"
                         :filters="[{ text: '运行', value: '运行' },
                         { text: '升级', value: '升级' },
                         { text: '异常', value: '异常' },
@@ -90,7 +90,7 @@
 
       >
         <template slot-scope="scope">
-          <el-tag   effect="dark" :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          <el-tag   effect="dark" :type="scope.row.status | statusFilter">{{ scope.row.txState }}</el-tag>
         </template>
       </el-table-column>
 
@@ -123,7 +123,7 @@
 
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
 
 
     <!--查看详情-->
@@ -131,16 +131,16 @@
       <el-table :data="gridData">
         <el-table-column property="power" label="控件版本"></el-table-column>
         <el-table-column property="businessModel" label="运营商"></el-table-column>
-        <el-table-column property="businessModel" label="工作频点"></el-table-column>
-        <el-table-column property="outputFrequency" label="输出频率"></el-table-column>
-        <el-table-column property="deployAddress" label="部署地点"></el-table-column>
-        <el-table-column property="deployTime" label="部署时间"></el-table-column>
+        <el-table-column property="businessModel" label="工作频点"></el-table-column><!--avgPower-->
+        <el-table-column property="outputFrequency" label="输出频率"></el-table-column><!--freq-->
+        <el-table-column property="deployAddress" label="部署地点"></el-table-column><!--location-->
+        <el-table-column property="updateTime" label="部署时间"></el-table-column>
         <el-table-column property="gallery" label="通道"></el-table-column>
-        <el-table-column property="spectrumPattern" label="频谱模式"></el-table-column>
+        <el-table-column property="spectrumPattern" label="频谱模式"></el-table-column><!--SpecMode-->
         <el-table-column property="dataFormat" label="数据格式"></el-table-column>
         <el-table-column property="reuseType" label="复用类型"></el-table-column>
         <el-table-column property="differentialData" label="差分数据"></el-table-column>
-        <el-table-column property="status" label="状态"></el-table-column>
+        <el-table-column property="status" label="状态"></el-table-column><!--txState-->
       </el-table>
     </el-dialog>
 
@@ -171,8 +171,8 @@
                                @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
-            <el-form-item label="部署时间" prop="deployTime">
-              <el-date-picker v-model="temp.deployTime" type="datetime" placeholder="Please pick a date" style="width: 80%" />
+            <el-form-item label="部署时间" prop="updateTime">
+              <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="Please pick a date" style="width: 80%" />
             </el-form-item>
 
           </el-col>
@@ -248,10 +248,11 @@
 
 <script>
   import { fetchList, createArticle, updateArticle } from '@/api/article'
-  import { getList } from '@/api/table'
   import waves from '@/directive/waves'
+  import getList from '@/api/table'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
+  import axios from 'axios'
 
 export default {
   components: { Pagination },
@@ -280,18 +281,18 @@ export default {
       deployAddress: '',
       dialogVisible: false,
       tableKey: 0,
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 20,
-        workingFrequency: "",
+        location : "",
+        avgPower : "",
+        freq : "",
         businessModel: '',
-        deployTime: new Date(),
-        power: '',
-        deployAddress: '',
-        status: ''
+        txState : "",
+        updateTime: new Date(),
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       // statusOptions: ['update', 'backups', 'stop', 'running', 'exception', "warning"],
@@ -299,13 +300,12 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        workingFrequency: "",
-        outputFrequency: "",
+        location : "",
+        avgPower : "",
+        freq : "",
         businessModel: '',
-        deployTime: new Date(),
-        power: '',
-        deployAddress: '',
-        status: ''
+        txState : "",
+        updateTime: new Date()
       },
       dialogFormVisible: false,
       dialogTableVisible: false,
@@ -328,7 +328,7 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        deployTime: [{ type: 'date', required: true, message: 'deployTime is required', trigger: 'blur' }],
+        updateTime: [{ type: 'date', required: true, message: 'updateTime is required', trigger: 'blur' }],
         power: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
         status: [{ required: true, message: 'status is required', trigger: 'blur' }],
         businessModel: [{ required: true, message: 'businessModel is required', trigger: 'blur'}]
@@ -366,9 +366,47 @@ export default {
     };
   },
   created() {
-    this.fetchData()
+    this.getList()
+    // this.fetchData();
+  },
+  mounted() {
+
   },
   methods: {
+    txList(){
+      let that = this;
+      axios.get('v1/device')
+        .then(function (res) {
+          console.log(res);
+          that.list = res.data
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    getList() {
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
+        this.list = response.result
+        this.total = response.result.length
+        console.log(this.list, this.total)
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+
+    },
+    fetchData() {
+      this.listLoading = true
+      getList().then(response => {
+        console.table(response.result+"--------------")
+        this.list = response.data.items
+        this.listLoading = false
+      })
+    },
+
     querySearch(queryString, cb) {
       var restaurants = this.restaurants;
       console.log(restaurants);
@@ -396,25 +434,6 @@ export default {
     this.restaurants = this.loadAll();
   },*/
 
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
-    },
-    getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-        // this.fetchData()
-      })
-    },
     sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
@@ -430,7 +449,7 @@ export default {
       this.handleFilter()
     },
     handleFilter() {
-      this.listQuery.page = 1
+      // this.listQuery.page = 1
       this.getList()
     },
     //状态筛选
@@ -440,12 +459,12 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        importance: "",
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+        location : "",
+        avgPower : "",
+        freq : "",
+        businessModel: '',
+        txState : "",
+        updateTime: new Date()
       }
     },
     createData() {
@@ -502,7 +521,7 @@ export default {
 
    /* handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.deployTime = new Date(this.temp.deployTime)
+      this.temp.updateTime = new Date(this.temp.updateTime)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -514,7 +533,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['部署地点', '部署时间', '功率', '业务模式', '频点', '状态']
-        const filterVal = ['deployAddress', 'deployTime', 'power', 'businessModel', 'workingFrequency', 'status']
+        const filterVal = ['deployAddress', 'updateTime', 'power', 'businessModel', 'workingFrequency', 'status']
         console.log(filterVal);
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel({
@@ -527,7 +546,7 @@ export default {
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'deployTime') {
+        if (j === 'updateTime') {
           return parseTime(v[j])
         } else {
           return v[j]

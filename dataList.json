@@ -1,0 +1,8 @@
+{
+  "location": "str",
+  "avgPower": 0,
+  "freq": 0,
+  "businessModel": "str",
+  "time": 0,
+  "txState": 0
+}
