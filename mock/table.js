@@ -4,7 +4,7 @@ const data = Mock.mock({
   'items|30': [{
     id: '@id',
     title: '@sentence(10, 20)',
-    'status|1': ['异常', '升级', '运行','警告', '停止', '备份'],
+    'status|1': ['异常', '升级', '运行', '警告', '停止', '备份'],
     author: 'name',
     display_time: '@datetime',
     pageviews: '@integer(300, 5000)'

@@ -3,12 +3,11 @@
 
     <!-- 地图显示 -->
     <div class="chart-wrapper">
-      <cn-map-chart/>
+      <cn-map-chart />
     </div>
 
     <!-- 资源中心总体显示卡片 -->
     <panel-group @handleSetBarChartData="handleSetBarChartData" />
-
 
     <!--<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
@@ -30,7 +29,6 @@
       </el-col>
     </el-row>
 
-
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="9">
         <div class="chart-wrapper">
@@ -50,7 +48,7 @@
     </el-row>
 
     <!--<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->
-      <!--<line-chart :chart-data="lineChartData" />-->
+    <!--<line-chart :chart-data="lineChartData" />-->
     <!--</el-row>-->
 
   </div>

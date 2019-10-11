@@ -4,26 +4,23 @@
     <el-drawer title="激励器信息" :visible.sync="drawer" :direction="direction" size="50%">
 
       <el-table :data="gridData">
-        <el-table-column property="date" label="日期" width="150"></el-table-column>
-        <el-table-column property="name" label="姓名" width="200"></el-table-column>
-        <el-table-column property="address" label="地址"></el-table-column>
+        <el-table-column property="date" label="日期" width="150" />
+        <el-table-column property="name" label="姓名" width="200" />
+        <el-table-column property="address" label="地址" />
 
       </el-table>
     </el-drawer>
 
     <!--<el-button @click=openAlert() type="primary" style="margin-left: 16px; position: absolute;top: 5px;left: 50px;text-align: center; ">-->
-      <!--点击-->
+    <!--点击-->
     <!--</el-button>-->
 
     <!--<el-button @click=openAlert() type="pirmary" plain class="forward" style="margin: 0 0 0 20px; position: absolute;top: 5px;left: 50px;">返回</el-button>-->
-    <div :style="{height:'800px',width:'100%'}" ref="myEchart">
-
-    </div>
+    <div ref="myEchart" :style="{height:'800px',width:'100%'}" />
 
   </div>
 
 </template>
-
 
 <script>
 
@@ -67,20 +64,19 @@ import 'echarts/map/js/province/xianggang.js'
 import 'echarts/map/js/province/aomen.js'
 
 const geoCoordMap = {
-  '北京':[116.46,39.92],
-  '内蒙古':[111.670801,40.818311],
-  '广西':[108.320004,22.82402],
+  '北京': [116.46, 39.92],
+  '内蒙古': [111.670801, 40.818311],
+  '广西': [108.320004, 22.82402]
 
 }
 
-const provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen'];
-const provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门'];
-
+const provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen']
+const provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门']
 
 const sanData = [
   { name: '北京', value: 50 },
   { name: '内蒙古', value: 30 },
-  { name: '广西', value: 100 },
+  { name: '广西', value: 100 }
 
 ]
 
@@ -90,8 +86,8 @@ export default {
   data() {
     return {
       myMapName: 'china',
-      drawer: false,//抽屉
-      direction: 'rtl',//方位 ltr从左到右，rtl从右到左
+      drawer: false, // 抽屉
+      direction: 'rtl', // 方位 ltr从左到右，rtl从右到左
       chart: null,
       gridData: [{
         date: '2016-05-02',
@@ -109,13 +105,12 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
-      }],
+      }]
     }
-
   },
 
   watch: {
-    //深度监听，可监听到对象、数组的变化
+    // 深度监听，可监听到对象、数组的变化
     chartData: {
       deep: true,
       handler(val) {
@@ -124,7 +119,6 @@ export default {
     }
   },
   mounted() {
-
     this.$nextTick(() => {
       // this.initChart()
       this.initMap(this.myMapName)
@@ -139,57 +133,50 @@ export default {
   },
   methods: {
 
-    //地图数据转换
-    convertData: function(data){
-      var res = [];
+    // 地图数据转换
+    convertData: function(data) {
+      var res = []
       for (var i = 0; i < data.length; i++) {
-        var geoCoord = geoCoordMap[data[i].name]; // 数据的名字对应的经纬度
+        var geoCoord = geoCoordMap[data[i].name] // 数据的名字对应的经纬度
         if (geoCoord) { // 如果数据data对应上，
           res.push({
             name: data[i].name,
-            value: geoCoord.concat(data[i].value),
-          });
+            value: geoCoord.concat(data[i].value)
+          })
         }
       }
-      return res;
+      return res
     },
 
-
-    initMap: function(mapName){
-
+    initMap: function(mapName) {
       this.chart = echarts.init(this.$refs.myEchart, 'macarons')
-      if (mapName === "china"){
+      if (mapName === 'china') {
         this.setOptions(this.myMapName)
-        this.chart.on('click', (params)=> {
+        this.chart.on('click', (params) => {
           // 销毁实例
           this.chart.dispose()
           this.$options.methods.openSubMap.bind(this)(params.name)
           this.$options.methods.initMap.bind(this)(params.name)
 
           // alert('yes')
-        } )
-
-      }
-      else{
+        })
+      } else {
         this.setOptionsSub(this.myMapName)
-        this.chart.on('dblclick', ()=> {
+        this.chart.on('dblclick', () => {
           this.chart.dispose()
           this.$options.methods.openSubMap.bind(this)('china')
           this.$options.methods.initMap.bind(this)('china')
 
           // alert('yes')
-        } )
+        })
 
-        this.chart.on('click', 'series', (params)=> {
+        this.chart.on('click', 'series', (params) => {
           // this.$options.methods.openDrawer.bind(this)()
-          this.drawer = true;
+          this.drawer = true
           // alert('yes')
-        } )
-
+        })
       }
-
     },
-
 
     // initChart() {
     //   this.chart = echarts.init(this.$refs.myEchart, 'macarons')
@@ -239,16 +226,16 @@ export default {
     //
     // },
 
-    openSubMap: function(provinceName){
-      this.myMapName = provinceName;
+    openSubMap: function(provinceName) {
+      this.myMapName = provinceName
     },
 
-    /*openDrawer: function(){
+    /* openDrawer: function(){
       this.drawer = true;
     },*/
 
-    openAlert: function(){
-      alert('hi~~');
+    openAlert: function() {
+      alert('hi~~')
     },
 
     setOptions(paraMapName) {
@@ -267,8 +254,8 @@ export default {
         // 鼠标移到图里面的浮动提示框
         tooltip: {
           trigger: 'item',
-          formatter: function (params) {
-            return params.name + ' : ' + params.value[2]+ ' : ' + params.value[0] + ' : ' + params.value[1]+ ' : ' + params.value[3];
+          formatter: function(params) {
+            return params.name + ' : ' + params.value[2] + ' : ' + params.value[0] + ' : ' + params.value[1] + ' : ' + params.value[3]
           }
         },
         // 图例
@@ -277,7 +264,7 @@ export default {
           left: 50,
           top: 50,
           selectedMode: 'single', // 图例选择的模式，单选：'single'，多选：'multiple'
-          inactiveColor: '#E4E7ED',// 图例关闭时的颜色
+          inactiveColor: '#E4E7ED', // 图例关闭时的颜色
           data: ['激励器总数', '停止的激励器数量'],
           textStyle: {
             fontStyle: 'normal',
@@ -330,13 +317,13 @@ export default {
           name: '激励器总数',
           type: 'scatter',
           coordinateSystem: 'geo', // 对应上方配置
-          symbol: 'pin', //标签形状：圆形'circle', 方形'rect', 圆角方形'roundRect', 三角形'triangle', 菱形'diamond', 标记'pin', 箭头'arrow', 'none'
+          symbol: 'pin', // 标签形状：圆形'circle', 方形'rect', 圆角方形'roundRect', 三角形'triangle', 菱形'diamond', 标记'pin', 箭头'arrow', 'none'
           symbolSize: '50',
           label: {
             normal: {
               show: true,
               formatter: function(params) {
-                return params.data.value[2];
+                return params.data.value[2]
               },
               textStyle: {
                 color: '#fff',
@@ -351,7 +338,6 @@ export default {
           //    ['104.05325' , '29.646273', 50 , this.drawer],
           //    ['104.05325' , '25.646273', 25 , this.drawer],
           //    ['94.05325'  , '30.646273', 1  , this.drawer]]
-
 
         },
         {
@@ -368,44 +354,42 @@ export default {
           // data: this.convertData(sanData)
           data: [['116.347927', '39.948795', 100],
             ['100.06376', '30.554698', 75],
-            ['108.320004','22.82402', 50],['104.05325', '25.646273', 25],['94.05325', '30.646273', 1]],
-
+            ['108.320004', '22.82402', 50], ['104.05325', '25.646273', 25], ['94.05325', '30.646273', 1]]
 
         }
-        ,
-        // {
-        //   name: '正在运行的激励器', // 浮动框的标题
-        //   type: 'map',
-        //   geoIndex: 0,
-        //   data: [{
-        //     'name': '北京',
-        //     'value': 599
-        //   }, {
-        //     'name': '上海',
-        //     'value': 142
-        //   }, {
-        //     'name': '黑龙江',
-        //     'value': 44
-        //   }, {
-        //     'name': '深圳',
-        //     'value': 92
-        //   }, {
-        //     'name': '湖北',
-        //     'value': 810
-        //   }, {
-        //     'name': '四川',
-        //     'value': 453
-        //   }]
-        // },
-        // {
-        //   name: '停止运行的激励器', // 浮动框的标题
-        //   type: 'map',
-        //   geoIndex: 0,
-        //   data: [{
-        //     'name': '新疆',
-        //     'value': 599
-        //   }]
-        // },
+          // {
+          //   name: '正在运行的激励器', // 浮动框的标题
+          //   type: 'map',
+          //   geoIndex: 0,
+          //   data: [{
+          //     'name': '北京',
+          //     'value': 599
+          //   }, {
+          //     'name': '上海',
+          //     'value': 142
+          //   }, {
+          //     'name': '黑龙江',
+          //     'value': 44
+          //   }, {
+          //     'name': '深圳',
+          //     'value': 92
+          //   }, {
+          //     'name': '湖北',
+          //     'value': 810
+          //   }, {
+          //     'name': '四川',
+          //     'value': 453
+          //   }]
+          // },
+          // {
+          //   name: '停止运行的激励器', // 浮动框的标题
+          //   type: 'map',
+          //   geoIndex: 0,
+          //   data: [{
+          //     'name': '新疆',
+          //     'value': 599
+          //   }]
+          // },
 
         ]
       })
@@ -488,18 +472,13 @@ export default {
           },
           data:
             [['108.320004', '22.82402', 80],
-             ['109.119254' , '21.473343', 20 ],]
-
+              ['109.119254', '21.473343', 20]]
 
         }
 
         ]
       })
-    },
-
-
-
-
+    }
 
   }// End methods
 }// End export

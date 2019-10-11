@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Mock from 'mockjs'
 
 const List = []
@@ -31,7 +32,7 @@ export default [
   {
     url: '/article/list',
     type: 'get',
-    response: config => {
+    /*response: config => {
       const { location, avgPower, freq, businessModel, txState, sort } = config.query
 
       let mockList = List.filter(item => {
@@ -51,7 +52,7 @@ export default [
           total: mockList.length
         }
       }
-    }
+    }*/
   },
 
   /*{

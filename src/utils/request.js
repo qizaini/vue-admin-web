@@ -1,10 +1,10 @@
+/* eslint-disable */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
-var localhost = "localhost:8081/v1/api-shadow";
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // baseURL: "/v1", // url = base url + request url
@@ -47,9 +47,10 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     const code = res.code
-    if (code === "200") {
+    const responseCode = res.responseCode
+    if (responseCode === 200)
       return res
-    }
+
     // if the custom code is not 20000, it is judged as an error.
     if (code !== 20000) {
       Message({
@@ -71,7 +72,7 @@ service.interceptors.response.use(
           })
         })
       }
-        return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
     }

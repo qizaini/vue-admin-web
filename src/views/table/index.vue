@@ -15,18 +15,18 @@
 
         <el-col :xs="24" :sm="24" :lg="12">
 
-            <span class="demonstration">部署时间</span>&nbsp;
-            <el-date-picker
-              v-model="value2"
-              type="daterange"
-              size="medium"
-              align="right"
-              unlink-panels
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>&nbsp;&nbsp;&nbsp;
+          <span class="demonstration">部署时间</span>&nbsp;
+          <el-date-picker
+            v-model="value2"
+            type="daterange"
+            size="medium"
+            align="right"
+            unlink-panels
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions"
+          />&nbsp;&nbsp;&nbsp;
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="dialogFormVisible = true">添加</el-button>
           <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
@@ -46,7 +46,8 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column v-if="" align="center" label="序号" width="70" ><!--v-if="false" 隐藏列-->
+
+      <el-table-column v-if="" align="center" label="序号" width="70"><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -72,25 +73,31 @@
           <span>{{ scope.row.businessModel }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" align="center"  sortable label="部署时间" width="200">
+      <el-table-column prop="updateTime" align="center" sortable label="部署时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{parseInt(scope.row.updateTime+"000") | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
+          <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
         </template>
       </el-table-column>
-      <el-table-column prop="txState"  lang="cn" class-name="status-col" label="状态" width="110" align="center"
-                        :filters="[{ text: '运行', value: '运行' },
-                        { text: '升级', value: '升级' },
-                        { text: '异常', value: '异常' },
-                        { text: '备用', value: '备用' },
-                        { text: '停止', value: '停止' },
-                        { text: '警告', value: '警告' },
-                        ]"
-                        :filter-method="filterTag"
-
+      <el-table-column
+        prop="txState"
+        lang="cn"
+        class-name="status-col"
+        label="状态"
+        width="110"
+        align="center"
+        :filters="[{ text: '运行', value: 'running' },
+                   { text: '升级', value: 'updating' },
+                   { text: '故障', value: 'breakdown' },
+                   { text: '备用', value: 'backups' },
+                   { text: '停止', value: 'shutdown' },
+                   { text: '警告', value: 'warning' },
+        ]"
+        :filter-method="filterTag"
       >
         <template slot-scope="scope">
-          <el-tag   effect="dark" :type="scope.row.status | statusFilter">{{ scope.row.txState }}</el-tag>
+          <el-tag effect="dark" :type="scope.row.status | statusFilter">{{ scope.row.txState }}</el-tag>
         </template>
       </el-table-column>
 
@@ -125,32 +132,31 @@
 
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
 
-
     <!--查看详情-->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
-        <el-table-column property="power" label="控件版本"></el-table-column>
-        <el-table-column property="businessModel" label="运营商"></el-table-column>
-        <el-table-column property="businessModel" label="工作频点"></el-table-column><!--avgPower-->
-        <el-table-column property="outputFrequency" label="输出频率"></el-table-column><!--freq-->
-        <el-table-column property="deployAddress" label="部署地点"></el-table-column><!--location-->
-        <el-table-column property="updateTime" label="部署时间"></el-table-column>
-        <el-table-column property="gallery" label="通道"></el-table-column>
-        <el-table-column property="spectrumPattern" label="频谱模式"></el-table-column><!--SpecMode-->
-        <el-table-column property="dataFormat" label="数据格式"></el-table-column>
-        <el-table-column property="reuseType" label="复用类型"></el-table-column>
-        <el-table-column property="differentialData" label="差分数据"></el-table-column>
-        <el-table-column property="status" label="状态"></el-table-column><!--txState-->
+        <el-table-column property="power" label="控件版本" />
+        <el-table-column property="businessModel" label="运营商" />
+        <el-table-column property="avgPower" label="工作频点" /><!--avgPower-->
+        <el-table-column property="freq" label="输出频率" /><!--freq-->
+        <el-table-column property="deployAddress" label="部署地点" /><!--location-->
+        <el-table-column property="updateTime" label="部署时间" />
+        <el-table-column property="gallery" label="通道" />
+        <el-table-column property="spectrumPattern" label="频谱模式" /><!--SpecMode-->
+        <el-table-column property="dataFormat" label="数据格式" />
+        <el-table-column property="reuseType" label="复用类型" />
+        <el-table-column property="differentialData" label="差分数据" />
+        <el-table-column property="status" label="状态" /><!--txState-->
       </el-table>
     </el-dialog>
 
     <!--编辑-->
     <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px" >
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="11">
             <el-form-item label="控件版本" prop="power">
-              <el-input v-model="temp.power" style="width: 80%"/>
+              <el-input v-model="temp.power" style="width: 80%" />
             </el-form-item>
             <el-form-item label="运营商" prop="power">
               <el-input v-model="temp.businessModel" style="width: 80%" />
@@ -162,14 +168,15 @@
               <el-input v-model="temp.outputFrequency" style="width: 80%" />
             </el-form-item>
             <el-form-item label="部署地点" prop="power">
-              <el-autocomplete style="width: 80%"
-                               class="inline-input"
-                               v-model="deployAddress"
-                               :fetch-suggestions="querySearch"
-                               placeholder="请输入内容"
-                               :trigger-on-focus="false"
-                               @select="handleSelect"
-              ></el-autocomplete>
+              <el-autocomplete
+                v-model="deployAddress"
+                style="width: 80%"
+                class="inline-input"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+              />
             </el-form-item>
             <el-form-item label="部署时间" prop="updateTime">
               <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="Please pick a date" style="width: 80%" />
@@ -185,37 +192,37 @@
             </el-form-item>
             <el-form-item label="通道" prop="power">
               <el-select v-model="temp.gallery" placeholder="请选择通道类型">
-                <el-option label="通道0" value="shanghai"></el-option>
-                <el-option label="通道1" value="shanghai"></el-option>
-                <el-option label="通道2" value="shanghai"></el-option>
-                <el-option label="通道3" value="shanghai"></el-option>
-                <el-option label="通道4" value="shanghai"></el-option>
+                <el-option label="通道0" value="shanghai" />
+                <el-option label="通道1" value="shanghai" />
+                <el-option label="通道2" value="shanghai" />
+                <el-option label="通道3" value="shanghai" />
+                <el-option label="通道4" value="shanghai" />
               </el-select>
             </el-form-item>
             <el-form-item label="频谱模式" prop="power">
               <el-select v-model="temp.spectrumPattern" placeholder="请选择频谱模式">
-                <el-option label="模式1" value="shanghai"></el-option>
-                <el-option label="模式2" value="beijing"></el-option>
-                <el-option label="模式3" value="beijing"></el-option>
-                <el-option label="模式4" value="beijing"></el-option>
+                <el-option label="模式1" value="shanghai" />
+                <el-option label="模式2" value="beijing" />
+                <el-option label="模式3" value="beijing" />
+                <el-option label="模式4" value="beijing" />
               </el-select>
             </el-form-item>
             <el-form-item label="数据格式" prop="power">
               <el-select v-model="temp.dataFormat" placeholder="请选择数据格式">
-                <el-option label="RTCM23_GPS" value="shanghai"></el-option>
-                <el-option label="RTCM32_GGB" value="beijing"></el-option>
+                <el-option label="RTCM23_GPS" value="shanghai" />
+                <el-option label="RTCM32_GGB" value="beijing" />
               </el-select>
             </el-form-item>
             <el-form-item label="差分类型" prop="power">
               <el-select v-model="temp.differentialData" placeholder="请选择差分类型">
-                <el-option label="RTK" value="shanghai"></el-option>
-                <el-option label="RTD" value="beijing"></el-option>
+                <el-option label="RTK" value="shanghai" />
+                <el-option label="RTD" value="beijing" />
               </el-select>
             </el-form-item>
             <el-form-item label="复用类型" prop="power">
               <el-select v-model="temp.reuseType" placeholder="请选择复用类型">
-                <el-option label="CDMA" value="shanghai"></el-option>
-                <el-option label="TDMA" value="beijing"></el-option>
+                <el-option label="CDMA" value="shanghai" />
+                <el-option label="TDMA" value="beijing" />
               </el-select>
             </el-form-item>
 
@@ -232,7 +239,6 @@
       </div>
     </el-dialog>
 
-
     <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
       <el-table :data="pvData" border fit highlight-current-row style=" width: 100%">
         <el-table-column prop="key" label="Channel" />
@@ -247,26 +253,52 @@
 </template>
 
 <script>
-  import { fetchList, createArticle, updateArticle } from '@/api/article'
-  import waves from '@/directive/waves'
-  import getList from '@/api/table'
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination'
-  import axios from 'axios'
+/* eslint-disable */
+import { fetchList, createArticle, updateArticle } from '@/api/article'
+import waves from '@/directive/waves'
+import getList from '@/api/table'
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination'
+import axios from 'axios'
 
 export default {
+
   components: { Pagination },
   directives: { waves },
   filters: {
+    msgDateFormat:function(msg,pattern=''){
+      // 将字符串转换为Date类型
+      var mt = new Date(msg)
+      if (mt.toString() == "Invalid Date")
+        return ""
+
+      // 获取年份
+      var y = mt.getFullYear()
+      // 获取月份 从0开始
+      var m = (mt.getMonth()+1).toString().padStart(2,"0")
+      // 获取天数
+      var d = mt.getDate();
+      if(pattern === 'yyyy-mm-dd'){
+        return y+"-"+m+"-"+d
+      }
+      // 获取小时
+      var h = mt.getHours().toString().padStart(2,"0")
+      // 获取分钟
+      var mi = mt.getMinutes().toString().padStart(2,"0")
+      // 获取秒
+      var s = mt.getSeconds().toString().padStart(2,"0")
+      // 拼接为我们需要的各式
+      return y+"-"+m+"-"+d+" "+h+":"+mi+":"+s
+    },
     statusFilter(status) {
-      // '运行running', '备用backups', '警告warning','停止stop','异常exception'，'升级update'
+      // '运行running', '备用backups', '警告warning','停止shutdown','故障breakdown'，'升级updating'
       const statusMap = {
-        运行: 'success',
-        升级: 'primary',
-        异常: 'danger',
-        备份: 'plain',
-        停止: 'info',
-        警告: 'warning'
+        running: 'success',
+        updating: 'primary',
+        breakdown: 'danger',
+        backups: 'plain',
+        shutdown : 'danger',
+        warning: 'warning'
       }
       return statusMap[status]
     }
@@ -274,10 +306,10 @@ export default {
   data() {
     return {
       restaurants: [
-          { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
-        ],
+        // { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+        // { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+        // { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
+      ],
       deployAddress: '',
       dialogVisible: false,
       tableKey: 0,
@@ -292,11 +324,11 @@ export default {
         freq : "",
         businessModel: '',
         txState : "",
-        updateTime: new Date(),
+        updateTime: new Date()
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      // statusOptions: ['update', 'backups', 'stop', 'running', 'exception', "warning"],
-      statusOptions: ["运行", "升级", "异常", "备用", "停止", "警告"],
+      // statusOptions: ['running', 'update','breakdown', 'backups', 'shutdown', "warning"],
+      statusOptions: ["运行", "升级", "故障", "备用", "停止", "警告"],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -319,12 +351,12 @@ export default {
         resource: '',
         desc: ''
       },
-     /* dialogStatus: '',
-      textMap: {
-        update: '编辑',
-        create: '添加',
-        detail: '查看详情'
-      },*/
+      // dialogStatus: '',
+      // textMap: {
+      //   update: '编辑',
+      //   create: '添加',
+      //   detail: '查看详情'
+      // },
       dialogPvVisible: false,
       pvData: [],
       rules: {
@@ -377,7 +409,6 @@ export default {
       let that = this;
       axios.get('v1/device')
         .then(function (res) {
-          console.log(res);
           that.list = res.data
         })
         .catch(function (error) {
@@ -389,7 +420,7 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.result
         this.total = response.result.length
-        console.log(this.list, this.total)
+        // console.log(this.list, this.total)
 
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -401,26 +432,25 @@ export default {
     fetchData() {
       this.listLoading = true
       getList().then(response => {
-        console.table(response.result+"--------------")
         this.list = response.data.items
         this.listLoading = false
       })
     },
 
     querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      console.log(restaurants);
+      var restaurants = this.restaurants
+      console.log(restaurants)
       var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-      console.log(results);
+      console.log(results)
       // 调用 callback 返回建议列表的数据
-      cb(results);
+      cb(results)
     },
     createFilter(queryString) {
       return (restaurant) => {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
-      };
+      }
     },
- /*   loadAll() {
+    loadAll() {
       return [
         { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
         { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
@@ -432,7 +462,7 @@ export default {
     },
   mounted() {
     this.restaurants = this.loadAll();
-  },*/
+  },
 
     sortChange(data) {
       const { prop, order } = data
@@ -454,7 +484,7 @@ export default {
     },
     //状态筛选
     filterTag(value, row) {
-      return  row.status === value;
+      return  row.status === value
     },
     resetTemp() {
       this.temp = {

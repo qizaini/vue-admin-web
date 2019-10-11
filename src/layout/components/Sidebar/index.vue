@@ -13,7 +13,8 @@
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
-        @close="handleClose" theme="dark"
+        theme="dark"
+        @close="handleClose"
       >
         <!--<el-menu class="el-menu-vertical" @open="handleOpen" @close="handleClose" theme="dark" :default-openeds="openeds">-->
         <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
