@@ -97,7 +97,15 @@
         :filter-method="filterTag"
       >
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="scope.row.status | statusFilter">{{ scope.row.txState }}</el-tag>
+          <el-tag effect="dark" :type="scope.row.txState | statusFilter">{{ scope.row.txState }}</el-tag>
+        </template>
+        <template slot-scope="scope" prop="txState">
+          <el-tag v-if="scope.row.txState === 'shutdown'" :type="'info'" disable-transitions>停止</el-tag>
+          <el-tag v-else-if="scope.row.txState === 'running'" :type="'success'" disable-transitions>运行</el-tag>
+          <el-tag v-else-if="scope.row.txState === 'warning'" :type="'warning'" disable-transitions>警告</el-tag>
+          <el-tag v-else-if="scope.row.txState === 'breakdown'" :type="'danger'" disable-transitions>故障</el-tag>
+          <el-tag v-else-if="scope.row.txState === 'backups'" :type="'plain'" disable-transitions>备用</el-tag>
+          <el-tag v-else-if="scope.row.txState === 'updating'" :type="'primary'" disable-transitions>升级</el-tag>
         </template>
       </el-table-column>
 
@@ -118,7 +126,7 @@
       </el-table-column>-->
 
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
+        <template>
           <el-button type="danger" size="mini" style="display: none">
             删除
           </el-button>
@@ -290,17 +298,17 @@ export default {
       // 拼接为我们需要的各式
       return y+"-"+m+"-"+d+" "+h+":"+mi+":"+s
     },
-    statusFilter(status) {
+    statusFilter(txState) {
       // '运行running', '备用backups', '警告warning','停止shutdown','故障breakdown'，'升级updating'
       const statusMap = {
         running: 'success',
         updating: 'primary',
         breakdown: 'danger',
         backups: 'plain',
-        shutdown : 'danger',
+        shutdown : 'info',
         warning: 'warning'
       }
-      return statusMap[status]
+      return statusMap[txState]
     }
   },
   data() {
