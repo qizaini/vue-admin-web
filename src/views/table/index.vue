@@ -4,7 +4,7 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.location" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+          <el-input v-model="listQuery.location" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="$event.target.blur" @blur="handleFilter"/>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
