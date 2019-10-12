@@ -9,7 +9,7 @@
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
           <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="handleFilter">
-            <el-option v-for="item in txState" :key="item" :label="item.name" :value="item .value"/>
+            <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value"/>
           </el-select>
         </el-col>
 
@@ -430,23 +430,23 @@
               continue
             }
             if (s === 'running') {
-              news_arr.push({ name: '运行', value: s})
+              news_arr.push({ name: '运行', value: s })
               continue
             }
             if (s === 'updating') {
-              news_arr.push({ name: '升级', value: s})
+              news_arr.push({ name: '升级', value: s })
               continue
             }
             if (s === 'backups') {
-              news_arr.push({ name: '备用', value: s})
+              news_arr.push({ name: '备用', value: s })
               continue
             }
             if (s === 'warning') {
-              news_arr.push({ name: '警告', value: s})
+              news_arr.push({ name: '警告', value: s })
               continue
             }
             if (s === 'breakdown') {
-              news_arr.push({ name: '故障', value: s})
+              news_arr.push({ name: '故障', value: s })
             }
           }
           //绑定txState下拉框
@@ -584,7 +584,7 @@
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['部署地点', '部署时间', '功率', '业务模式', '频点', '状态']
-          const filterVal = ['location', 'updateTime', 'power', 'businessModel', 'workingFrequency', 'status']
+          const filterVal = ['location', 'updateTime', 'freq', 'businessModel', 'avgPower', 'txState']
           console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
