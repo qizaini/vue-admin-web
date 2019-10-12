@@ -9,7 +9,7 @@
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
           <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item">
-            <el-option :label="txState" :value="txState" />
+            <el-option v-for="item in txState" :key="item" :value="item" />
           </el-select>
         </el-col>
 
@@ -109,7 +109,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="338">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template>
           <el-button type="danger" size="mini" style="display: none">
             删除
@@ -315,7 +315,7 @@ export default {
         avgPower : "",
         freq : "",
         businessModel: '',
-        // txState : [],
+        txState : [],
         updateTime: new Date()
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -406,28 +406,33 @@ export default {
         });
     },*/
     getList() {
-      this.listLoading = true
+      this.listLoading = false
       fetchList(this.listQuery).then(response => {
         this.list = response.result
         this.total = response.result.length
-
+        var state_arr = []
+        
         for(var i=0;i<response.result.length;i++){
-          var txState = response.result[i].txState
-          if (txState == 'shutdown')
-            txState = '停止'
-          if (txState == 'running')
-            txState = '运行'
-          if (txState == 'updating')
-            txState = '升级'
-          if (txState == 'backups')
-            txState = '备用'
-          if (txState == 'warning')
-            txState = '警告'
-          if (txState == 'breakdown')
-            txState = '故障'
-          console.log(txState);
-          //绑定txState下拉框
-          this.txState = txState
+
+          var state = response.result[i].txState
+          if (state === 'shutdown')
+            state = '停止'
+          if (state === 'running')
+            state = '运行'
+          if (state === 'updating')
+            state = '升级'
+          if (state === 'backups')
+            state = '备用'
+          if (state === 'warning')
+            state = '警告'
+          if (state === 'breakdown')
+            state = '故障'
+          if (!state_arr.includes(state)) {
+            state_arr.push(state)
+            //绑定txState下拉框
+            this.txState = state_arr
+          }
+
         }
 
         // console.log(this.list, this.total)
