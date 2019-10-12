@@ -8,8 +8,8 @@
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
-          <el-select v-model="listQuery.status" placeholder="" size="medium" clearable style="width: 170px" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+          <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item">
+            <el-option :label="txState" :value="txState" />
           </el-select>
         </el-col>
 
@@ -47,33 +47,33 @@
       @sort-change="sortChange"
     >
 
-      <el-table-column v-if="" align="center" label="序号" width="70"><!--v-if="false" 隐藏列-->
+      <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="location" label="部署地点" align="center">
+      <el-table-column prop="location" label="部署地点" align="center" width="200px">
         <template slot-scope="scope">
           <span>{{ scope.row.location }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="avgPower" label="频点(MHz)" align="center">
+      <el-table-column prop="avgPower" label="频点(MHz)" align="center" width="200px">
         <template slot-scope="scope">
           {{ scope.row.avgPower }}
         </template>
       </el-table-column>
 
-      <el-table-column prop="freq" label="功率(w)" width="110" align="center">
+      <el-table-column prop="freq" label="功率(w)" align="center" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.freq }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="businessModel" label="业务模式" width="110" align="center">
+      <el-table-column prop="businessModel" label="业务模式" align="center" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.businessModel }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" align="center" sortable label="部署时间" width="200">
+      <el-table-column prop="updateTime" align="center" sortable label="部署时间" width="280">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{parseInt(scope.row.updateTime+"000") | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
@@ -85,7 +85,7 @@
         lang="cn"
         class-name="status-col"
         label="状态"
-        width="110"
+        width="180"
         align="center"
         :filters="[{ text: '运行', value: 'running' },
                    { text: '升级', value: 'updating' },
@@ -125,7 +125,7 @@
         </template>
       </el-table-column>-->
 
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="338">
         <template>
           <el-button type="danger" size="mini" style="display: none">
             删除
@@ -264,7 +264,6 @@
 /* eslint-disable */
 import { fetchList, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves'
-import getList from '@/api/table'
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 import axios from 'axios'
@@ -322,21 +321,21 @@ export default {
       dialogVisible: false,
       tableKey: 0,
       list: [],
-      total: 0,
+      total : 0,
+      txState : [],
       listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
+      listQuery : {
+        // page: 1,
+        // limit: 20,
         location : "",
         avgPower : "",
         freq : "",
         businessModel: '',
-        txState : "",
+        // txState : [],
         updateTime: new Date()
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       // statusOptions: ['running', 'update','breakdown', 'backups', 'shutdown', "warning"],
-      statusOptions: ["运行", "升级", "故障", "备用", "停止", "警告"],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -344,7 +343,7 @@ export default {
         avgPower : "",
         freq : "",
         businessModel: '',
-        txState : "",
+        // txState : "",
         updateTime: new Date()
       },
       dialogFormVisible: false,
@@ -407,13 +406,12 @@ export default {
   },
   created() {
     this.getList()
-    // this.fetchData();
   },
   mounted() {
 
   },
   methods: {
-    txList(){
+   /* txList(){
       let that = this;
       axios.get('v1/device')
         .then(function (res) {
@@ -422,29 +420,39 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
-    },
+    },*/
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.result
         this.total = response.result.length
-        // console.log(this.list, this.total)
 
+        for(var i=0;i<response.result.length;i++){
+          var txState = response.result[i].txState
+          if (txState == 'shutdown')
+            txState = '停止'
+          if (txState == 'running')
+            txState = '运行'
+          if (txState == 'updating')
+            txState = '升级'
+          if (txState == 'backups')
+            txState = '备用'
+          if (txState == 'warning')
+            txState = '警告'
+          if (txState == 'breakdown')
+            txState = '故障'
+          console.log(txState);
+          //绑定txState下拉框
+          this.txState = txState
+        }
+
+        // console.log(this.list, this.total)
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
       })
-
     },
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
-    },
-
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
       console.log(restaurants)
@@ -466,7 +474,7 @@ export default {
       ];
     },
     handleSelect(item) {
-      console.log(item);
+      // console.log(item);
     },
   mounted() {
     this.restaurants = this.loadAll();
