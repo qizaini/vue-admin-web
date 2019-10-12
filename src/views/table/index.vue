@@ -451,32 +451,7 @@
           }
           //绑定txState下拉框
           this.txState = news_arr
-          // for (let txar state = tx.txState
-          //    if (state_arr.includes({name}))
-          //   if (state === 'shutdown') {
-          //     state_arr.push({ name: '停止', value: state })
-          //   }
-          //   if (state === 'running') {
-          //     state_arr.push({ name: '运行', value: state })
-          //   }
-          //   if (state === 'updating') {
-          //     state_arr.push({ name: '升级', value: state })
-          //   }
-          //   if (state === 'backups') {
-          //     state_arr.push({ name: '备用', value: state })
-          //   }
-          //   if (state === 'warning') {
-          //     state_arr.push({ name: '警告', value: state })
-          //   } in response.result) {
-          //   v
-          //   if (state === 'breakdown') {
-          //     state_arr.push({ name: '故障', value: state })
-          //   }
-          // }
 
-
-
-          // console.log(this.list, this.total)
           // Just to simulate the time of the request
           setTimeout(() => {
             this.listLoading = false
