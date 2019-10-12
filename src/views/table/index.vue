@@ -109,22 +109,6 @@
         </template>
       </el-table-column>
 
-      <!--<el-table-column align="center" label="操作" width="120">
-        <template slot-scope="scope">
-          &lt;!&ndash;<router-link :to="'/table/edit/'+scope.row.id">&ndash;&gt;
-
-          &lt;!&ndash;<router-link :to="'/example/edit/'+scope.$index">&ndash;&gt;
-          <router-link :to="{name: 'table_edit', params: {id: scope.row.cdradio_id}}">
-            &lt;!&ndash;<router-link :to="'/example/edit'">&ndash;&gt;
-            &lt;!&ndash;<el-button type="primary" size="small" icon="el-icon-edit">&ndash;&gt;
-            <el-button type="primary" size="small" icon="el-icon-view">
-              查看详情
-            </el-button>
-          </router-link>
-
-        </template>
-      </el-table-column>-->
-
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="338">
         <template>
           <el-button type="danger" size="mini" style="display: none">
@@ -145,16 +129,16 @@
       <el-table :data="gridData">
         <el-table-column property="power" label="控件版本" />
         <el-table-column property="businessModel" label="运营商" />
-        <el-table-column property="avgPower" label="工作频点" /><!--avgPower-->
-        <el-table-column property="freq" label="输出频率" /><!--freq-->
-        <el-table-column property="deployAddress" label="部署地点" /><!--location-->
+        <el-table-column property="avgPower" label="工作频点" />
+        <el-table-column property="freq" label="输出频率" />
+        <el-table-column property="location" label="部署地点" />
         <el-table-column property="updateTime" label="部署时间" />
         <el-table-column property="gallery" label="通道" />
-        <el-table-column property="spectrumPattern" label="频谱模式" /><!--SpecMode-->
+        <el-table-column property="SpecMode" label="频谱模式" />
         <el-table-column property="dataFormat" label="数据格式" />
         <el-table-column property="reuseType" label="复用类型" />
         <el-table-column property="differentialData" label="差分数据" />
-        <el-table-column property="status" label="状态" /><!--txState-->
+        <el-table-column property="txState" label="状态" />
       </el-table>
     </el-dialog>
 
