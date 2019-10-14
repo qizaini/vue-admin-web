@@ -188,9 +188,7 @@
 
           <el-col :xs="24" :sm="24" :lg="12">
             <el-form-item label="状态" prop="power">
-              <el-select v-model="listQuery.txState" class="filter-item" placeholder="请选择状态类型">
-                <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value"/>
-              </el-select>
+              <el-input v-model="temp.txState" style="width: 62%" disabled="disabled"/>
             </el-form-item>
             <el-form-item label="通道" prop="power">
               <el-select v-model="temp.specMode" placeholder="请选择通道类型"><!--gallery-->
@@ -335,7 +333,7 @@
           avgPower: '',
           freq: '',
           service1SealMode: '',
-          txState : '',
+          txState : {},
           specMode: '',
           updateTime: new Date()
         },
@@ -526,7 +524,7 @@
           avgPower: '',
           freq: '',
           service1SealMode: '',
-          txState: '',
+          txState: [],
           updateTime: new Date()
         }
       },
@@ -559,9 +557,29 @@
       },
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
-        this.temp.updateTime = new Date(this.temp.updateTime)
+        var status = row.txState
+        if (status === 'shutdown') {
+          this.temp.txState = "停止"
+        }
+        if (status === 'running') {
+          this.temp.txState = "运行"
+        }
+        if (status === 'updating') {
+          this.temp.txState = "升级"
+        }
+        if (status === 'backups') {
+          this.temp.txState = "备用"
+        }
+        if (status === 'warning') {
+          this.temp.txState = "警告"
+        }
+        if (status === 'breakdown') {
+          this.temp.txState = "故障"
+        }
+        var nowTime = this.temp.updateTime
+        this.temp.updateTime = parseInt(nowTime + "000")
 
-        console.log(this.temp.updateTime + "," + this.temp.txState)
+
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -571,12 +589,11 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            const tempData = Object.assign({}, this.temp)
-            tempData.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(tempData).then(() => {
+            // const tempData = Object.assign({}, this.temp)
+            // console.log(this.temp)
+            // tempData.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+            updateArticle(this.temp).then(() => {
               for (const v of this.list) {
-                // console.log(v)
-                // console.log(v.id + "||" + v.rowKey + "||" + this.temp.id)
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
                   this.list.splice(index, 1, this.temp)
