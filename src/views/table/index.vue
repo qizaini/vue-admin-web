@@ -17,7 +17,7 @@
 
           <span class="demonstration">部署时间</span>&nbsp;
           <el-date-picker
-            v-model="value2"
+            v-model="listQuery.updateTime"
             type="daterange"
             size="medium"
             align="right"
@@ -25,10 +25,10 @@
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"
+            :el-date-picker="pickerOptions"
           />&nbsp;&nbsp;&nbsp;
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button type="primary" size="medium" icon="el-icon-edit" @click="dialogFormVisible = true">添加</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-edit" @click="handleCreate">添加</el-button>
           <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
         </el-col>
 
@@ -36,6 +36,7 @@
     </div>
     <br>
 
+    <!--列表-->
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -51,6 +52,11 @@
       <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="rowKey" label="rowKey" align="center" width="80px" :class-name="getSortClass('rowKey')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.rowKey }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="location" label="部署地点" align="center" width="200px">
@@ -69,16 +75,16 @@
           <span>{{ scope.row.freq }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="businessModel" label="业务模式" align="center" width="200">
+      <el-table-column prop="service1SealMode" label="业务模式" align="center" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.businessModel }}</span>
+          <span>{{ scope.row.service1SealMode }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" align="center" sortable label="部署时间" width="280">
         <template slot-scope="scope">
-          <i class="el-icon-time"/>
-          <span>{{parseInt(scope.row.updateTime+'000') | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
+          <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
+          <span>{{parseInt(scope.row.updateTime+'000') | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -111,11 +117,12 @@
       </el-table-column>
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template>
+        <template slot-scope="{row}">
           <el-button type="danger" size="mini" style="display: none">
             删除
           </el-button>
-          <el-button type="primary" size="mini" @click="dialogFormVisible = true">编辑</el-button>
+          <!--<el-button type="primary" size="mini" @click="dialogFormVisible = true">编辑</el-button>-->
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <el-button type="success" size="mini" @click="dialogTableVisible = true">查看详情</el-button>
 
         </template>
@@ -129,7 +136,7 @@
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
         <el-table-column property="power" label="控件版本"/>
-        <el-table-column property="businessModel" label="运营商"/>
+        <el-table-column property="service1SealMode" label="运营商"/>
         <el-table-column property="avgPower" label="工作频点"/>
         <el-table-column property="freq" label="输出频率"/>
         <el-table-column property="location" label="部署地点"/>
@@ -144,23 +151,26 @@
     </el-dialog>
 
     <!--编辑-->
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="11">
             <el-form-item label="控件版本" prop="power">
-              <el-input v-model="temp.power" style="width: 80%"/>
+              <el-input v-model="temp.service1SealMode" style="width: 80%"/><!--controlVersion-->
             </el-form-item>
             <el-form-item label="运营商" prop="power">
-              <el-input v-model="temp.businessModel" style="width: 80%"/>
+              <el-input v-model="temp.service1SealMode" style="width: 80%"/><!--operator-->
             </el-form-item>
             <el-form-item label="工作频点" prop="power">
-              <el-input v-model="temp.workingFrequency" style="width: 80%"/>
+              <el-input v-model="temp.avgPower" style="width: 80%"/>
             </el-form-item>
             <el-form-item label="输出频率" prop="power">
-              <el-input v-model="temp.outputFrequency" style="width: 80%"/>
+              <el-input v-model="temp.freq" style="width: 80%"/>
             </el-form-item>
             <el-form-item label="部署地点" prop="power">
+              <el-input v-model="temp.location" style="width: 80%"/>
+            </el-form-item>
+           <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
               <el-autocomplete
                 v-model="location"
                 style="width: 80%"
@@ -170,21 +180,20 @@
                 :trigger-on-focus="false"
                 @select="handleSelect"
               />
-            </el-form-item>
+            </el-form-item>-->
             <el-form-item label="部署时间" prop="updateTime">
               <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="Please pick a date" style="width: 80%"/>
             </el-form-item>
-
           </el-col>
 
           <el-col :xs="24" :sm="24" :lg="12">
             <el-form-item label="状态" prop="power">
-              <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-                <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item"/>
+              <el-select v-model="listQuery.txState" class="filter-item" placeholder="请选择状态类型">
+                <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value"/>
               </el-select>
             </el-form-item>
             <el-form-item label="通道" prop="power">
-              <el-select v-model="temp.gallery" placeholder="请选择通道类型">
+              <el-select v-model="temp.specMode" placeholder="请选择通道类型"><!--gallery-->
                 <el-option label="通道0" value="shanghai"/>
                 <el-option label="通道1" value="shanghai"/>
                 <el-option label="通道2" value="shanghai"/>
@@ -193,7 +202,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="频谱模式" prop="power">
-              <el-select v-model="temp.spectrumPattern" placeholder="请选择频谱模式">
+              <el-select v-model="temp.specMode" placeholder="请选择频谱模式">
                 <el-option label="模式1" value="shanghai"/>
                 <el-option label="模式2" value="beijing"/>
                 <el-option label="模式3" value="beijing"/>
@@ -201,19 +210,19 @@
               </el-select>
             </el-form-item>
             <el-form-item label="数据格式" prop="power">
-              <el-select v-model="temp.dataFormat" placeholder="请选择数据格式">
+              <el-select v-model="temp.specMode" placeholder="请选择数据格式"><!--dataFormat-->
                 <el-option label="RTCM23_GPS" value="shanghai"/>
                 <el-option label="RTCM32_GGB" value="beijing"/>
               </el-select>
             </el-form-item>
             <el-form-item label="差分类型" prop="power">
-              <el-select v-model="temp.differentialData" placeholder="请选择差分类型">
+              <el-select v-model="temp.specMode" placeholder="请选择差分类型"><!--differentialData-->
                 <el-option label="RTK" value="shanghai"/>
                 <el-option label="RTD" value="beijing"/>
               </el-select>
             </el-form-item>
             <el-form-item label="复用类型" prop="power">
-              <el-select v-model="temp.reuseType" placeholder="请选择复用类型">
+              <el-select v-model="temp.specMode" placeholder="请选择复用类型"><!--reuseType-->
                 <el-option label="CDMA" value="shanghai"/>
                 <el-option label="TDMA" value="beijing"/>
               </el-select>
@@ -298,42 +307,45 @@
     },
     data() {
       return {
-        restaurants: [
-          // { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-          // { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-          // { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" }
-        ],
         location: '',
         dialogVisible: false,
         tableKey: 0,
         list: [],
         total: 0,
         txState: [],
+        updateTime: [],
         listLoading: true,
         listQuery: {
           // page: 1,
           // limit: 20,
           location: '',
+          rowKey: '',
           avgPower: '',
           freq: '',
-          businessModel: '',
+          service1SealMode: '',
           txState: '',
-          updateTime: new Date()
+          updateTime: new Date(),
+          sort: '+rowKey'
         },
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-        // statusOptions: ['running', 'update','breakdown', 'backups', 'shutdown', "warning"],
         showReviewer: false,
         temp: {
           id: undefined,
           location: '',
           avgPower: '',
           freq: '',
-          businessModel: '',
-          // txState : "",
+          service1SealMode: '',
+          txState : '',
+          specMode: '',
           updateTime: new Date()
         },
         dialogFormVisible: false,
-        dialogTableVisible: false,
+        dialogStatus: '',
+        textMap: {
+          update: '编辑',
+          create: '添加',
+          detail: '查看详情'
+        },
         form: {
           name: '',
           region: '',
@@ -344,20 +356,15 @@
           resource: '',
           desc: ''
         },
-        // dialogStatus: '',
-        // textMap: {
-        //   update: '编辑',
-        //   create: '添加',
-        //   detail: '查看详情'
-        // },
         dialogPvVisible: false,
+        dialogTableVisible: false,
         pvData: [],
-        rules: {
+        /*rules: {
           updateTime: [{ type: 'date', required: true, message: 'updateTime is required', trigger: 'blur' }],
           power: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
           status: [{ required: true, message: 'status is required', trigger: 'blur' }],
-          businessModel: [{ required: true, message: 'businessModel is required', trigger: 'blur' }]
-        },
+          service1SealMode: [{ required: true, message: 'service1SealMode is required', trigger: 'blur' }]
+        },*/
         downloadLoading: false,
         pickerOptions: {
           shortcuts: [{
@@ -386,8 +393,6 @@
             }
           }]
         },
-        value1: '',
-        value2: ''
       }
     },
     created() {
@@ -421,6 +426,12 @@
             if (!state_arr.includes(state)) {
               state_arr.push(state)
             }
+            if (result[i].service1SealMode === '1'){
+              result[i].service1SealMode = '业务流'
+            }
+            else if (result[i].service1SealMode === '2'){
+              result[i].service1SealMode = '业务包'
+            }
           }
 
           for (let i = 0; i < state_arr.length; i++) {
@@ -452,6 +463,7 @@
           //绑定txState下拉框
           this.txState = news_arr
 
+
           // Just to simulate the time of the request
           setTimeout(() => {
             this.listLoading = false
@@ -459,10 +471,10 @@
         })
       },
       querySearch(queryString, cb) {
-        var restaurants = this.restaurants
-        console.log(restaurants)
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-        console.log(results)
+        var location = this.location
+        // console.log(location)
+        var results = queryString ? location.filter(this.createFilter(queryString)) : location
+        // console.log(results)
         // 调用 callback 返回建议列表的数据
         cb(results)
       },
@@ -482,7 +494,7 @@
         // console.log(item);
       },
       mounted() {
-        this.restaurants = this.loadAll()
+        this.location = this.loadAll()
       },
 
       sortChange(data) {
@@ -513,20 +525,28 @@
           location: '',
           avgPower: '',
           freq: '',
-          businessModel: '',
+          service1SealMode: '',
           txState: '',
           updateTime: new Date()
         }
       },
+      handleCreate() {
+        this.resetTemp()
+        this.dialogStatus = 'create'
+        this.dialogFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
       createData() {
         this.$refs['dataForm'].validate((valid) => {
-          console.log(this.$refs['dataForm'])
+          // console.log(this.$refs['dataForm'])
           if (valid) {
             this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
             this.temp.author = 'vue-element-admin'
             createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)
-              this.dialogFormVisible = f
+              this.dialogFormVisible = false
               this.$notify({
                 title: 'Success',
                 message: 'Created Successfully',
@@ -537,13 +557,26 @@
           }
         })
       },
+      handleUpdate(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        this.temp.updateTime = new Date(this.temp.updateTime)
+
+        console.log(this.temp.updateTime + "," + this.temp.txState)
+        this.dialogStatus = 'update'
+        this.dialogFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp)
-            tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+            tempData.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
             updateArticle(tempData).then(() => {
               for (const v of this.list) {
+                // console.log(v)
+                // console.log(v.id + "||" + v.rowKey + "||" + this.temp.id)
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
                   this.list.splice(index, 1, this.temp)
@@ -569,22 +602,11 @@
           this.$refs['dataForm'].clearValidate()
         })
       },
-
-      /* handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.updateTime = new Date(this.temp.updateTime)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },*/
-
       handleDownload() {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['部署地点', '部署时间', '功率', '业务模式', '频点', '状态']
-          const filterVal = ['location', 'updateTime', 'freq', 'businessModel', 'avgPower', 'txState']
+          const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
           console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
@@ -603,6 +625,14 @@
             return v[j]
           }
         }))
+      },
+      getSortClass: function(key) {
+        const sort = this.listQuery.sort
+        return sort === `+${key}`
+          ? 'ascending'
+          : sort === `-${key}`
+            ? 'descending'
+            : ''
       }
     }
   }

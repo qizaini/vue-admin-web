@@ -29,32 +29,6 @@ const image_uri = 'https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70
 }*/
 
 export default [
-  {
-    url: '/article/list',
-    type: 'get',
-    /*response: config => {
-      const { location, avgPower, freq, businessModel, txState, sort } = config.query
-
-      let mockList = List.filter(item => {
-        if (location && item.location !== +location) return false
-        if (avgPower && item.avgPower !== avgPower) return false
-        if (freq && item.freq.indexOf(freq) < 0) return false
-        return true
-      })
-
-      if (sort === '-id') {
-        mockList = mockList.reverse()
-      }
-
-      return {
-        code: 20000,
-        data: {
-          total: mockList.length
-        }
-      }
-    }*/
-  },
-
   /*{
     url: '/article/list',
     type: 'get',
