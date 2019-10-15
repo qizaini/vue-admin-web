@@ -121,7 +121,6 @@
           <el-button type="danger" size="mini" style="display: none">
             删除
           </el-button>
-          <!--<el-button type="primary" size="mini" @click="dialogFormVisible = true">编辑</el-button>-->
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <el-button type="success" size="mini" @click="dialogTableVisible = true">查看详情</el-button>
 
@@ -150,7 +149,7 @@
       </el-table>
     </el-dialog>
 
-    <!--编辑-->
+    <!--添加&编辑-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
@@ -182,7 +181,7 @@
               />
             </el-form-item>-->
             <el-form-item label="部署时间" prop="updateTime">
-              <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="Please pick a date" style="width: 80%"/>
+              <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
             </el-form-item>
           </el-col>
 
@@ -335,7 +334,7 @@
           service1SealMode: '',
           txState : {},
           specMode: '',
-          updateTime: new Date()
+          updateTime: ''
         },
         dialogFormVisible: false,
         dialogStatus: '',
@@ -525,7 +524,7 @@
           freq: '',
           service1SealMode: '',
           txState: [],
-          updateTime: new Date()
+          updateTime: ''
         }
       },
       handleCreate() {
@@ -578,7 +577,6 @@
         }
         var nowTime = this.temp.updateTime
         this.temp.updateTime = parseInt(nowTime + "000")
-
 
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
