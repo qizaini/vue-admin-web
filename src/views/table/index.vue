@@ -26,6 +26,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             :el-date-picker="pickerOptions"
+            validate-event="true"
           />&nbsp;&nbsp;&nbsp;
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="handleCreate">添加</el-button>
@@ -127,6 +128,12 @@
         </template>
       </el-table-column>
 
+      <template slot="empty">
+        <div class="nodataTip">
+          <img src="#" alt="" />
+            暂无数据
+        </div>
+      </template>
     </el-table>
 
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
@@ -169,17 +176,17 @@
             <el-form-item label="部署地点" prop="power">
               <el-input v-model="temp.location" style="width: 80%"/>
             </el-form-item>
-           <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
-              <el-autocomplete
-                v-model="location"
-                style="width: 80%"
-                class="inline-input"
-                :fetch-suggestions="querySearch"
-                placeholder="请输入内容"
-                :trigger-on-focus="false"
-                @select="handleSelect"
-              />
-            </el-form-item>-->
+            <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
+               <el-autocomplete
+                 v-model="location"
+                 style="width: 80%"
+                 class="inline-input"
+                 :fetch-suggestions="querySearch"
+                 placeholder="请输入内容"
+                 :trigger-on-focus="false"
+                 @select="handleSelect"
+               />
+             </el-form-item>-->
             <el-form-item label="部署时间" prop="updateTime">
               <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
             </el-form-item>
@@ -252,7 +259,7 @@
 </template>
 
 <script>
-/* eslint-disable */
+  /* eslint-disable */
   import { fetchList, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
@@ -321,7 +328,7 @@
           freq: '',
           service1SealMode: '',
           txState: '',
-          updateTime: new Date(),
+          updateTime: '',
           sort: '+rowKey'
         },
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -409,14 +416,15 @@
           console.log(error);
         });
     },*/
-      getList(flag) {
-        if (flag) {
+      getList() {
+        this.listLoading = false
+        if (this.listQuery.updateTime !== '') {
+          console.log(this.listQuery.updateTime)
           var time_arr = this.listQuery.updateTime.toString().split(',')
           var start_time = new Date(time_arr[0]).getTime() / 1000
           var end_time = new Date(time_arr[1]).getTime() / 1000
           this.listQuery.updateTime = [start_time, end_time]
         }
-        this.listLoading = false
         fetchList(this.listQuery).then(response => {
           this.list = response.result
           this.total = response.result.length
@@ -465,8 +473,6 @@
           }
           //绑定txState下拉框
           this.txState = news_arr
-
-
           // Just to simulate the time of the request
           setTimeout(() => {
             this.listLoading = false
@@ -514,9 +520,14 @@
         }
         this.handleFilter()
       },
+      //搜索
       handleFilter() {
         // this.listQuery.page = 1
-        this.getList(true)
+        if (this.listQuery.updateTime === '' && this.listQuery.location === '' && this.listQuery.txState === '' ){
+          // 后期可以提醒用户输入查询条件
+        }else {
+          this.getList()
+        }
       },
       //状态筛选
       filterTag(value, row) {
