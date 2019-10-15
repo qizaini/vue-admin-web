@@ -16,7 +16,7 @@
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="12">
         <!--资源中心曲线图-->
-        <div class="chart-wrapper">
+        <div class="chart-wrapper" id="lineMain">
           <line-chart :chart-data="lineChartData" />
         </div>
       </el-col>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { mapGetters } from 'vuex'
 import PanelGroup from './components/PanelGroup'
 import BarChart from './components/BarChart'

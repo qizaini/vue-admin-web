@@ -84,7 +84,7 @@
         <template slot-scope="scope">
           <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-          <span>{{parseInt(scope.row.updateTime+'000') | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
+          <span>{{scope.row.updateTime * 1000 | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -132,7 +132,7 @@
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
 
     <!--查看详情-->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible">
+    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="1000px">
       <el-table :data="gridData">
         <el-table-column property="power" label="控件版本"/>
         <el-table-column property="service1SealMode" label="运营商"/>
@@ -332,7 +332,7 @@
           avgPower: '',
           freq: '',
           service1SealMode: '',
-          txState : {},
+          txState : '',
           specMode: '',
           updateTime: ''
         },
@@ -409,7 +409,13 @@
           console.log(error);
         });
     },*/
-      getList() {
+      getList(flag) {
+        if (flag) {
+          var time_arr = this.listQuery.updateTime.toString().split(',')
+          var start_time = new Date(time_arr[0]).getTime() / 1000
+          var end_time = new Date(time_arr[1]).getTime() / 1000
+          this.listQuery.updateTime = [start_time, end_time]
+        }
         this.listLoading = false
         fetchList(this.listQuery).then(response => {
           this.list = response.result
@@ -510,7 +516,7 @@
       },
       handleFilter() {
         // this.listQuery.page = 1
-        this.getList()
+        this.getList(true)
       },
       //状态筛选
       filterTag(value, row) {
@@ -523,12 +529,14 @@
           avgPower: '',
           freq: '',
           service1SealMode: '',
-          txState: [],
+          txState: '',
           updateTime: ''
         }
       },
       handleCreate() {
         this.resetTemp()
+        //默认状态为备用
+        this.temp.txState = 'backups'
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -540,7 +548,6 @@
           // console.log(this.$refs['dataForm'])
           if (valid) {
             this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-            this.temp.author = 'vue-element-admin'
             createArticle(this.temp).then(() => {
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
@@ -607,14 +614,6 @@
               })
             })
           }
-        })
-      },
-      handleCreate() {
-        this.resetTemp()
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
         })
       },
       handleDownload() {
