@@ -2,7 +2,7 @@
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <!--'/formApply','/secureForm', '/productForm' 一级菜单路径-->
+      <!--'/formApply','/secureForm', '/productForm' 一级菜单路径，:default-openeds=设置二级菜单默认展开-->
       <el-menu
         :default-openeds="['/formApply','/secureForm', '/productForm']"
         :default-active="activeMenu"

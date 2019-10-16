@@ -1,7 +1,17 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
+    <div class="div-logo">
+      <img src="../../img/login.png" style="height: 100px"/>
+    </div>
+    <div class="bg-lightGreen">
+      light green
+    </div>
+    <div class="bg-green">
+      green
+    </div>
+
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
         <h3 class="title">欢迎登陆</h3>
       </div>
@@ -41,9 +51,9 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button :loading="loading" type="success" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
       <el-row style="text-align: right">
-        <el-link href="" type="primary">没有账号，马上注册</el-link>
+        <el-link href="" type="success" style="color: white">没有账号，马上注册</el-link>
       </el-row>
 
     </el-form>
@@ -171,10 +181,27 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
+$bg: FFFFFF;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
+.div-logo{
+  margin: 60px 0 0 130px;
+}
+ .bg-lightGreen{
+   background: rgb(21, 176, 87);
+   height: 60px;
+   width: 100%;
+   transform:rotate(150deg);
+   margin: 0 0 0 -200px;
+ }
+.bg-green{
+  background: rgb(14, 112, 56);
+  height: 850px;
+  width: 130%;
+  transform:rotate(150deg);
+  margin: 0 0 0 -370px;
+}
 .login-container {
   min-height: 100%;
   width: 100%;
@@ -182,11 +209,13 @@ $light_gray:#eee;
   overflow: hidden;
 
   .login-form {
+    border: 1px solid #b2b1b2;
+    border-radius: 5px;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    padding: 50px 35px 20px 35px;
+    margin: -850px 0 0 1000px;
     overflow: hidden;
   }
 
@@ -232,4 +261,5 @@ $light_gray:#eee;
     user-select: none;
   }
 }
+
 </style>
