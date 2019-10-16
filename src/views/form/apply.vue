@@ -1,69 +1,14 @@
 <template>
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
-    <div class="content">
-      <h1>广播RTK</h1>
-      <span>划分格网确定虚拟参考站位置</span><br><br>
-      <span>稳定、连续、准确输出位置信息</span>
-    </div>
 
-    <div class="banner-3d">
-      <div class="banner">
-        <div class="icon-findu-banner1">
-          <!--style="border:2px solid blue; background-image: url('https://static.qxwz.com/resources/5cf758faf5ce2f2b4b834a595a17b768.png');background-position: 0 0; width: 535px; height: 585px;"-->
-        </div>
-        <div class="icon-findu-banner4 down" />
-        <div class="icon-findu-banner3 up" />
-        <div class="icon-findu-banner5 up" />
-        <div class="icon-findu-banner2" />
+    <div class="x-row ">
+      <div class="content">
+        <h1 align="center">应用管理</h1>
+        <span><h4 align="center">可为多个需要厘米级定位服务的行业提供实际应用</h4> </span>
       </div>
-    </div>
+      <div class="el-row div-image">
 
-    <div class="x-row">
-      <div class="el-row">
-        <div class="intro x-col-xs-12">
-          <div class="x-media active">
-            <div class="x-media-left x-media-middle">
-              <div class="x-media-object number">1</div>
-            </div>
-            <div class="x-media-body x-media-middle text">
-              基于传感器定位，国内首个采用云、端一体化算法来为运动类产品提供计步及多项个性化服务的SDK产品。
-            </div>
-          </div>
-        </div>
-        <div class="intro x-col-xs-12">
-          <div class="x-media">
-            <div class="x-media-left x-media-middle">
-              <div class="x-media-object number">2</div>
-            </div>
-            <div class="x-media-body x-media-middle text">
-              通过千寻自主研发的行人增强定位算法, 实现对用户运动状态下的准确记步、步幅计算、里程计算和步态分析。
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="el-row">
-        <div class="intro x-col-xs-12">
-          <div class="x-media">
-            <div class="x-media-left x-media-middle">
-              <div class="x-media-object number">3</div>
-            </div>
-            <div class="x-media-body x-media-middle text">
-              能够自动识别用户手机摆放位置，并降低在城市峡谷中卫星定位漂移对轨迹的影响，通过云、端一体化服务来解决不同手机品牌的适配问题，确保和各款手机达最佳融合效果，从而输出更精准的运动数据。
-            </div>
-          </div>
-        </div>
-        <div class="intro x-col-xs-12">
-          <div class="x-media">
-            <div class="x-media-left x-media-middle">
-              <div class="x-media-object number">4</div>
-            </div>
-            <div class="x-media-body x-media-middle text">
-              可集成于跑步类APP、运动类智能终端、室内定位类APP中，为C端用户提供更精准的位置信息和运动数据。
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
 
     <div class="cover">
@@ -98,11 +43,19 @@
 
     <div class="doc-section x-center-block">
       <h3 class="title">帮助文档</h3>
-      <div class="x-container-fluid">
         <div class="x-row">
-          <a href="//help.qxwz.com/400019" class="x-col-xs-24">《常见问题》</a>
+          <div class="el-row">
+            <div class="help">
+                 <span>产品试用及购买</span>
+            </div>
+            <div class="help">
+                <span>产品配置</span>
+            </div>
+            <div class="help">
+                <span>常见问题</span>
+            </div>
+          </div>
         </div>
-      </div>
     </div>
 
   </div>

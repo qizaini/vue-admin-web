@@ -16,11 +16,10 @@ export function fetchArticle(id) {
   })
 }
 
-export function fetchPv(pv) {
+export function fetchTx() {
   return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
+    url: 'v1/device/',
+    method: 'get'
   })
 }
 

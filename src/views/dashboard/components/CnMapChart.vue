@@ -242,7 +242,7 @@ export default {
       this.chart.setOption({
         backgroundColor: 'rgba(2,175,219,0.9)', // #02AFDB
         title: {
-          text: '激励器全国部署图',
+          text: '基合系统部署图',
           padding: 20,
           left: 'center',
           textStyle: {

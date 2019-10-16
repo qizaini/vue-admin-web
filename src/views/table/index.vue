@@ -123,7 +123,7 @@
             删除
           </el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
-          <el-button type="success" size="mini" @click="dialogTableVisible = true">查看详情</el-button>
+          <el-button type="success" size="mini" @click="handleFetchDetail(row)">查看详情</el-button>
 
         </template>
       </el-table-column>
@@ -140,19 +140,28 @@
 
     <!--查看详情-->
     <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="1000px">
-      <el-table :data="gridData">
-        <el-table-column property="power" label="控件版本"/>
+      <el-table :data="txData">
+        <el-table-column property="service1SealMode" label="控件版本"/><!--controlVersion-->
         <el-table-column property="service1SealMode" label="运营商"/>
         <el-table-column property="avgPower" label="工作频点"/>
         <el-table-column property="freq" label="输出频率"/>
         <el-table-column property="location" label="部署地点"/>
         <el-table-column property="updateTime" label="部署时间"/>
-        <el-table-column property="gallery" label="通道"/>
+        <el-table-column property="freq" label="通道"/><!--gallery-->
         <el-table-column property="SpecMode" label="频谱模式"/>
-        <el-table-column property="dataFormat" label="数据格式"/>
-        <el-table-column property="reuseType" label="复用类型"/>
-        <el-table-column property="differentialData" label="差分数据"/>
+        <el-table-column property="freq" label="数据格式"/><!--dataFormat-->
+        <el-table-column property="freq" label="复用类型"/><!--reuseType-->
+        <el-table-column property="freq" label="差分数据"/><!--differentialData-->
         <el-table-column property="txState" label="状态"/>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogTableVisible = false">确定</el-button>
+      </span>
+        <template slot="empty">
+          <div class="nodataTip">
+            <img src="#" alt="" />
+            暂无数据
+          </div>
+        </template>
       </el-table>
     </el-dialog>
 
@@ -198,19 +207,10 @@
             </el-form-item>
             <el-form-item label="通道" prop="power">
               <el-select v-model="temp.specMode" placeholder="请选择通道类型"><!--gallery-->
-                <el-option label="通道0" value="shanghai"/>
-                <el-option label="通道1" value="shanghai"/>
-                <el-option label="通道2" value="shanghai"/>
-                <el-option label="通道3" value="shanghai"/>
-                <el-option label="通道4" value="shanghai"/>
               </el-select>
             </el-form-item>
             <el-form-item label="频谱模式" prop="power">
               <el-select v-model="temp.specMode" placeholder="请选择频谱模式">
-                <el-option label="模式1" value="shanghai"/>
-                <el-option label="模式2" value="beijing"/>
-                <el-option label="模式3" value="beijing"/>
-                <el-option label="模式4" value="beijing"/>
               </el-select>
             </el-form-item>
             <el-form-item label="数据格式" prop="power">
@@ -240,27 +240,17 @@
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确认
+          确定
         </el-button>
       </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style=" width: 100%">
-        <el-table-column prop="key" label="Channel"/>
-        <el-table-column prop="pv" label="Pv"/>
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">确认</el-button>
-      </span>
     </el-dialog>
 
   </div>
 </template>
 
 <script>
-  /* eslint-disable */
-  import { fetchList, createArticle, updateArticle } from '@/api/article'
+/* eslint-disable */
+  import { fetchList, fetchTx, createArticle, updateArticle } from '@/api/article'
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -360,9 +350,8 @@
           resource: '',
           desc: ''
         },
-        dialogPvVisible: false,
         dialogTableVisible: false,
-        pvData: [],
+        txData: [],
         /*rules: {
           updateTime: [{ type: 'date', required: true, message: 'updateTime is required', trigger: 'blur' }],
           power: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
@@ -625,6 +614,15 @@
               })
             })
           }
+        })
+      },
+      handleFetchDetail(row) {
+        this.temp = Object.assign({}, row)
+        let rowKey = this.temp.rowKey
+        fetchTx(rowKey).then(() => {
+          console.log(rowKey)
+
+          this.dialogTableVisible = true
         })
       },
       handleDownload() {

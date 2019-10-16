@@ -35,6 +35,7 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
 export const constantRoutes = [
   {
     path: '/login',
@@ -60,34 +61,6 @@ export const constantRoutes = [
     }]
   },
 
-  /* {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '资源监控', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '资源列表', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/table/addDevice'),
-        meta: { title: '添加设备', icon: 'coupon-5-line' }
-      },
-      {
-        path: 'list',
-        name: 'list',
-        component: () => import('@/views/tab/index'),
-        meta: { title: '综合table', icon: 'coupon-5-line' }
-      }
-    ]
-  },*/
-
   {
     path: '/example',
     component: Layout,
@@ -100,16 +73,24 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/formApply',
     component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: '应用管理', icon: 'form' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/broadcast'),
-        meta: { title: '应用管理', icon: 'form' }
+        path: 'broadcast',
+        name: 'broadcast',
+        component: () => import('@/views/form/apply'),
+        meta: { title: '播出管理', icon: 'shopping-bag-line' }
+      },
+      {
+        path: 'forward',
+        name: 'forward',
+        component: () => import('@/views/form/apply'),
+        meta: { title: '转发管理', icon: 'link' }
       }
     ]
   },
@@ -121,22 +102,16 @@ export const constantRoutes = [
     meta: { title: '安全播出', icon: 'integral' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'broadcast',
+        name: 'broadcast',
         component: () => import('@/views/table/index'),
-        meta: { title: '无线信号', icon: 'table' }
+        meta: { title: '信号质量', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'network',
+        name: 'network',
         component: () => import('@/views/table/index'),
-        meta: { title: '监控播出', icon: 'tree' }
-      },
-      {
-        path: 'tree2',
-        name: 'Tree2',
-        component: () => import('@/views/table/index'),
-        meta: { title: '监控发出信号', icon: 'exchange-funds-fill' }
+        meta: { title: '数据安全', icon: 'exchange-funds-fill' }
       }
     ]
   },
@@ -145,7 +120,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: '产品服务', icon: 'home page' },
+    meta: { title: '产品服务', icon: 'price-tag-2-fill' },
     children: [
       {
         path: 'broadcast',
@@ -163,13 +138,13 @@ export const constantRoutes = [
         path: 'monitoring',
         name: 'monitoring',
         component: () => import('@/views/form/monitoring'),
-        meta: { title: '物联网位置监控', icon: 'price-tag-2-fill' }
+        meta: { title: '物联网节点监控', icon: 'home page' }
       },
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: '基合静态毫米', icon: 'coupon-5-line' }
+        meta: { title: '基合见毫', icon: 'coupon-5-line' }
       },
       {
         path: 'tree',
@@ -199,7 +174,7 @@ export const constantRoutes = [
     ]
   },
 
-  {
+  /*{
     path: 'external-link',
     component: Layout,
     children: [
@@ -208,7 +183,7 @@ export const constantRoutes = [
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
-  },
+  },*/
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
