@@ -143,19 +143,19 @@ export const constantRoutes = [
       {
         path: 'table',
         name: 'Table',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/form/millimeter'),
         meta: { title: '基合见毫', icon: 'coupon-5-line' }
       },
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/form/millimeter'),
         meta: { title: 'A-GPS辅助定位', icon: 'nested' }
       },
       {
         path: 'tree2',
         name: 'Tree2',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/form/millimeter'),
         meta: { title: '基合CORS网服务', icon: 'example' }
       }
     ]

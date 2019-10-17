@@ -1,9 +1,9 @@
 <template>
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
     <div class="content">
-      <h1>网络RTK</h1>
-      <span>北斗差分定位系统基于北斗网络RTK技术</span><br><br>
-      <span>能够提供米级、分米级甚至厘米级实时定位服务</span>
+      <h1>基合静态毫米</h1>
+      <span>无线传感器网络</span><br><br>
+      <span>实现主从节点之间的数据采集与传输</span>
     </div>
 
     <div class="banner-3d">
@@ -140,5 +140,5 @@
   }
 </script>
 
-<style src="../../product/broadcast/broadcast.css"></style>
+<style src="../../product/broadcast/millimeter.css"></style>
 

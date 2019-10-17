@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
 
-    <div class="x-row ">
+    <div class="x-row">
       <div class="content">
         <h1 align="center">应用管理</h1>
         <span><h4 align="center">可为多个需要厘米级定位服务的行业提供实际应用</h4> </span>
@@ -46,13 +46,25 @@
         <div class="x-row">
           <div class="el-row">
             <div class="help">
-                 <span>产品试用及购买</span>
+              <div class="help-left">
+                <img src="../../img/value-icon-12.png" />
+              </div>
+              <div class="help-center">产品试用及购买</div>
+              <div class="help-right1">查看详情</div>
             </div>
             <div class="help">
-                <span>产品配置</span>
+              <div class="help-left">
+                <img src="../../img/value-icon-6.png" />
+              </div>
+              <div class="help-center">产品配置</div>
+              <div class="help-right">查看详情</div>
             </div>
             <div class="help">
-                <span>常见问题</span>
+              <div class="help-left">
+                <img src="../../img/value-icon-19.png" />
+              </div>
+              <div class="help-center">常见问题</div>
+              <div class="help-right">查看详情</div>
             </div>
           </div>
         </div>
@@ -93,5 +105,5 @@ export default {
 }
 </script>
 
-<style src="../../apply/index.css"></style>
+<style src="../../apply/apply.css"></style>
 

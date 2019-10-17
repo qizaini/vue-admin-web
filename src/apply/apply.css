@@ -1,8 +1,4 @@
 
-.content{
-  /*border: 2px solid black;*/
-  margin: 60px 0 0 120px;
-}
 .banner-3d {
   width: 600px;
   position: absolute;
@@ -19,32 +15,55 @@
 }
 
 .x-row{
-  margin: 200px 30px 0 30px;
+  margin: 65px 30px 0 30px;
 }
-.el-row{
-  display: flex;
-}
-.x-media {
-  background: #fff;
-  color: #666;
-  border: 1px solid #e5e5e5;
-  -webkit-transition: all .2s;
-  transition: all .2s;
-  display: flex;
-  padding: 50px 10px 0 0;
-}
-.x-media .x-media-left {
-  height: 150px;
-  vertical-align: middle;
+.div-image{
+  height: 305px;
+  width: 1125px;
+  background-image: url("./pic.png");
+  margin:  0 200px;
 }
 
+.help{
+  display: flex;
+  height: 100px;
+  background: white;
+  margin-bottom: 30px;
+  padding-left: 50px;
+}
+.help-left{
+  padding-top: 25px;
+
+}
+.help-center{
+  padding: 40px 0 0 20px;
+}
+.help-right{
+  border: 2px seagreen solid;
+  border-radius: 10px;
+  margin: 25px 0 0 70%;
+  height: 50px;
+
+  width: 200px;
+  text-align: center;
+  color: #2c5d56;
+}
+.help-right1{
+  border: 2px seagreen solid;
+  border-radius: 10px;
+  margin: 25px 0 0 66.5%;
+  height: 50px;
+  width: 200px;
+  text-align: center;
+  color: #2c5d56;
+}
 .intro {
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 20px;
   width: 50%;
 }
-.number {
+/*.number {
   font-family: Impact, Helvetica, 微软雅黑, sans-serif;
   font-size: 24px;
   color: rgb(12, 75, 24);
@@ -66,7 +85,7 @@
   vertical-align: middle;
   zoom: 1;
   overflow: hidden;
-}
+}*/
 
 .cover{
   margin: 0 30px;
@@ -142,6 +161,7 @@ h3.title {
   background: #dcffd8;
   border-radius: 20px;
 }
+/*
 .doc-section .title{
   line-height: 65px;
 }
@@ -152,6 +172,7 @@ h3.title {
   line-height: 63px;
   margin: -180px 0 0 0;
 }
+*/
 
 
 
