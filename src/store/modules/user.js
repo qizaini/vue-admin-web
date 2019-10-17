@@ -1,6 +1,8 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import Cookies from 'js-cookie'
+/* eslint-disable */
 
 const state = {
   token: getToken(),
@@ -27,6 +29,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
+        Cookies.set('Token', response.data.token) //登录成功后将token存储在cookie之中
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()

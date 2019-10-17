@@ -35,7 +35,7 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-
+/* eslint-disable */
 export const constantRoutes = [
   {
     path: '/login',

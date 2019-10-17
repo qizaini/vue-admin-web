@@ -5,10 +5,8 @@
       <img src="../../img/login.png" style="height: 100px"/>
     </div>
     <div class="bg-lightGreen">
-      light green
     </div>
     <div class="bg-green">
-      green
     </div>
 
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
@@ -215,7 +213,7 @@ $light_gray:#eee;
     width: 520px;
     max-width: 100%;
     padding: 50px 35px 20px 35px;
-    margin: -850px 0 0 1000px;
+    margin: -45% 0 0 56%;
     overflow: hidden;
   }
 
@@ -240,7 +238,7 @@ $light_gray:#eee;
   }
 
   .title-container {
-    position: relative;
+    /*position: relative;*/
 
     .title {
       font-size: 26px;
