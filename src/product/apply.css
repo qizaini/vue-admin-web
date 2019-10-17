@@ -35,6 +35,9 @@
   margin-bottom: 30px;
   padding-left: 50px;
 }
+.help:hover {
+  box-shadow:5px 5px 10px 2px gainsboro inset;
+}
 .help-left{
   padding-top: 25px;
 
