@@ -1,5 +1,6 @@
 <template>
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
+
     <div class="content">
       <h1>广播RTK</h1>
       <span>划分格网确定虚拟参考站位置</span><br><br>
@@ -96,14 +97,20 @@
       </div>
     </div>
 
-    <div class="doc-section x-center-block">
-      <h3 class="title">帮助文档</h3>
-      <div class="x-container-fluid">
-        <div class="x-row">
+      <div class="div-fluid">
+        <div class="div-qxwz">
           <a href="//help.qxwz.com/400019" class="x-col-xs-24">《常见问题》</a>
         </div>
+        <div class="div-content">
+          <p>
+            基合云为电力行业客户提供基于全国统一时空基准的动态厘米级差分定位解决方案，<br/>
+            赋予无人机精准飞行能力，实现全国范围内的自主飞行无人机电力巡检的标准化作业，大幅提升巡检效率。
+          </p>
+        </div>
+        <div class="div-img">
+          <img src="https://venus-pub.oss-cn-beijing.aliyuncs.com/solution/introduce-UAV-electric-power.png" height="280px"/>
+        </div>
       </div>
-    </div>
 
   </div>
 

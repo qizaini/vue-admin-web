@@ -4,6 +4,13 @@
   /*border: 2px solid black;*/
   margin: 60px 0 0 120px;
 }
+.div-content{
+  padding: 90px 30px 90px 200px;
+  float: left;
+}
+.div-img{
+  margin:  0 0 0 1100px;
+}
 .banner-3d {
   width: 600px;
   position: absolute;
@@ -138,18 +145,14 @@ h3.title {
   min-height: 1px;
 }
 
-.doc-section{
-  margin: 10px 30px;
-  background: #dcffd8;
-  border-radius: 20px;
-}
-.doc-section .title{
-  line-height: 65px;
-}
-.x-container-fluid{
-  background: #d5ebc6;
-  height: 60px;
+.div-fluid{
   text-align: center;
-  line-height: 63px;
-  margin: -180px 0 0 0;
+  margin: -180px 30px 0 30px;
+  background: white;
+}
+.div-qxwz{
+  height: 60px;
+  margin: 200px 0 0 0;
+  background: #d5ebc6;
+  line-height: 60px;
 }
