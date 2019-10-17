@@ -1,4 +1,5 @@
 
+/*广播TRK*/
 .content{
   /*border: 2px solid black;*/
   margin: 60px 0 0 120px;
@@ -17,45 +18,6 @@
   bottom: 0;
   top: 0;
 }
-/*.icon-findu-banner1 {
-  border: 2px solid black;
-  background-image: url(https://static.qxwz.com/resources/5cf758faf5ce2f2b4b834a595a17b768.png);
-  background-position: 0 0;
-  width: 535px;
-  height: 895px;
-}
-.icon-findu-banner4 {
-  background-image: url(https://static.qxwz.com/resources/5cf758faf5ce2f2b4b834a595a17b768.png);
-  background-position: 0 -605px;
-  right: 210px;
-  bottom: 70px;
-}
-.down {
-  -webkit-animation: down 4s linear infinite alternate;
-  animation: down 4s linear infinite alternate;
-}
-.icon-findu-banner3 {
-  background-image: url(https://static.qxwz.com/resources/5cf758faf5ce2f2b4b834a595a17b768.png);
-  background-position: -148px -605px;
-  left: 120px;
-  top: 20px;
-}
-.up {
-  -webkit-animation: down 4s linear infinite alternate;
-  animation: up 4s linear infinite alternate;
-}
-.icon-findu-banner5 {
-  background-image: url(https://static.qxwz.com/resources/5cf758faf5ce2f2b4b834a595a17b768.png);
-  background-position: -286px -605px;
-  right: 70px;
-  bottom: 0;
-}
-.icon-findu-banner2 {
-  background-image: url(https://static.qxwz.com/resources/5cf758faf5ce2f2b4b834a595a17b768.png);
-  background-position: -555px 0;
-  width: 535px;
-  height: 585px;
-}*/
 
 .x-row{
   margin: 200px 30px 0 30px;
@@ -191,11 +153,3 @@ h3.title {
   line-height: 63px;
   margin: -180px 0 0 0;
 }
-
-
-
-
-
-
-
-

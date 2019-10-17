@@ -140,5 +140,5 @@ export default {
 }
 </script>
 
-<style src="../../product/broadcast/broadcast.css"></style>
+<style src="../../product/broadcast.css"></style>
 

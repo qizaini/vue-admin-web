@@ -1,4 +1,5 @@
 
+/*播出管理*/
 .banner-3d {
   width: 600px;
   position: absolute;
@@ -43,7 +44,7 @@
   border-radius: 10px;
   margin: 25px 0 0 70%;
   height: 50px;
-
+  line-height: 45px;
   width: 200px;
   text-align: center;
   color: #2c5d56;
@@ -53,6 +54,7 @@
   border-radius: 10px;
   margin: 25px 0 0 66.5%;
   height: 50px;
+  line-height: 45px;
   width: 200px;
   text-align: center;
   color: #2c5d56;
@@ -161,23 +163,7 @@ h3.title {
   background: #dcffd8;
   border-radius: 20px;
 }
-/*
+
 .doc-section .title{
   line-height: 65px;
 }
-.x-container-fluid{
-  background: #d5ebc6;
-  height: 60px;
-  text-align: center;
-  line-height: 63px;
-  margin: -180px 0 0 0;
-}
-*/
-
-
-
-
-
-
-
-

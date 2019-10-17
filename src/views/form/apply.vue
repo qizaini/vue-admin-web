@@ -105,5 +105,5 @@ export default {
 }
 </script>
 
-<style src="../../apply/apply.css"></style>
+<style src="../../product/apply.css"></style>
 

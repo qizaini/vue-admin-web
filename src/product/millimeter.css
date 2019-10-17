@@ -1,4 +1,4 @@
-
+/*基合见毫*/
 .content{
   /*border: 2px solid black;*/
   margin: 60px 0 0 120px;
@@ -17,6 +17,7 @@
   bottom: 0;
   top: 0;
 }
+
 
 .x-row{
   margin: 200px 30px 0 30px;
@@ -152,11 +153,3 @@ h3.title {
   line-height: 63px;
   margin: -180px 0 0 0;
 }
-
-
-
-
-
-
-
-

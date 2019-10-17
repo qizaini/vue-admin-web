@@ -140,5 +140,5 @@
   }
 </script>
 
-<style src="../../product/broadcast/broadcast.css"></style>
+<style src="../../product/monitoring.css"></style>
 
