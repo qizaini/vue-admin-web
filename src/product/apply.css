@@ -15,8 +15,11 @@
   top: 0;
 }
 
-.x-row{
+.x-row-apply{
   margin: 65px 30px 0 30px;
+}
+.div-bottom{
+  padding: 50px 30px 20px 30px;
 }
 .div-image{
   height: 305px;

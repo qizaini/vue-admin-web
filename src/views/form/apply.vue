@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
 
-    <div class="x-row">
+    <div class="x-row-apply">
       <div class="content">
         <h1 align="center">应用管理</h1>
         <span><h4 align="center">可为多个需要厘米级定位服务的行业提供实际应用</h4> </span>
@@ -43,8 +43,7 @@
 
     <div class="doc-section x-center-block">
       <h3 class="title">帮助文档</h3>
-        <div class="x-row">
-          <div class="el-row">
+          <div class="div-bottom">
             <div class="help">
               <div class="help-left">
                 <img src="../../img/value-icon-12.png" />
@@ -67,7 +66,6 @@
               <div class="help-right">查看详情</div>
             </div>
           </div>
-        </div>
     </div>
 
   </div>
