@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
 
+    <div class="div-bg" >
+      <img src="../../img/bg.png" height="938" />
+    </div>
     <div class="div-logo">
-      <img src="../../img/login.png" style="height: 100px"/>
-    </div>
-    <div class="bg-lightGreen">
-    </div>
-    <div class="bg-green">
+      <img src="../../img/login.png" style="height: 50px"/>
+      <h1 style="color: #b2b1b2;">基合云管理系统</h1>
     </div>
 
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
@@ -140,6 +140,7 @@ export default {
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+html{overflow: hidden}
 
 $bg:#283443;
 $light_gray:#fff;
@@ -190,37 +191,22 @@ $dark_gray:#889aa4;
 $light_gray:#eee;
 
 .div-logo{
-  margin: 60px 0 0 130px;
-}
- .bg-lightGreen{
-   position: absolute;
-   background: rgb(21, 176, 87);
-   height: 60px;
-   width: 100%;
-   transform:rotate(150deg);
-   margin: 0 0 0 -200px;
- }
-.bg-green{
-  background: rgb(14, 112, 56);
-  height: 850px;
-  width: 130%;
-  transform:rotate(150deg);
-  margin: 0 0 0 -370px;
+  margin: -880px 0 0 130px;
+  position: absolute;
 }
 .login-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;
-  overflow: hidden;
 
   .login-form {
     border: 1px solid #b2b1b2;
     border-radius: 5px;
-    position: relative;
+    position: absolute;
     width: 520px;
     max-width: 100%;
     padding: 50px 35px 20px 35px;
-    margin: -45% 0 0 56%;
+    margin: -730px 0 0 56%;
     overflow: hidden;
   }
 
