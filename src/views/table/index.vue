@@ -4,7 +4,7 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.location" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="$event.target.blur" @blur="handleFilter"/>
+          <el-input v-model="listQuery.location" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="$event.target.blur" @change="handleFilter"/>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
@@ -29,7 +29,7 @@
             validate-event="true"
           />&nbsp;&nbsp;&nbsp;
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button type="primary" size="medium" icon="el-icon-edit" @click="handleCreate">添加</el-button>
+          <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
           <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
         </el-col>
 
@@ -55,7 +55,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="rowKey" label="rowKey" align="center" width="80px" :class-name="getSortClass('rowKey')">
+      <el-table-column v-if="false" prop="rowKey" label="rowKey" align="center" width="80px" :class-name="getSortClass('rowKey')">
         <template slot-scope="scope">
           <span>{{ scope.row.rowKey }}</span>
         </template>
@@ -165,7 +165,7 @@
       </el-table>
     </el-dialog>
 
-    <!--添加&编辑-->
+    <!--编辑-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
@@ -405,6 +405,19 @@
           console.log(error);
         });
     },*/
+      open() {
+        this.$prompt('请输入激励器ID', '添加', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern:'',
+          inputErrorMessage: '激励器ID格式不正确'
+        }).then(({ value }) => {
+          this.$message({
+            type: 'success',
+            message: '你的激励器ID是: ' + value
+          });
+        })
+      },
       getList() {
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {

@@ -187,6 +187,7 @@ $light_gray:#eee;
   margin: 60px 0 0 130px;
 }
  .bg-lightGreen{
+   position: absolute;
    background: rgb(21, 176, 87);
    height: 60px;
    width: 100%;
