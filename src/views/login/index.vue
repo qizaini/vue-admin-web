@@ -59,7 +59,9 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+/* eslint-disable */
+  import { validUsername } from '@/utils/validate'
+// import { setToken, setIdentity } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -116,7 +118,11 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            // // 1.将token缓存
+            // setToken('后台响应数据里的token')
+            // // 2.将权限标识缓存
+            // setIdentity('后台响应数据里的identity')
+            this.$router.push({ path: this.redirect || '/' })//切换路由
             this.loading = false
           }).catch(() => {
             this.loading = false

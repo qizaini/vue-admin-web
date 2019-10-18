@@ -25,6 +25,7 @@ import '@/permission' // permission control
  */
 /* eslint-disable */
 import { mockXHR } from '../mock'
+
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 if (process.env.NODE_ENV === 'development') {
   mockXHR() // simulation data
 }
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 
@@ -44,3 +46,4 @@ new Vue({
   store,
   render: h => h(App)
 })
+

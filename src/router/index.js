@@ -69,7 +69,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/table/index'),
-        meta: { title: '资源监控', icon: 'example' }
+        meta: {
+          // role: ['admin'],
+          title: '资源监控',
+          icon: 'example'
+        }
       }
     ]
   },
@@ -89,7 +93,7 @@ export const constantRoutes = [
       {
         path: 'forward',
         name: 'forward',
-        component: () => import('@/views/form/apply'),
+        component: () => import('@/views/form/forward'),
         meta: { title: '转发管理', icon: 'link' }
       }
     ]
@@ -104,13 +108,13 @@ export const constantRoutes = [
       {
         path: 'broadcast',
         name: 'broadcast',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/form/signalQuality'),
         meta: { title: '信号质量', icon: 'table' }
       },
       {
         path: 'network',
         name: 'network',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/form/signalQuality'),
         meta: { title: '数据安全', icon: 'exchange-funds-fill' }
       }
     ]
@@ -168,7 +172,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Form',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/form/signalQuality'),
         meta: { title: '位置服务', icon: 'address' }
       }
     ]

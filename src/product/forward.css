@@ -1,0 +1,175 @@
+
+/*播出管理*/
+.banner-3d {
+  width: 600px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.banner {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 0;
+}
+
+.x-row-apply{
+  margin: 65px 30px 0 30px;
+}
+.div-bottom{
+  padding: 50px 30px 20px 30px;
+}
+.div-image{
+  height: 305px;
+  width: 1125px;
+  background-image: url("./pic.png");
+  margin:  0 200px;
+}
+
+.help{
+  display: flex;
+  height: 100px;
+  background: white;
+  margin-bottom: 30px;
+  padding-left: 50px;
+}
+.help:hover {
+  box-shadow:5px 5px 10px 2px gainsboro inset;
+}
+.help-left{
+  padding-top: 25px;
+
+}
+.help-center{
+  padding: 40px 0 0 20px;
+}
+.help-right{
+  border: 2px seagreen solid;
+  border-radius: 10px;
+  margin: 25px 0 0 70%;
+  height: 50px;
+  line-height: 45px;
+  width: 200px;
+  text-align: center;
+  color: #2c5d56;
+}
+.help-right1{
+  border: 2px seagreen solid;
+  border-radius: 10px;
+  margin: 25px 0 0 66.5%;
+  height: 50px;
+  line-height: 45px;
+  width: 200px;
+  text-align: center;
+  color: #2c5d56;
+}
+.intro {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  width: 50%;
+}
+/*.number {
+  font-family: Impact, Helvetica, 微软雅黑, sans-serif;
+  font-size: 24px;
+  color: rgb(12, 75, 24);
+  height: 80px;
+  width: 80px;
+  line-height: 80px;
+  text-align: center;
+    background-color: rgb(249, 254, 240);
+  margin-left: 20px;
+  margin-right: 10px;
+  border-radius: 50%;
+  float: left;
+}
+.text {
+  font-size: 14px;
+  line-height: 2em;
+  color: inherit;
+  display: table-cell;
+  vertical-align: middle;
+  zoom: 1;
+  overflow: hidden;
+}*/
+
+.cover{
+  margin: 0 30px;
+  /*border: 2px solid slateblue;*/
+}
+h3.title {
+  font-size: 24px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.all{
+  height: 80px;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #eee;
+  position: relative;
+}
+.all > .title {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  width: 30px;
+  line-height: 1.2;
+  padding: 0 6px;
+  height: 100%;
+  background: #3c8076;
+  color: #fff;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-writing-mode: vertical-lr;
+  -ms-writing-mode: tb-lr;
+  writing-mode: vertical-lr;
+  z-index: 1;
+}
+.all ul {
+  width: calc(100% - 30px);
+  display: inline-block;
+  margin-left: 30px;
+}
+.slick-list {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.slick-track {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+}
+.all ul li {
+  display: inline-block;
+  padding: 12px 0;
+  width: 70px;
+  text-align: center;
+  border-right: 1px solid #eee;
+  margin: 4px auto;
+}
+.slick-slide {
+  width: 71px!important;
+  display: none;
+  float: left;
+  height: 100%;
+  min-height: 1px;
+}
+
+.doc-section{
+  margin: 10px 30px;
+  background: #dcffd8;
+  border-radius: 20px;
+}
+
+.doc-section .title{
+  line-height: 65px;
+}

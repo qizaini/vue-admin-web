@@ -3,7 +3,7 @@
 
     <div class="x-row-apply">
       <div class="content">
-        <h1 align="center">播出管理</h1>
+        <h1 align="center">转发管理</h1>
         <span><h4 align="center">可为多个需要厘米级定位服务的行业提供实际应用</h4> </span>
       </div>
       <div class="el-row div-image">
@@ -103,5 +103,5 @@ export default {
 }
 </script>
 
-<style src="../../product/apply.css"></style>
+<style src="../../product/forward.css"></style>
 

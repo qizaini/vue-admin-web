@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, getIdentity } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -23,6 +23,10 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       config.headers['X-Token'] = getToken()
     }
+    // if (store.getters.identity) {
+    //   config.headers['identity'] = getIdentity()
+    // }
+
     return config
   },
   error => {
@@ -58,6 +62,9 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
+
+      //不同权限不同操作，如果response=401给出提示弹框 没有权限，不允许对此进行操作。
+
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (code === 50008 || code === 50012 || code === 50014) {

@@ -2,12 +2,14 @@ import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Cookies from 'js-cookie'
+import { getIdentity } from '../../utils/auth'
 /* eslint-disable */
 
 const state = {
   token: getToken(),
   name: '',
-  avatar: ''
+  avatar: '',
+  identity: getIdentity()
 }
 
 const mutations = {
