@@ -2,7 +2,7 @@
   <div class="login-container">
 
     <div class="div-bg" >
-      <img src="../../img/bg.png" height="938" />
+      <img src="../../img/bg.png" height="940">
     </div>
     <div class="div-logo">
       <img src="../../img/login.png" style="height: 50px"/>
@@ -140,8 +140,9 @@ export default {
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-html{overflow: hidden}
-
+html{
+  /*overflow: hidden;*/
+}
 $bg:#283443;
 $light_gray:#fff;
 $cursor: #fff;
@@ -195,6 +196,7 @@ $light_gray:#eee;
   position: absolute;
 }
 .login-container {
+  overflow: hidden;
   min-height: 100%;
   width: 100%;
   background-color: $bg;
