@@ -192,7 +192,7 @@
     </el-dialog>
 
     <!--编辑-->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]+this.temp.rowKey" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="11">
@@ -353,6 +353,7 @@
         showReviewer: false,
         temp: {
           id: undefined,
+          rowKey: '',
           location: '',
           avgPower: '',
           freq: '',
@@ -374,7 +375,7 @@
         dialogFormVisible: false,
         dialogStatus: '',
         textMap: {
-          update: '编辑',
+          update: '编辑激励器',
           create: '添加',
           detail: '查看详情'
         },
@@ -634,6 +635,7 @@
         var nowTime = this.temp.updateTime
         this.temp.updateTime = parseInt(nowTime + "000")
 
+        var rowKey = this.temp.rowKey
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
         this.$nextTick(() => {
