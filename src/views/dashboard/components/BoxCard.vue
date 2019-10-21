@@ -1,13 +1,13 @@
 <template>
-  <el-card class="box-card-component" style="margin-left:8px;">
+  <el-card class="box-card-component" style="margin-left:8px;height: 300px">
     <div slot="header" class="box-card-header">
       <!--<img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">-->
       <img src="http://i8.hexunimg.cn/2015-10-05/179629267.jpg">
     </div>
     <div style="position:relative;">
       <pan-thumb :image="avatar" class="panThumb" />
-      <mallki class-name="mallki-text" text="激励器百分比" />
-      <div style="padding-top:35px;" class="progress-item">
+      <mallki class-name="mallki-text" text="基合系统部署图" />
+      <!--<div style="padding-top:35px;" class="progress-item">
         <span>广西</span>
         <el-progress :percentage="70" />
       </div>
@@ -22,7 +22,7 @@
       <div class="progress-item">
         <span>新疆</span>
         <el-progress :percentage="100" status="success" />
-      </div>
+      </div>-->
     </div>
   </el-card>
 </template>

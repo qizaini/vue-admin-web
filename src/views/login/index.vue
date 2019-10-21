@@ -5,8 +5,8 @@
       <img src="../../img/bg.png" height="940">
     </div>
     <div class="div-logo">
-      <img src="../../img/login.png" style="height: 50px"/>
-      <h1 style="color: #b2b1b2;">基合云管理系统</h1>
+      <img src="../../img/login.png" style="height: 80px"/><br />
+      <span class="p-title">基合云管理系统</span>
     </div>
 
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
@@ -194,6 +194,12 @@ $light_gray:#eee;
 .div-logo{
   margin: -880px 0 0 130px;
   position: absolute;
+}
+.p-title{
+  font-size: 50px;
+  color: forestgreen;
+  letter-spacing: 0;
+  text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 6px 0px #444, 0px 7px 0px #333, 0px 8px 7px #001135;
 }
 .login-container {
   overflow: hidden;

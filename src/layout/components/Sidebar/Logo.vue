@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import logoimg from '@/img/header.png'
+import logoimg from '@/img/logo-tran.png'
 
 export default {
   name: 'SidebarLogo',

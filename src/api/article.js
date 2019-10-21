@@ -16,9 +16,9 @@ export function fetchArticle(id) {
   })
 }
 
-export function fetchTx() {
+export function fetchTx(id) {
   return request({
-    url: 'v1/device/',
+    url: 'v1/device/' + id,
     method: 'get'
   })
 }

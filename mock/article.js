@@ -57,7 +57,7 @@ export default [
       }
     }
   },
-*/
+
 
   {
     url: '/article/detail',
@@ -114,5 +114,6 @@ export default [
       }
     }
   }
+  */
 ]
 

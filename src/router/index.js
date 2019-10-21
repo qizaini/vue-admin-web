@@ -82,19 +82,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: '应用管理', icon: 'form' },
+    meta: { title: '内容管理', icon: 'form' },
     children: [
       {
         path: 'broadcast',
         name: 'broadcast',
         component: () => import('@/views/form/apply'),
-        meta: { title: '播出管理', icon: 'shopping-bag-line' }
+        meta: { title: '播出内容', icon: 'shopping-bag-line' }
       },
       {
         path: 'forward',
         name: 'forward',
         component: () => import('@/views/form/forward'),
-        meta: { title: '转发管理', icon: 'link' }
+        meta: { title: '转发内容', icon: 'link' }
       }
     ]
   },
@@ -108,13 +108,13 @@ export const constantRoutes = [
       {
         path: 'broadcast',
         name: 'broadcast',
-        component: () => import('@/views/form/signalQuality'),
+        component: () => import('@/views/form/signalquality'),
         meta: { title: '信号质量', icon: 'table' }
       },
       {
         path: 'network',
         name: 'network',
-        component: () => import('@/views/form/signalQuality'),
+        component: () => import('@/views/form/datasecurity'),
         meta: { title: '数据安全', icon: 'exchange-funds-fill' }
       }
     ]
@@ -130,7 +130,7 @@ export const constantRoutes = [
         path: 'broadcast',
         name: 'broadcast',
         component: () => import('@/views/form/broadcast'),
-        meta: { title: '广播RTK', icon: 'table' }
+        meta: { title: '广播RTK', icon: 'nested' }
       },
       {
         path: 'network',
@@ -139,42 +139,32 @@ export const constantRoutes = [
         meta: { title: '网络RTK', icon: 'tree' }
       },
       {
-        path: 'monitoring',
-        name: 'monitoring',
-        component: () => import('@/views/form/monitoring'),
-        meta: { title: '物联网节点监控', icon: 'home page' }
-      },
-      {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/form/millimeter'),
         meta: { title: '基合见毫', icon: 'coupon-5-line' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/form/millimeter'),
-        meta: { title: 'A-GPS辅助定位', icon: 'nested' }
-      },
-      {
         path: 'tree2',
         name: 'Tree2',
-        component: () => import('@/views/form/millimeter'),
-        meta: { title: '基合CORS网服务', icon: 'example' }
+        component: () => import('@/views/form/signalquality'),
+        meta: { title: '基合CORS', icon: 'example' }
       }
     ]
   },
-
   {
     path: '/formAdress',
     component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: '位置服务', icon: 'address' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/signalQuality'),
-        meta: { title: '位置服务', icon: 'address' }
-      }
+        path: 'monitoring',
+        name: 'monitoring',
+        component: () => import('@/views/form/monitoring'),
+        meta: { title: '物联网节点监控', icon: 'home page' }
+      },
     ]
   },
 

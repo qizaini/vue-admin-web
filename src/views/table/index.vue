@@ -76,9 +76,9 @@
           <span>{{ scope.row.freq }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="service1SealMode" label="业务模式" align="center" width="200">
+      <el-table-column prop="specMode" label="频谱模式" align="center" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.service1SealMode }}</span>
+          <span>{{ scope.row.specMode }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" align="center" sortable label="部署时间" width="280">
@@ -139,30 +139,56 @@
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
 
     <!--查看详情-->
-    <el-dialog title="查看详情" :visible.sync="dialogTableVisible" width="1000px">
-      <el-table :data="txData">
-        <el-table-column property="service1SealMode" label="控件版本"/><!--controlVersion-->
-        <el-table-column property="service1SealMode" label="运营商"/>
-        <el-table-column property="avgPower" label="工作频点"/>
-        <el-table-column property="freq" label="输出频率"/>
-        <el-table-column property="location" label="部署地点"/>
-        <el-table-column property="updateTime" label="部署时间"/>
-        <el-table-column property="freq" label="通道"/><!--gallery-->
-        <el-table-column property="SpecMode" label="频谱模式"/>
-        <el-table-column property="freq" label="数据格式"/><!--dataFormat-->
-        <el-table-column property="freq" label="复用类型"/><!--reuseType-->
-        <el-table-column property="freq" label="差分数据"/><!--differentialData-->
-        <el-table-column property="txState" label="状态"/>
-        <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogTableVisible = false">确定</el-button>
-      </span>
+    <el-dialog :visible.sync="dialogTableVisible" title="查看详情">
+      <el-table :data="txData" style=" width: 100%">
+        <el-table-column prop="service1SealMode" label="控件版本"><!--controlVersion-->
+        </el-table-column>
+        <el-table-column prop="service1SealMode" label="运营商">
+        </el-table-column>
+        <el-table-column prop="avgPower" label="工作频点">
+        </el-table-column>
+        <el-table-column prop="freq" label="输出频率">
+        </el-table-column>
+        <el-table-column prop="location" label="部署地点">
+        </el-table-column>
+        <el-table-column prop="location" label="部署时间">
+        </el-table-column>
+        <el-table-column prop="freq" label="通道" ><!--gallery-->
+        </el-table-column>
+        <el-table-column prop="specMode" label="频谱模式">
+        </el-table-column>
+        <el-table-column prop="freq" label="数据格式"><!--dataFormat-->
+        </el-table-column>
+        <el-table-column prop="freq" label="复用类型"><!--reuseType-->
+        </el-table-column>
+        <el-table-column prop="freq" label="差分数据"><!--differentialData-->
+        </el-table-column>
+        <el-table-column prop="txState" label="状态">
+        </el-table-column>
+      </el-table>
+      <div style="display: flex">
+        <!--<div style="width:85px">{{txData.service1SealMode}}</div>
+        <div style="width:85px">{{txData.service1SealMode}}</div>
+        <div style="width:85px">{{txData.avgPower}}</div>
+        <div style="width:85px">{{txData.freq}}</div>
+        <div style="width:85px">{{txData.location}}</div>
+        <div style="width:85px">{{txData.updateTime}}</div>
+        <div style="width:85px">{{txData.freq}}</div>
+        <div style="width:85px">{{txData.specMode}}</div>
+        <div style="width:85px">{{txData.freq}}</div>
+        <div style="width:85px">{{txData.freq}}</div>
+        <div style="width:85px">{{txData.freq}}</div>
+        <div style="width:85px">{{txData.txState}}</div>-->
+      </div>
         <template slot="empty">
           <div class="nodataTip">
             <img src="#" alt="" />
             暂无数据
           </div>
         </template>
-      </el-table>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="dialogTableVisible = false">确定</el-button>
+        </span>
     </el-dialog>
 
     <!--编辑-->
@@ -321,6 +347,8 @@
           updateTime: '',
           sort: '+rowKey'
         },
+        dialogTableVisible: false,
+        txData: [],
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
         showReviewer: false,
         temp: {
@@ -333,6 +361,16 @@
           specMode: '',
           updateTime: ''
         },
+        /*txData: {
+          id: undefined,
+          location: '',
+          avgPower: '',
+          freq: '',
+          service1SealMode: '',
+          txState : '',
+          specMode: '',
+          updateTime: ''
+        },*/
         dialogFormVisible: false,
         dialogStatus: '',
         textMap: {
@@ -350,8 +388,6 @@
           resource: '',
           desc: ''
         },
-        dialogTableVisible: false,
-        txData: [],
         /*rules: {
           updateTime: [{ type: 'date', required: true, message: 'updateTime is required', trigger: 'blur' }],
           power: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
@@ -632,16 +668,17 @@
       handleFetchDetail(row) {
         this.temp = Object.assign({}, row)
         let rowKey = this.temp.rowKey
-        fetchTx(rowKey).then(() => {
-          console.log(rowKey)
+        fetchTx(rowKey).then(response => {
+          this.txData  = response.result
 
+          console.log(this.txData)
           this.dialogTableVisible = true
         })
       },
       handleDownload() {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['部署地点', '部署时间', '功率', '业务模式', '频点', '状态']
+          const tHeader = ['部署地点', '部署时间', '功率', '频谱模式', '频点', '状态']
           const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
           console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
