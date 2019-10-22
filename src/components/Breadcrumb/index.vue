@@ -1,6 +1,8 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator="/">
+  <!--通过设置 separator-class 可使用相应的 iconfont 作为分隔符，注意这将使 separator 设置失效-->
+  <el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
     <transition-group name="breadcrumb">
+      <!--面包屑-->
       <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
         <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
         <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
@@ -32,9 +34,9 @@ export default {
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       const first = matched[0]
 
-      if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: '资源中心' }}].concat(matched)
-      }
+      // if (!this.isDashboard(first)) {
+      //   matched = [{ path: '/dashboard', meta: { title: '资源中心' }}].concat(matched)
+      // }
 
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
     },

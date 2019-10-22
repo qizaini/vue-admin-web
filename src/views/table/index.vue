@@ -122,6 +122,7 @@
           <el-button type="danger" size="mini" style="display: none">
             删除
           </el-button>
+          <!--普通用户禁止编辑 disabled="false"-->
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <el-button type="success" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
         </template>
