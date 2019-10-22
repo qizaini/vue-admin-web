@@ -85,7 +85,7 @@
         <template slot-scope="scope">
           <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-          <span>{{scope.row.updateTime * 1000 | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
+          <span>{{scope.row.updateTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -131,7 +131,7 @@
       <template slot="empty">
         <div class="nodataTip">
           <img src="#" alt="" />
-            暂无数据
+          暂无数据
         </div>
       </template>
     </el-table>
@@ -167,7 +167,7 @@
         </el-table-column>
       </el-table>
       <div style="display: flex">
-        <!--<div style="width:85px">{{txData.service1SealMode}}</div>
+        <div style="width:85px">{{txData.service1SealMode}}</div>
         <div style="width:85px">{{txData.service1SealMode}}</div>
         <div style="width:85px">{{txData.avgPower}}</div>
         <div style="width:85px">{{txData.freq}}</div>
@@ -178,14 +178,14 @@
         <div style="width:85px">{{txData.freq}}</div>
         <div style="width:85px">{{txData.freq}}</div>
         <div style="width:85px">{{txData.freq}}</div>
-        <div style="width:85px">{{txData.txState}}</div>-->
+        <div style="width:85px">{{txData.txState}}</div>
       </div>
-        <template slot="empty">
-          <div class="nodataTip">
-            <img src="#" alt="" />
-            暂无数据
-          </div>
-        </template>
+      <template slot="empty">
+        <div class="nodataTip">
+          <img src="#" alt="" />
+          暂无数据
+        </div>
+      </template>
       <el-dialog
         width="30%"
         title="内层 Dialog"
@@ -208,7 +208,7 @@
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   </span>
-  </el-dialog>
+    </el-dialog>
 
     <!--编辑-->
     <el-dialog :title="textMap[dialogStatus]+this.temp.rowKey" :visible.sync="dialogFormVisible">
@@ -308,11 +308,10 @@
     filters: {
       msgDateFormat: function(msg, pattern = '') {
         // 将字符串转换为Date类型
-        var mt = new Date(msg)
-        if (mt.toString() == 'Invalid Date') {
+        var mt = new Date(msg * 1000)
+        if (mt.toString() === 'Invalid Date') {
           return ''
         }
-
         // 获取年份
         var y = mt.getFullYear()
         // 获取月份 从0开始
@@ -328,6 +327,7 @@
         var mi = mt.getMinutes().toString().padStart(2, '0')
         // 获取秒
         var s = mt.getSeconds().toString().padStart(2, '0')
+
         // 拼接为我们需要的各式
         return y + '-' + m + '-' + d + ' ' + h + ':' + mi + ':' + s
       },
@@ -383,16 +383,8 @@
           specMode: '',
           updateTime: ''
         },
-        /*txData: {
-          id: undefined,
-          location: '',
-          avgPower: '',
-          freq: '',
-          service1SealMode: '',
-          txState : '',
-          specMode: '',
-          updateTime: ''
-        },*/
+        cloneTemp: {},
+        diffTemp: null,
         dialogFormVisible: false,
         dialogStatus: '',
         textMap: {
@@ -635,6 +627,8 @@
       //进入编辑dialog
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
+        // 备份一份原始数据
+        this.cloneTemp = Object.assign({}, row)
         var status = row.txState
         if (status === 'shutdown') {
           this.temp.txState = "停止"
@@ -655,7 +649,7 @@
           this.temp.txState = "故障"
         }
         var nowTime = this.temp.updateTime
-        this.temp.updateTime = parseInt(nowTime + "000")
+        this.temp.updateTime = nowTime * 1000
 
         var rowKey = this.temp.rowKey
         this.dialogStatus = 'update'
@@ -667,10 +661,25 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            // const tempData = Object.assign({}, this.temp)
+            var time = this.temp.updateTime / 1000
+            this.temp.updateTime = time
+            for(let k in  this.temp) {
+              if(this.temp[k]  !=  this.cloneTemp[k]) {
+                if (!this.diffTemp) {
+                  this.diffTemp = {};
+                }
+                if (k === 'txState') {
+                  continue
+                }
+                this.diffTemp[k] = this.temp[k];
+              }
+            }
+            console.log(this.diffTemp)
+            // 1.克隆原始数据
             // console.log(this.temp)
-            // tempData.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(this.temp).then(() => {
+            // temp Data.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+
+            updateArticle(this.diffTemp).then(response => {
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)

@@ -12,6 +12,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import pathToRegexp from 'path-to-regexp'
 
 export default {
@@ -34,6 +35,7 @@ export default {
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       const first = matched[0]
 
+      //设置面包屑默认一级菜单为‘/dashboard’
       // if (!this.isDashboard(first)) {
       //   matched = [{ path: '/dashboard', meta: { title: '资源中心' }}].concat(matched)
       // }
