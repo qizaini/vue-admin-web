@@ -123,8 +123,7 @@
             删除
           </el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
-          <el-button type="success" size="mini" @click="handleFetchDetail(row)">查看详情</el-button>
-
+          <el-button type="success" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
         </template>
       </el-table-column>
 
@@ -139,7 +138,7 @@
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
 
     <!--查看详情-->
-    <el-dialog :visible.sync="dialogTableVisible" title="查看详情">
+    <el-dialog :visible.sync="outerVisible" title="查看详情">
       <el-table :data="txData" style=" width: 100%">
         <el-table-column prop="service1SealMode" label="控件版本"><!--controlVersion-->
         </el-table-column>
@@ -186,10 +185,29 @@
             暂无数据
           </div>
         </template>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogTableVisible = false">确定</el-button>
-        </span>
+      <el-dialog
+        width="30%"
+        title="内层 Dialog"
+        :visible.sync="innerVisible"
+        append-to-body>
+      </el-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="outerVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
+      </div>
     </el-dialog>
+
+    <!--查看日志-->
+    <el-dialog
+      title="查看日志"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <span>this is log.</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+  </el-dialog>
 
     <!--编辑-->
     <el-dialog :title="textMap[dialogStatus]+this.temp.rowKey" :visible.sync="dialogFormVisible">
@@ -329,6 +347,8 @@
       return {
         location: '',
         dialogVisible: false,
+        innerVisible: false,
+        outerVisible: false,
         tableKey: 0,
         list: [],
         total: 0,
@@ -611,6 +631,7 @@
           }
         })
       },
+      //进入编辑dialog
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
         var status = row.txState
@@ -667,6 +688,7 @@
           }
         })
       },
+      //进入查看详情dialog
       handleFetchDetail(row) {
         this.temp = Object.assign({}, row)
         let rowKey = this.temp.rowKey
@@ -674,7 +696,8 @@
           this.txData  = response.result
 
           console.log(this.txData)
-          this.dialogTableVisible = true
+          this.outerVisible = true
+          // this.dialogTableVisible = true
         })
       },
       handleDownload() {
