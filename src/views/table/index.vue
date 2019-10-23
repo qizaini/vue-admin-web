@@ -228,7 +228,7 @@
 
               <el-col :xs="24" :sm="24" :lg="22">
                 <el-form-item label="发射功率" prop="power">
-                  <!--Slider滑块-->
+                  <!--Slider滑块  set(handles.slider1,'Max',100,'Min',1,'Value',1)-->
                   <el-slider
                     v-model="temp.avgPower"
                     max="1000"
@@ -313,6 +313,27 @@
                 </el-form-item>
               </el-col>
 
+              <el-col :xs="24" :sm="24" :lg="22">
+                <el-form-item label="子帧长度" prop="power">
+                  <!--Slider滑块-->
+                  <el-slider
+                    v-model="temp.subFrameNum"
+                    min="2"
+                    max="255"
+                    show-input>
+                  </el-slider>
+                </el-form-item>
+                <el-form-item label="调制度" prop="power">
+                  <!--Slider滑块-->
+                  <el-slider
+                    v-model="temp.modulation"
+                    min="10"
+                    max="150"
+                    show-input>
+                  </el-slider>
+                </el-form-item>
+              </el-col>
+
               <el-col :xs="24" :sm="24" :lg="8">
                 <el-form-item label="CDRadio开关" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.cdRadioEnable" placement="top">
@@ -374,27 +395,6 @@
                       inactive-value="0">
                     </el-switch>
                   </el-tooltip>
-                </el-form-item>
-              </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="22">
-                <el-form-item label="子帧长度" prop="power">
-                  <!--Slider滑块-->
-                  <el-slider
-                    v-model="temp.subFrameNum"
-                    min="2"
-                    max="255"
-                    show-input>
-                  </el-slider>
-                </el-form-item>
-                <el-form-item label="调制度" prop="power">
-                  <!--Slider滑块-->
-                  <el-slider
-                    v-model="temp.modulation"
-                    min="10"
-                    max="150"
-                    show-input>
-                  </el-slider>
                 </el-form-item>
               </el-col>
 
@@ -862,6 +862,7 @@
     },
     created() {
       this.getList()
+      set(handles.slider1,'Max',1000,'Min',1,'Value',1)
     },
     mounted() {
 
@@ -1044,6 +1045,10 @@
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
         // 备份一份原始数据
+        var avg = this.temp.avgPower
+        var ad = this.temp.adPowerRatio
+        this.temp.adPowerRatio = parseInt(ad)
+        this.temp.avgPower = parseInt(avg)
         this.cloneTemp = Object.assign({}, row)
         var status = row.txState
         if (status === 'shutdown') {
@@ -1130,7 +1135,7 @@
       handleDownload() {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['部署地点', '激活时间', '功率', '频谱模式', '频点', '状态']
+          const tHeader = ['部署地点', '激活时间', '发射频点', '频谱模式', '发射功率', '状态']
           const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
           console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
