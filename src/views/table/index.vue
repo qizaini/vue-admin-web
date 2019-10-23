@@ -458,18 +458,18 @@
             <el-row :gutter="32">
               <el-col :xs="24" :sm="24" :lg="12">
               <el-form-item label="激励器状态" prop="power">
-                <el-input v-model="temp.txState" style="width: 75%"/>
+                <el-input v-model="temp.txState" disabled="false" style="width: 75%"/>
               </el-form-item>
               <el-form-item label="激活时间" prop="power">
-                <el-input v-model="temp.activeTime" style="width: 75%"/>
+                <el-input v-model="temp.activeTime" disabled="false" style="width: 75%"/>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="24" :lg="12">
               <el-form-item label="上次开机时间" prop="power">
-                <el-date-picker v-model="temp.lastPowerOnTime" type="datetime" placeholder="请选择一个日期" style="width: 75%"/>
+                <el-date-picker v-model="temp.lastPowerOnTime" type="datetime" disabled="false" style="width: 75%"/>
               </el-form-item>
               <el-form-item label="配置更新时间" prop="power">
-                <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 75%"/>
+                <el-date-picker v-model="temp.updateTime" type="datetime" disabled="false" style="width: 75%"/>
               </el-form-item>
             </el-col>
             </el-row>
