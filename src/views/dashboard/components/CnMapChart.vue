@@ -1,4 +1,5 @@
 <template>
+  <!--PageHeader 页头-->
   <div class="echarts">
 
     <el-drawer title="激励器信息" :visible.sync="drawer" :direction="direction" size="50%">

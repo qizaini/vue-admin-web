@@ -211,75 +211,272 @@
     </el-dialog>
 
     <!--编辑-->
-    <el-dialog :title="textMap[dialogStatus]+this.temp.rowKey" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
-        <el-row :gutter="32">
-          <el-col :xs="24" :sm="24" :lg="11">
-            <el-form-item label="控件版本" prop="power">
-              <el-input v-model="temp.service1SealMode" style="width: 80%"/><!--controlVersion-->
-            </el-form-item>
-            <el-form-item label="运营商" prop="power">
-              <el-input v-model="temp.service1SealMode" style="width: 80%"/><!--operator-->
-            </el-form-item>
-            <el-form-item label="工作频点" prop="power">
-              <el-input v-model="temp.avgPower" style="width: 80%"/>
-            </el-form-item>
-            <el-form-item label="输出频率" prop="power">
-              <el-input v-model="temp.freq" style="width: 80%"/>
-            </el-form-item>
-            <el-form-item label="部署地点" prop="power">
-              <el-input v-model="temp.location" style="width: 80%"/>
-            </el-form-item>
-            <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
-               <el-autocomplete
-                 v-model="location"
-                 style="width: 80%"
-                 class="inline-input"
-                 :fetch-suggestions="querySearch"
-                 placeholder="请输入内容"
-                 :trigger-on-focus="false"
-                 @select="handleSelect"
-               />
-             </el-form-item>-->
-            <el-form-item label="部署时间" prop="updateTime">
-              <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
-            </el-form-item>
-          </el-col>
+    <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible">
 
-          <el-col :xs="24" :sm="24" :lg="12">
-            <el-form-item label="状态" prop="power">
-              <el-input v-model="temp.txState" style="width: 62%" disabled="disabled"/>
-            </el-form-item>
-            <el-form-item label="通道" prop="power">
-              <el-select v-model="temp.specMode" placeholder="请选择通道类型"><!--gallery-->
-              </el-select>
-            </el-form-item>
-            <el-form-item label="频谱模式" prop="power">
-              <el-select v-model="temp.specMode" placeholder="请选择频谱模式">
-              </el-select>
-            </el-form-item>
-            <el-form-item label="数据格式" prop="power">
-              <el-select v-model="temp.specMode" placeholder="请选择数据格式"><!--dataFormat-->
-                <el-option label="RTCM23_GPS" value="shanghai"/>
-                <el-option label="RTCM32_GGB" value="beijing"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="差分类型" prop="power">
-              <el-select v-model="temp.specMode" placeholder="请选择差分类型"><!--differentialData-->
-                <el-option label="RTK" value="shanghai"/>
-                <el-option label="RTD" value="beijing"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="复用类型" prop="power">
-              <el-select v-model="temp.specMode" placeholder="请选择复用类型"><!--reuseType-->
-                <el-option label="CDMA" value="shanghai"/>
-                <el-option label="TDMA" value="beijing"/>
-              </el-select>
-            </el-form-item>
+      <el-tabs :tab-position="tabPosition">
+        <!--第一个tabs-->
+        <el-tab-pane label="基本配置">
 
-          </el-col>
-        </el-row>
-      </el-form>
+          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+            <el-row :gutter="32">
+
+              <el-col :xs="24" :sm="24" :lg="12">
+                <el-form-item label="激励器ID" prop="power">
+                  <el-input v-model="temp.txId" disabled="false" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="部署地点" prop="power">
+                  <el-select v-model="temp.location" placeholder="请选择部署地点">
+                  </el-select>
+                </el-form-item>
+              </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="12">
+                  <el-form-item label="运营商" prop="power">
+                    <el-input v-model="temp.operator" style="width: 75%"/>
+                  </el-form-item>
+                  <el-form-item label="发射频点" prop="power">
+                    <el-input v-model="temp.freq" style="width: 75%"/>
+                  </el-form-item>
+                </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="22">
+                <el-form-item label="发射功率" prop="power">
+                  <!--Slider滑块-->
+                  <el-slider
+                    v-model="temp.avgPower"
+                    max="1000"
+                    show-input>
+                  </el-slider>
+                </el-form-item>
+                <el-form-item label="模数功率比" prop="power">
+                  <el-slider
+                    v-model="temp.adPowerRatio"
+                    min="10.0"
+                    max="30.0"
+                    show-input>
+                  </el-slider>
+                </el-form-item>
+                <el-form-item label="频谱模式" prop="power">
+                  <el-radio v-model="temp.specMode" label="1">A1</el-radio>
+                  <el-radio v-model="temp.specMode" label="2">A2</el-radio>
+                  <el-radio v-model="temp.specMode" label="1">A3</el-radio>
+                  <el-radio v-model="temp.specMode" label="1">A4</el-radio>
+                  <el-radio v-model="temp.specMode" label="1">B1</el-radio>
+                  <el-radio v-model="temp.specMode" label="1">B2</el-radio>
+                  <el-radio v-model="temp.specMode" label="1">B3</el-radio>
+                  <el-radio v-model="temp.specMode" label="1">B4</el-radio>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+          </el-form>
+        </el-tab-pane>
+        <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
+                   <el-autocomplete
+                     v-model="location"
+                     style="width: 80%"
+                     class="inline-input"
+                     :fetch-suggestions="querySearch"
+                     placeholder="请输入内容"
+                     :trigger-on-focus="false"
+                     @select="handleSelect"
+                   />
+                 </el-form-item>-->
+
+                  <!--<el-form-item label="部署时间" prop="updateTime">
+                    <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
+                  </el-form-item>
+                  <el-form-item label="状态" prop="power">
+                    <el-input v-model="temp.txState" style="width: 62%" disabled="disabled"/>
+                  </el-form-item>-->
+        <!--第二个tabs-->
+        <el-tab-pane label="高级配置">
+
+          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+            <el-row :gutter="32">
+
+              <el-col :xs="24" :sm="24" :lg="12">
+                <el-form-item label="硬件版本" prop="power">
+                  <el-input v-model="temp.hardVersion" disabled="false" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="软件版本" prop="power">
+                  <el-input v-model="temp.softVersion" disabled="false" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="业务数据数量" prop="power">
+                  <el-input v-model="temp.subFrameNum" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="音频输入源" prop="power">
+                  <el-input v-model="temp.audioSource" style="width: 75%"/>
+                </el-form-item>
+
+              </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="12">
+                <el-form-item label="声道" prop="power">
+                  <el-input v-model="temp.vocalTract" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="预加重" prop="power">
+                  <el-input v-model="temp.preAggravation" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="定时启动时间" prop="power">
+                  <el-input v-model="temp.startTimeStamp" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="时延补偿" prop="power">
+                  <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
+                </el-form-item>
+              </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="8">
+                <el-form-item label="CDRadio开关" prop="power">
+                  <el-tooltip :content="'Switch value: ' + temp.cdRadioEnable" placement="top">
+                    <el-switch
+                      v-model="temp.cdRadioEnable"
+                      active-color="#13ce66"
+                      inactive-color="grey"
+                      active-value="100"
+                      inactive-value="0">
+                    </el-switch>
+                  </el-tooltip>
+                </el-form-item>
+                <el-form-item label="自动上报开关" prop="power">
+                  <el-tooltip :content="'Switch value: ' + temp.reportEnable" placement="top">
+                    <el-switch
+                      v-model="temp.reportEnable"
+                      active-color="#13ce66"
+                      inactive-color="grey"
+                      active-value="100"
+                      inactive-value="0">
+                    </el-switch>
+                  </el-tooltip>
+                </el-form-item>
+              </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="8">
+                <el-form-item label="Dpd开关" prop="power">
+                  <el-tooltip :content="'Switch value: ' + temp.dpdEnable" placement="top">
+                    <el-switch
+                      v-model="temp.dpdEnable"
+                      active-color="#13ce66"
+                      inactive-color="grey"
+                      active-value="100"
+                      inactive-value="0">
+                    </el-switch>
+                  </el-tooltip>
+                </el-form-item>
+                <el-form-item label="FM开关" prop="power">
+                  <el-tooltip :content="'Switch value: ' + temp.fmEnable" placement="top">
+                    <el-switch
+                      v-model="temp.fmEnable"
+                      active-color="#13ce66"
+                      inactive-color="grey"
+                      active-value="100"
+                      inactive-value="0">
+                    </el-switch>
+                  </el-tooltip>
+                </el-form-item>
+              </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="8">
+                <el-form-item label="授时开关" prop="power">
+                  <el-tooltip :content="'Switch value: ' + temp.timeServiceEnable" placement="top">
+                    <el-switch
+                      v-model="temp.timeServiceEnable"
+                      active-color="#13ce66"
+                      inactive-color="grey"
+                      active-value="100"
+                      inactive-value="0">
+                    </el-switch>
+                  </el-tooltip>
+                </el-form-item>
+              </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="22">
+                <el-form-item label="子帧长度" prop="power">
+                  <!--Slider滑块-->
+                  <el-slider
+                    v-model="temp.subFrameNum"
+                    min="2"
+                    max="255"
+                    show-input>
+                  </el-slider>
+                </el-form-item>
+                <el-form-item label="调制度" prop="power">
+                  <!--Slider滑块-->
+                  <el-slider
+                    v-model="temp.modulation"
+                    min="10"
+                    max="150"
+                    show-input>
+                  </el-slider>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+          </el-form>
+
+        </el-tab-pane>
+
+        <!--第三个tabs-->
+        <el-tab-pane label="业务配置">
+          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+            <el-row :gutter="32">
+              <el-col :xs="24" :sm="24" :lg="12">
+                <el-form-item label="业务1的LDPC块数" prop="power" label-width="150px">
+                  <el-input v-model="temp.service1LdpcNum" style="width: 85%"/>
+                </el-form-item>
+                <el-form-item label="业务1的交织深度" prop="power" label-width="150px">
+                  <el-input v-model="temp.service1IntvNum" style="width: 85%"/>
+                </el-form-item>
+                <el-form-item label="业务1的LDPC码率" prop="power" label-width="150px">
+                  <el-input v-model="temp.service1LdpcRate" style="width: 85%"/>
+                </el-form-item>
+                <el-form-item label="业务1的星座映射方式" prop="power" label-width="150px">
+                  <el-input v-model="temp.service1MapMode" style="width: 85%"/>
+                </el-form-item>
+              </el-col>
+
+              <el-col :xs="24" :sm="24" :lg="12">
+                <el-form-item label="业务1的扩频倍率" prop="power">
+                  <el-input v-model="temp.service1ExpandTime" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="业务1的封装格式" prop="power">
+                  <el-input v-model="temp.service1SealMode" style="width: 75%"/>
+                </el-form-item>
+                <el-form-item label="业务1的授权序列" prop="power">
+                  <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+          </el-form>
+
+        </el-tab-pane>
+
+        <!--第四个tabs-->
+        <el-tab-pane label="状态配置">
+          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+            <el-row :gutter="32">
+              <el-col :xs="24" :sm="24" :lg="12">
+              <el-form-item label="激励器状态" prop="power">
+                <el-input v-model="temp.txState" style="width: 75%"/>
+              </el-form-item>
+              <el-form-item label="激活时间" prop="power">
+                <el-input v-model="temp.activeTime" style="width: 75%"/>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="24" :lg="12">
+              <el-form-item label="上次开机时间" prop="power">
+                <el-date-picker v-model="temp.lastPowerOnTime" type="datetime" placeholder="请选择一个日期" style="width: 75%"/>
+              </el-form-item>
+              <el-form-item label="配置更新时间" prop="power">
+                <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 75%"/>
+              </el-form-item>
+            </el-col>
+            </el-row>
+          </el-form>
+        </el-tab-pane>
+
+      </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
@@ -346,6 +543,7 @@
     },
     data() {
       return {
+        tabPosition: 'left',// tabs位置
         location: '',
         dialogVisible: false,
         innerVisible: false,
@@ -375,10 +573,11 @@
         temp: {
           id: undefined,
           rowKey: '',
+          txId: '',
           location: '',
           avgPower: '',
           freq: '',
-          service1SealMode: '',
+          adPowerRatio: '',
           txState : '',
           specMode: '',
           updateTime: ''
@@ -664,6 +863,7 @@
             var time = this.temp.updateTime / 1000
             this.temp.updateTime = time
             for(let k in  this.temp) {
+              //判断当前表单数据不等于克隆数据
               if(this.temp[k]  !=  this.cloneTemp[k]) {
                 if (!this.diffTemp) {
                   this.diffTemp = {};
@@ -674,7 +874,7 @@
                 this.diffTemp[k] = this.temp[k];
               }
             }
-            console.log(this.diffTemp)
+            // console.log(this.diffTemp)
             // 1.克隆原始数据
             // console.log(this.temp)
             // temp Data.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464

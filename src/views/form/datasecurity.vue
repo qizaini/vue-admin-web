@@ -1,4 +1,5 @@
 <template>
+  <!--Carousel 走马灯-->
 
   <!--轮播图-->
   <!--<div class="slide">
