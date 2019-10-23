@@ -15,7 +15,7 @@
 
         <el-col :xs="24" :sm="24" :lg="12">
 
-          <span class="demonstration">部署时间</span>&nbsp;
+          <span class="demonstration">激活时间</span>&nbsp;
           <el-date-picker
             v-model="listQuery.updateTime"
             type="daterange"
@@ -81,7 +81,7 @@
           <span>{{ scope.row.specMode }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" align="center" sortable label="部署时间" width="280">
+      <el-table-column prop="updateTime" align="center" sortable label="激活时间" width="280">
         <template slot-scope="scope">
           <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
@@ -151,7 +151,7 @@
         </el-table-column>
         <el-table-column prop="location" label="部署地点">
         </el-table-column>
-        <el-table-column prop="location" label="部署时间">
+        <el-table-column prop="location" label="激活时间">
         </el-table-column>
         <el-table-column prop="freq" label="通道" ><!--gallery-->
         </el-table-column>
@@ -283,7 +283,7 @@
                    />
                  </el-form-item>-->
 
-                  <!--<el-form-item label="部署时间" prop="updateTime">
+                  <!--<el-form-item label="激活时间" prop="updateTime">
                     <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
                   </el-form-item>
                   <el-form-item label="状态" prop="power">
@@ -913,7 +913,7 @@
       handleDownload() {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['部署地点', '部署时间', '功率', '频谱模式', '频点', '状态']
+          const tHeader = ['部署地点', '激活时间', '功率', '频谱模式', '频点', '状态']
           const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
           console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
