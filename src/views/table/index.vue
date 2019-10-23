@@ -408,233 +408,221 @@
           <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
 
             <el-collapse v-model="activeNames" @change="handleChange">
-              <el-collapse-item title="业务LDPC块数" name="1">
+              <el-collapse-item title="业务1" name="1">
                 <el-row :gutter="32">
                   <el-col :xs="24" :sm="24" :lg="12">
 
-                    <el-form-item label="业务1的LDPC块数" prop="power" label-width="150px">
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
                       <el-input v-model="temp.service1LdpcNum" style="width: 85%"/>
                     </el-form-item>
-                    <el-form-item label="业务2的LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2LdpcRate" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="业务3的LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3MapMode" style="width: 85%"/>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="业务4的LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4IntvNum" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="业务5的LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service5ExpandTime" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="业务6的LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service6SealMode" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="业务7的LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service7AuthorList" style="width: 75%"/>
-                    </el-form-item>
-
-                  </el-col>
-                </el-row>
-              </el-collapse-item>
-
-              <el-collapse-item title="业务LDPC码率" name="2">
-                <el-row :gutter="32">
-                  <el-col :xs="24" :sm="24" :lg="12">
-
-                    <el-form-item label="业务1的LDPC码率" prop="power" label-width="150px">
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
                       <el-input v-model="temp.service1LdpcRate" style="width: 85%"/>
                     </el-form-item>
-                    <el-form-item label="业务2的LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2LdpcRate" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="业务3的LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3LdpcRate" style="width: 85%"/>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service1MapMode" style="width: 85%"/>
                     </el-form-item>
                   </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="业务4的LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4LdpcRate" style="width: 75%"/>
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
+                      <el-input v-model="temp.service1IntvNum" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务5的LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service5LdpcRate" style="width: 75%"/>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service1ExpandTime" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务6的LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service6LdpcRate" style="width: 75%"/>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service1SealMode" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务7的LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service7LdpcRate" style="width: 75%"/>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
                     </el-form-item>
 
                   </el-col>
                 </el-row>
               </el-collapse-item>
 
-              <el-collapse-item title="业务星座映射方式" name="3">
+              <el-collapse-item title="业务2" name="2">
                 <el-row :gutter="32">
                   <el-col :xs="24" :sm="24" :lg="12">
-
-                    <el-form-item label="业务1的星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1MapMode" style="width: 85%"/>
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                      <el-input v-model="temp.service2LdpcNum" style="width: 85%"/>
                     </el-form-item>
-                    <el-form-item label="业务2的星座映射方式" prop="power" label-width="150px">
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service2LdpcRate" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
                       <el-input v-model="temp.service2MapMode" style="width: 85%"/>
                     </el-form-item>
-                    <el-form-item label="业务3的星座映射方式" prop="power" label-width="150px">
+                  </el-col>
+
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
+                      <el-input v-model="temp.service2IntvNum" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service2ExpandTime" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service2SealMode" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service2AuthorList" style="width: 75%"/>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-collapse-item>
+
+              <el-collapse-item title="业务3" name="3">
+                <el-row :gutter="32">
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                      <el-input v-model="temp.service3LdpcNum" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service3LdpcRate" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
                       <el-input v-model="temp.service3MapMode" style="width: 85%"/>
                     </el-form-item>
                   </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="业务4的星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4MapMode" style="width: 75%"/>
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
+                      <el-input v-model="temp.service3IntvNum" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务5的星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service5MapMode" style="width: 75%"/>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service3ExpandTime" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务6的星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service6MapMode" style="width: 75%"/>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service3SealMode" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务7的星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service7MapMode" style="width: 75%"/>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service3AuthorList" style="width: 75%"/>
                     </el-form-item>
-
                   </el-col>
                 </el-row>
               </el-collapse-item>
 
-              <el-collapse-item title="业务交织深度" name="4">
+              <el-collapse-item title="业务4" name="4">
                 <el-row :gutter="32">
                   <el-col :xs="24" :sm="24" :lg="12">
-
-                    <el-form-item label="业务1的交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1IntvNum" style="width: 85%"/>
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                      <el-input v-model="temp.service4LdpcNum" style="width: 85%"/>
                     </el-form-item>
-                    <el-form-item label="业务2的交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2IntvNum" style="width: 85%"/>
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service4LdpcRate" style="width: 85%"/>
                     </el-form-item>
-                    <el-form-item label="业务3的交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3IntvNum" style="width: 85%"/>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service4MapMode" style="width: 85%"/>
                     </el-form-item>
                   </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="业务4的交织深度" prop="power" label-width="150px">
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
                       <el-input v-model="temp.service4IntvNum" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务5的交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service5IntvNum" style="width: 75%"/>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service4ExpandTime" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务6的交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service6IntvNum" style="width: 75%"/>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service4SealMode" style="width: 75%"/>
                     </el-form-item>
-                    <el-form-item label="业务7的交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service7IntvNum" style="width: 75%"/>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
                     </el-form-item>
-
                   </el-col>
                 </el-row>
               </el-collapse-item>
 
-            <el-collapse-item title="业务扩频倍率" name="5">
+            <el-collapse-item title="业务5" name="5">
               <el-row :gutter="32">
                 <el-col :xs="24" :sm="24" :lg="12">
-
-                  <el-form-item label="业务1的扩频倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service1ExpandTime" style="width: 85%"/>
+                  <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                    <el-input v-model="temp.service5LdpcNum" style="width: 85%"/>
                   </el-form-item>
-                  <el-form-item label="业务2的扩频倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service2ExpandTime" style="width: 85%"/>
+                  <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                    <el-input v-model="temp.service5LdpcRate" style="width: 85%"/>
                   </el-form-item>
-                  <el-form-item label="业务3的扩频倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service3ExpandTime" style="width: 85%"/>
+                  <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                    <el-input v-model="temp.service5MapMode" style="width: 85%"/>
                   </el-form-item>
                 </el-col>
 
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="业务4的扩频倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service4ExpandTime" style="width: 75%"/>
+                  <el-form-item label="交织深度" prop="power" label-width="150px">
+                    <el-input v-model="temp.service5IntvNum" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务5的扩频倍率" prop="power" label-width="150px">
+                  <el-form-item label="扩展倍率" prop="power" label-width="150px">
                     <el-input v-model="temp.service5ExpandTime" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务6的扩频倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6ExpandTime" style="width: 75%"/>
-                  </el-form-item>
-                  <el-form-item label="业务7的扩频倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7ExpandTime" style="width: 75%"/>
-                  </el-form-item>
-
-                </el-col>
-              </el-row>
-            </el-collapse-item>
-
-            <el-collapse-item title="业务封装格式" name="6">
-              <el-row :gutter="32">
-                <el-col :xs="24" :sm="24" :lg="12">
-
-                  <el-form-item label="业务1的封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service1SealMode" style="width: 85%"/>
-                  </el-form-item>
-                  <el-form-item label="业务2的封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service2SealMode" style="width: 85%"/>
-                  </el-form-item>
-                  <el-form-item label="业务3的封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service3SealMode" style="width: 85%"/>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="业务4的封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service4SealMode" style="width: 75%"/>
-                  </el-form-item>
-                  <el-form-item label="业务5的封装格式" prop="power" label-width="150px">
+                  <el-form-item label="封装格式" prop="power" label-width="150px">
                     <el-input v-model="temp.service5SealMode" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务6的封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6SealMode" style="width: 75%"/>
+                  <el-form-item label="授权序列" prop="power" label-width="150px">
+                    <el-input v-model="temp.service5AuthorList" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务7的封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7SealMode" style="width: 75%"/>
-                  </el-form-item>
-
                 </el-col>
               </el-row>
             </el-collapse-item>
 
-            <el-collapse-item title="业务授权序列" name="7">
+            <el-collapse-item title="业务6" name="6">
               <el-row :gutter="32">
                 <el-col :xs="24" :sm="24" :lg="12">
-
-                  <el-form-item label="业务1的授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service1AuthorList" style="width: 85%"/>
+                  <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                    <el-input v-model="temp.service6LdpcNum" style="width: 85%"/>
                   </el-form-item>
-                  <el-form-item label="业务2的授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service2AuthorList" style="width: 85%"/>
+                  <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                    <el-input v-model="temp.service6LdpcRate" style="width: 85%"/>
                   </el-form-item>
-                  <el-form-item label="业务3的授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service3AuthorList" style="width: 85%"/>
+                  <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                    <el-input v-model="temp.service6MapMode" style="width: 85%"/>
                   </el-form-item>
                 </el-col>
 
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="业务4的授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service4AuthorList" style="width: 75%"/>
+                  <el-form-item label="交织深度" prop="power" label-width="150px">
+                    <el-input v-model="temp.service6IntvNum" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务5的授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5AuthorList" style="width: 75%"/>
+                  <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                    <el-input v-model="temp.service6ExpandTime" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务6的授权序列" prop="power" label-width="150px">
+                  <el-form-item label="封装格式" prop="power" label-width="150px">
+                    <el-input v-model="temp.service6SealMode" style="width: 75%"/>
+                  </el-form-item>
+                  <el-form-item label="授权序列" prop="power" label-width="150px">
                     <el-input v-model="temp.service6AuthorList" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="业务7的授权序列" prop="power" label-width="150px">
+                </el-col>
+              </el-row>
+            </el-collapse-item>
+
+            <el-collapse-item title="业务7" name="7">
+              <el-row :gutter="32">
+                <el-col :xs="24" :sm="24" :lg="12">
+                  <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                    <el-input v-model="temp.service7LdpcNum" style="width: 85%"/>
+                  </el-form-item>
+                  <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                    <el-input v-model="temp.service7LdpcRate" style="width: 85%"/>
+                  </el-form-item>
+                  <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                    <el-input v-model="temp.service7MapMode" style="width: 85%"/>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="12">
+                  <el-form-item label="交织深度" prop="power" label-width="150px">
+                    <el-input v-model="temp.service7IntvNum" style="width: 75%"/>
+                  </el-form-item>
+                  <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                    <el-input v-model="temp.service7ExpandTime" style="width: 75%"/>
+                  </el-form-item>
+                  <el-form-item label="封装格式" prop="power" label-width="150px">
+                    <el-input v-model="temp.service7SealMode" style="width: 75%"/>
+                  </el-form-item>
+                  <el-form-item label="授权序列" prop="power" label-width="150px">
                     <el-input v-model="temp.service7AuthorList" style="width: 75%"/>
                   </el-form-item>
-
                 </el-col>
               </el-row>
             </el-collapse-item>
@@ -772,6 +760,48 @@
           service1ExpandTime: '',
           service1SealMode: '',
           service1AuthorList: '',
+          service2LdpcNum: '',
+          service2IntvNum: '',
+          service2LdpcRate: '',
+          service2MapMode: '',
+          service2ExpandTime: '',
+          service2SealMode: '',
+          service2AuthorList: '',
+          service3LdpcNum: '',
+          service3IntvNum: '',
+          service3LdpcRate: '',
+          service3MapMode: '',
+          service3ExpandTime: '',
+          service3SealMode: '',
+          service3AuthorList: '',
+          service4LdpcNum: '',
+          service4IntvNum: '',
+          service4LdpcRate: '',
+          service4MapMode: '',
+          service4ExpandTime: '',
+          service4SealMode: '',
+          service4AuthorList: '',
+          service5LdpcNum: '',
+          service5IntvNum: '',
+          service5LdpcRate: '',
+          service5MapMode: '',
+          service5ExpandTime: '',
+          service5SealMode: '',
+          service5AuthorList: '',
+          service6LdpcNum: '',
+          service6IntvNum: '',
+          service6LdpcRate: '',
+          service6MapMode: '',
+          service6ExpandTime: '',
+          service6SealMode: '',
+          service6AuthorList: '',
+          service7LdpcNum: '',
+          service7IntvNum: '',
+          service7LdpcRate: '',
+          service7MapMode: '',
+          service7ExpandTime: '',
+          service7SealMode: '',
+          service7AuthorList: '',
           activeTime: '',
           lastPowerOnTime: ''
         },
