@@ -123,7 +123,8 @@
             删除
           </el-button>
           <!--普通用户禁止编辑 disabled="false"-->
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑信息</el-button>
+          <el-button type="warning" size="mini" @click="handleSingle(row)">编辑指令</el-button>
           <el-button type="success" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
         </template>
       </el-table-column>
@@ -197,7 +198,34 @@
   </span>
     </el-dialog>
 
-    <!--编辑-->
+    <!--编辑指令-->
+    <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogSingleVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+        <el-row :gutter="32">
+          <el-col :xs="24" :sm="24" :lg="12">
+            <el-form-item label="部署地点" prop="power">
+              <el-select v-model="temp.location" placeholder="请选择部署地点">
+              </el-select>
+            </el-form-item>
+          </el-col>
+            <el-col :xs="24" :sm="24" :lg="12">
+            <el-form-item label="运营商" prop="power">
+              <el-input v-model="temp.operator" style="width: 75%"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <!--编辑信息-->
     <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible">
 
       <el-tabs :tab-position="tabPosition">
@@ -211,16 +239,9 @@
                 <el-form-item label="激励器ID" prop="power">
                   <el-input v-model="temp.txId" disabled="false" style="width: 75%"/>
                 </el-form-item>
-                <el-form-item label="部署地点" prop="power">
-                  <el-select v-model="temp.location" placeholder="请选择部署地点">
-                  </el-select>
-                </el-form-item>
               </el-col>
 
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="运营商" prop="power">
-                    <el-input v-model="temp.operator" style="width: 75%"/>
-                  </el-form-item>
                   <el-form-item label="发射频点" prop="power">
                     <el-input v-model="temp.freq" style="width: 75%"/>
                   </el-form-item>
@@ -335,24 +356,26 @@
               </el-col>
 
               <el-col :xs="24" :sm="24" :lg="8">
-                <el-form-item label="CDRadio开关" prop="power">
+                <el-form-item label="CDRadio" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.cdRadioEnable" placement="top">
                     <el-switch
                       v-model="temp.cdRadioEnable"
-                      active-color="#13ce66"
                       inactive-color="grey"
+                      active-text="开启"
+                      inactive-text="关闭"
                       active-value="1"
                       inactive-value="0">
                     </el-switch>
                   </el-tooltip>
                 </el-form-item>
-                <el-form-item label="自动上报开关" prop="power">
+                <el-form-item label="自动上报" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.reportEnable" placement="top">
                     <el-switch
                       v-model="temp.reportEnable"
-                      active-color="#13ce66"
                       inactive-color="grey"
-                      active-value="100"
+                      active-text="开启"
+                      inactive-text="关闭"
+                      active-value="1"
                       inactive-value="0">
                     </el-switch>
                   </el-tooltip>
@@ -360,24 +383,26 @@
               </el-col>
 
               <el-col :xs="24" :sm="24" :lg="8">
-                <el-form-item label="Dpd开关" prop="power">
+                <el-form-item label="Dpd" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.dpdEnable" placement="top">
                     <el-switch
                       v-model="temp.dpdEnable"
-                      active-color="#13ce66"
                       inactive-color="grey"
-                      active-value="100"
+                      active-text="开启"
+                      inactive-text="关闭"
+                      active-value="1"
                       inactive-value="0">
                     </el-switch>
                   </el-tooltip>
                 </el-form-item>
-                <el-form-item label="FM开关" prop="power">
+                <el-form-item label="FM" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.fmEnable" placement="top">
                     <el-switch
                       v-model="temp.fmEnable"
-                      active-color="#13ce66"
                       inactive-color="grey"
-                      active-value="100"
+                      active-text="开启"
+                      inactive-text="关闭"
+                      active-value="1"
                       inactive-value="0">
                     </el-switch>
                   </el-tooltip>
@@ -385,13 +410,14 @@
               </el-col>
 
               <el-col :xs="24" :sm="24" :lg="8">
-                <el-form-item label="授时开关" prop="power">
+                <el-form-item label="授时" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.timeServiceEnable" placement="top">
                     <el-switch
                       v-model="temp.timeServiceEnable"
-                      active-color="#13ce66"
                       inactive-color="grey"
-                      active-value="100"
+                      active-text="开启"
+                      inactive-text="关闭"
+                      active-value="1"
                       inactive-value="0">
                     </el-switch>
                   </el-tooltip>
@@ -705,6 +731,8 @@
         dialogVisible: false,
         innerVisible: false,
         outerVisible: false,
+        dialogFormVisible: false,
+        dialogSingleVisible: false,
         tableKey: 0,
         list: [],
         total: 0,
@@ -740,7 +768,7 @@
           updateTime: '',
           hardVersion: '',
           softVersion: '',
-          cdRadioEnable: true,
+          cdRadioEnable: '',
           fmEnable: '',
           dpdEnable: '',
           timeServiceEnable: '',
@@ -807,7 +835,6 @@
         },
         cloneTemp: {},
         diffTemp: null,
-        dialogFormVisible: false,
         dialogStatus: '',
         textMap: {
           update: '正在编辑激励器',
@@ -1041,14 +1068,73 @@
           }
         })
       },
-      //进入编辑dialog
+      //进入编辑指令dialog
+      handleSingle(row) {
+        this.temp = Object.assign({}, row) // copy obj
+        this.dialogStatus = 'update'
+        this.dialogSingleVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
+      },
+      //进入编辑信息dialog
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
-        // 备份一份原始数据
         var avg = this.temp.avgPower
         var ad = this.temp.adPowerRatio
-        this.temp.adPowerRatio = parseInt(ad)
-        this.temp.avgPower = parseInt(avg)
+        var sub = this.temp.subFrameNum
+        var mo = this.temp.modulation
+        //将滑块字符串转int类型
+        this.temp.avgPower = parseInt(avg)   //模数功率比
+        this.temp.adPowerRatio = parseInt(ad)//发射功率
+        this.temp.subFrameNum = parseInt(sub)//子帧长度
+        this.temp.modulation = parseInt(mo)  //调制度
+
+        // 开on=1
+        // 关off=0
+        // 将开关按钮字符串转int类型
+        var cdRadio = this.temp.cdRadioEnable
+        var fm = this.temp.fmEnable
+        var dpd = this.temp.dpdEnable
+        var timeService = this.temp.timeServiceEnable
+        var report = this.temp.reportEnable
+        if (cdRadio === 'on') {
+          this.temp.cdRadioEnable = '1'
+        }else if (cdRadio === 'off') {
+          this.temp.cdRadioEnable = '0'
+        }else {
+          this.temp.cdRadioEnable = '1'
+        }
+        if (dpd === 'on') {
+          this.temp.fmEnable = '1'
+        }else if (dpd === 'off') {
+          this.temp.fmEnable = '0'
+        }else {
+          this.temp.fmEnable = '0'
+        }
+        if (timeService === 'on') {
+          this.temp.dpdEnable = '1'
+        }else if (timeService === 'off') {
+          this.temp.dpdEnable = '0'
+        }else {
+          this.temp.dpdEnable = '0'
+        }
+        if (timeService === 'on') {
+          this.temp.timeServiceEnable = '1'
+        }else if (timeService === 'off') {
+          this.temp.timeServiceEnable = '0'
+        }else {
+          this.temp.timeServiceEnable = '0'
+        }
+        if (report === 'on') {
+          this.temp.reportEnable = '1'
+        }else if (report === 'off') {
+          this.temp.reportEnable = '0'
+        }else {
+          this.temp.reportEnable = '0'
+        }
+
+        //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
         var status = row.txState
         if (status === 'shutdown') {
