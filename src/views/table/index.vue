@@ -265,8 +265,8 @@
                   </el-slider>
                 </el-form-item>
                 <el-form-item label="频谱模式" prop="power">
-                  <el-radio v-model="temp.specMode" label="1">A1</el-radio>
-                  <el-radio v-model="temp.specMode" label="2">A2</el-radio>
+                  <el-radio v-model="temp.specMode" label="A1">A1</el-radio>
+                  <el-radio v-model="temp.specMode" label="A2">A2</el-radio>
                   <el-radio v-model="temp.specMode" label="A3">A3</el-radio>
                   <el-radio v-model="temp.specMode" label="A4">A4</el-radio>
                   <el-radio v-model="temp.specMode" label="B1">B1</el-radio>
@@ -382,7 +382,7 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :xs="24" :sm="24" :lg="8">
+              <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
                 <el-form-item label="Dpd" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.dpdEnable" placement="top">
                     <el-switch
@@ -409,7 +409,7 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :xs="24" :sm="24" :lg="8">
+              <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
                 <el-form-item label="授时" prop="power">
                   <el-tooltip :content="'Switch value: ' + temp.timeServiceEnable" placement="top">
                     <el-switch
@@ -1168,17 +1168,17 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            var time = this.temp.updateTime / 1000
-            this.temp.updateTime = time
+            var time = this.temp.startTimeStamp / 1000
+            this.temp.startTimeStamp = time
             for(let k in  this.temp) {
               //判断当前表单数据不等于克隆数据
               if(this.temp[k]  !=  this.cloneTemp[k]) {
                 if (!this.diffTemp) {
                   this.diffTemp = {};
                 }
-                if (k === 'txState') {
-                  continue
-                }
+                // if (k === 'txState') {
+                //   continue
+                // }
                 this.diffTemp[k] = this.temp[k];
               }
             }
@@ -1188,6 +1188,7 @@
             // temp Data.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
 
             updateArticle(this.diffTemp).then(response => {
+
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
