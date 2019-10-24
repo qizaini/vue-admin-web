@@ -60,23 +60,37 @@
           <span>{{ scope.row.rowKey }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="location" label="部署地点" align="center" width="200px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.location }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column prop="location" label="部署地点" align="center" width="230px">
+          <!--<template slot-scope="scope">
+            <span>{{ scope.row.location }}</span>
+          </template>-->
+          <template slot-scope="{row}">
+            <template v-if="row.edit">
+              <el-input v-model="row.location" class="edit-input" size="small" style="width: 140px"/>
+              <el-button
+                class="cancel-btn"
+                size="small"
+                type="warning"
+                @click="cancelEdit(row)"
+              >
+                取消
+              </el-button>
+            </template>
+            <span v-else>{{ row.location }}</span>
+          </template>
+        </el-table-column>
       <el-table-column prop="freq" label="频点(MHz)" align="center" width="200px">
         <template slot-scope="scope">
           {{ scope.row.freq }}
         </template>
       </el-table-column>
 
-      <el-table-column prop="avgPower" label="功率(w)" align="center" width="200">
+      <el-table-column prop="avgPower" label="功率(w)" align="center" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.avgPower }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="specMode" label="频谱模式" align="center" width="200">
+      <el-table-column prop="specMode" label="频谱模式" align="center" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.specMode }}</span>
         </template>
@@ -124,8 +138,25 @@
           </el-button>
           <!--普通用户禁止编辑 disabled="false"-->
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑信息</el-button>
-          <el-button type="warning" size="mini" @click="handleSingle(row)">编辑指令</el-button>
-          <el-button type="success" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
+          <!--<el-button type="warning" size="mini" @click="handleSingle(row)">编辑指令</el-button>-->
+          <el-button
+            v-if="row.edit"
+            type="success"
+            size="small"
+            icon="el-icon-circle-check-outline"
+            @click="confirmEdit(row)"
+          >
+            确定编辑
+          </el-button>
+          <el-button
+            v-else
+            type="warning"
+            size="small"
+            @click="row.edit=!row.edit"
+          >
+            编辑指令
+          </el-button>
+          <el-button type="danger" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
         </template>
       </el-table-column>
 
@@ -199,7 +230,7 @@
     </el-dialog>
 
     <!--编辑指令-->
-    <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogSingleVisible">
+    <!--<el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogSingleVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="12">
@@ -216,450 +247,451 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
+        <el-button @click="dialogSingleVisible = false">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
           确定
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
 
     <!--编辑信息-->
     <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
 
-      <el-tabs :tab-position="tabPosition">
-        <!--第一个tabs-->
-        <el-tab-pane label="基本配置">
+        <el-tabs :tab-position="tabPosition">
+          <!--第一个tabs-->
+          <el-tab-pane label="基本配置">
 
-          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
-            <el-row :gutter="32">
-
-              <el-col :xs="24" :sm="24" :lg="12">
-                <el-form-item label="激励器ID" prop="power">
-                  <el-input v-model="temp.txId" disabled="false" style="width: 75%"/>
-                </el-form-item>
-              </el-col>
-
-                <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="发射频点" prop="power">
-                    <el-input v-model="temp.freq" style="width: 75%"/>
-                  </el-form-item>
-                </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="22">
-                <el-form-item label="发射功率" prop="power">
-                  <!--Slider滑块  set(handles.slider1,'Max',100,'Min',1,'Value',1)-->
-                  <el-slider
-                    v-model="temp.avgPower"
-                    max="1000"
-                    show-input>
-                  </el-slider>
-                </el-form-item>
-                <el-form-item label="模数功率比" prop="power">
-                  <el-slider
-                    v-model="temp.adPowerRatio"
-                    min="10.0"
-                    max="30.0"
-                    show-input>
-                  </el-slider>
-                </el-form-item>
-                <el-form-item label="频谱模式" prop="power">
-                  <el-radio v-model="temp.specMode" label="A1">A1</el-radio>
-                  <el-radio v-model="temp.specMode" label="A2">A2</el-radio>
-                  <el-radio v-model="temp.specMode" label="A3">A3</el-radio>
-                  <el-radio v-model="temp.specMode" label="A4">A4</el-radio>
-                  <el-radio v-model="temp.specMode" label="B1">B1</el-radio>
-                  <el-radio v-model="temp.specMode" label="B2">B2</el-radio>
-                  <el-radio v-model="temp.specMode" label="B3">B3</el-radio>
-                  <el-radio v-model="temp.specMode" label="B4">B4</el-radio>
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-          </el-form>
-        </el-tab-pane>
-        <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
-                   <el-autocomplete
-                     v-model="location"
-                     style="width: 80%"
-                     class="inline-input"
-                     :fetch-suggestions="querySearch"
-                     placeholder="请输入内容"
-                     :trigger-on-focus="false"
-                     @select="handleSelect"
-                   />
-                 </el-form-item>-->
-
-                  <!--<el-form-item label="激活时间" prop="updateTime">
-                    <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
-                  </el-form-item>
-                  <el-form-item label="状态" prop="power">
-                    <el-input v-model="temp.txState" style="width: 62%" disabled="disabled"/>
-                  </el-form-item>-->
-        <!--第二个tabs-->
-        <el-tab-pane label="高级配置">
-
-          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
-            <el-row :gutter="32">
-
-              <el-col :xs="24" :sm="24" :lg="12">
-                <el-form-item label="硬件版本" prop="power">
-                  <el-input v-model="temp.hardVersion" disabled="false" style="width: 75%"/>
-                </el-form-item>
-                <el-form-item label="软件版本" prop="power">
-                  <el-input v-model="temp.softVersion" disabled="false" style="width: 75%"/>
-                </el-form-item>
-                <el-form-item label="业务数据数量" prop="power">
-                  <el-input v-model="temp.subFrameNum" style="width: 75%"/>
-                </el-form-item>
-                <el-form-item label="音频输入源" prop="power">
-                  <el-input v-model="temp.audioSource" style="width: 75%"/>
-                </el-form-item>
-
-              </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="12">
-                <el-form-item label="声道" prop="power">
-                  <el-input v-model="temp.vocalTract" style="width: 75%"/>
-                </el-form-item>
-                <el-form-item label="预加重" prop="power">
-                  <el-input v-model="temp.preAggravation" style="width: 75%"/>
-                </el-form-item>
-                <el-form-item label="定时启动时间" prop="power">
-                  <el-date-picker v-model="temp.startTimeStamp" type="datetime" style="width: 75%"/>
-                </el-form-item>
-                <el-form-item label="时延补偿" prop="power">
-                  <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
-                </el-form-item>
-              </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="22">
-                <el-form-item label="子帧长度" prop="power">
-                  <!--Slider滑块-->
-                  <el-slider
-                    v-model="temp.subFrameNum"
-                    min="2"
-                    max="255"
-                    show-input>
-                  </el-slider>
-                </el-form-item>
-                <el-form-item label="调制度" prop="power">
-                  <!--Slider滑块-->
-                  <el-slider
-                    v-model="temp.modulation"
-                    min="10"
-                    max="150"
-                    show-input>
-                  </el-slider>
-                </el-form-item>
-              </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="8">
-                <el-form-item label="CDRadio" prop="power">
-                  <el-tooltip :content="'Switch value: ' + temp.cdRadioEnable" placement="top">
-                    <el-switch
-                      v-model="temp.cdRadioEnable"
-                      inactive-color="grey"
-                      active-text="开启"
-                      inactive-text="关闭"
-                      active-value="1"
-                      inactive-value="0">
-                    </el-switch>
-                  </el-tooltip>
-                </el-form-item>
-                <el-form-item label="自动上报" prop="power">
-                  <el-tooltip :content="'Switch value: ' + temp.reportEnable" placement="top">
-                    <el-switch
-                      v-model="temp.reportEnable"
-                      inactive-color="grey"
-                      active-text="开启"
-                      inactive-text="关闭"
-                      active-value="1"
-                      inactive-value="0">
-                    </el-switch>
-                  </el-tooltip>
-                </el-form-item>
-              </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
-                <el-form-item label="Dpd" prop="power">
-                  <el-tooltip :content="'Switch value: ' + temp.dpdEnable" placement="top">
-                    <el-switch
-                      v-model="temp.dpdEnable"
-                      inactive-color="grey"
-                      active-text="开启"
-                      inactive-text="关闭"
-                      active-value="1"
-                      inactive-value="0">
-                    </el-switch>
-                  </el-tooltip>
-                </el-form-item>
-                <el-form-item label="FM" prop="power">
-                  <el-tooltip :content="'Switch value: ' + temp.fmEnable" placement="top">
-                    <el-switch
-                      v-model="temp.fmEnable"
-                      inactive-color="grey"
-                      active-text="开启"
-                      inactive-text="关闭"
-                      active-value="1"
-                      inactive-value="0">
-                    </el-switch>
-                  </el-tooltip>
-                </el-form-item>
-              </el-col>
-
-              <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
-                <el-form-item label="授时" prop="power">
-                  <el-tooltip :content="'Switch value: ' + temp.timeServiceEnable" placement="top">
-                    <el-switch
-                      v-model="temp.timeServiceEnable"
-                      inactive-color="grey"
-                      active-text="开启"
-                      inactive-text="关闭"
-                      active-value="1"
-                      inactive-value="0">
-                    </el-switch>
-                  </el-tooltip>
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-          </el-form>
-
-        </el-tab-pane>
-
-        <!--第三个tabs/Collapse 折叠面板-->
-        <el-tab-pane label="业务配置">
-          <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
-
-            <el-collapse v-model="activeNames" @change="handleChange">
-              <el-collapse-item title="业务1" name="1">
-                <el-row :gutter="32">
-                  <el-col :xs="24" :sm="24" :lg="12">
-
-                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1LdpcNum" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1LdpcRate" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1MapMode" style="width: 85%"/>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1IntvNum" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1ExpandTime" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="封装格式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1SealMode" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="授权序列" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
-                    </el-form-item>
-
-                  </el-col>
-                </el-row>
-              </el-collapse-item>
-
-              <el-collapse-item title="业务2" name="2">
-                <el-row :gutter="32">
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2LdpcNum" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2LdpcRate" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2MapMode" style="width: 85%"/>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2IntvNum" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2ExpandTime" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="封装格式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2SealMode" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="授权序列" prop="power" label-width="150px">
-                      <el-input v-model="temp.service2AuthorList" style="width: 75%"/>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-collapse-item>
-
-              <el-collapse-item title="业务3" name="3">
-                <el-row :gutter="32">
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3LdpcNum" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3LdpcRate" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3MapMode" style="width: 85%"/>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3IntvNum" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3ExpandTime" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="封装格式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3SealMode" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="授权序列" prop="power" label-width="150px">
-                      <el-input v-model="temp.service3AuthorList" style="width: 75%"/>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-collapse-item>
-
-              <el-collapse-item title="业务4" name="4">
-                <el-row :gutter="32">
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4LdpcNum" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4LdpcRate" style="width: 85%"/>
-                    </el-form-item>
-                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4MapMode" style="width: 85%"/>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="交织深度" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4IntvNum" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4ExpandTime" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="封装格式" prop="power" label-width="150px">
-                      <el-input v-model="temp.service4SealMode" style="width: 75%"/>
-                    </el-form-item>
-                    <el-form-item label="授权序列" prop="power" label-width="150px">
-                      <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-collapse-item>
-
-            <el-collapse-item title="业务5" name="5">
+            <!--<el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">-->
               <el-row :gutter="32">
+
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5LdpcNum" style="width: 85%"/>
-                  </el-form-item>
-                  <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5LdpcRate" style="width: 85%"/>
-                  </el-form-item>
-                  <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5MapMode" style="width: 85%"/>
+                  <el-form-item label="激励器ID" prop="power">
+                    <el-input v-model="temp.txId" disabled="false" style="width: 75%"/>
                   </el-form-item>
                 </el-col>
 
-                <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="交织深度" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5IntvNum" style="width: 75%"/>
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="发射频点" prop="power">
+                      <el-input v-model="temp.freq" style="width: 75%"/>
+                    </el-form-item>
+                  </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="22">
+                  <el-form-item label="发射功率" prop="power">
+                    <!--Slider滑块  set(handles.slider1,'Max',100,'Min',1,'Value',1)-->
+                    <el-slider
+                      v-model="temp.avgPower"
+                      max="1000"
+                      show-input>
+                    </el-slider>
                   </el-form-item>
-                  <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5ExpandTime" style="width: 75%"/>
+                  <el-form-item label="模数功率比" prop="power">
+                    <el-slider
+                      v-model="temp.adPowerRatio"
+                      min="10"
+                      max="30"
+                      show-input>
+                    </el-slider>
                   </el-form-item>
-                  <el-form-item label="封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5SealMode" style="width: 75%"/>
-                  </el-form-item>
-                  <el-form-item label="授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service5AuthorList" style="width: 75%"/>
+                  <el-form-item label="频谱模式" prop="power">
+                    <el-radio v-model="temp.specMode" label="A1">A1</el-radio>
+                    <el-radio v-model="temp.specMode" label="A2">A2</el-radio>
+                    <el-radio v-model="temp.specMode" label="A3">A3</el-radio>
+                    <el-radio v-model="temp.specMode" label="A4">A4</el-radio>
+                    <el-radio v-model="temp.specMode" label="B1">B1</el-radio>
+                    <el-radio v-model="temp.specMode" label="B2">B2</el-radio>
+                    <el-radio v-model="temp.specMode" label="B3">B3</el-radio>
+                    <el-radio v-model="temp.specMode" label="B4">B4</el-radio>
                   </el-form-item>
                 </el-col>
+
               </el-row>
-            </el-collapse-item>
+            <!--</el-form>-->
+          </el-tab-pane>
+          <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
+                     <el-autocomplete
+                       v-model="location"
+                       style="width: 80%"
+                       class="inline-input"
+                       :fetch-suggestions="querySearch"
+                       placeholder="请输入内容"
+                       :trigger-on-focus="false"
+                       @select="handleSelect"
+                     />
+                   </el-form-item>-->
 
-            <el-collapse-item title="业务6" name="6">
+                    <!--<el-form-item label="激活时间" prop="updateTime">
+                      <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
+                    </el-form-item>
+                    <el-form-item label="状态" prop="power">
+                      <el-input v-model="temp.txState" style="width: 62%" disabled="disabled"/>
+                    </el-form-item>-->
+          <!--第二个tabs-->
+          <el-tab-pane label="高级配置">
+
+            <!--<el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">-->
               <el-row :gutter="32">
+
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6LdpcNum" style="width: 85%"/>
+                  <el-form-item label="硬件版本" prop="power">
+                    <el-input v-model="temp.hardVersion" disabled="false" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6LdpcRate" style="width: 85%"/>
+                  <el-form-item label="软件版本" prop="power">
+                    <el-input v-model="temp.softVersion" disabled="false" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6MapMode" style="width: 85%"/>
+                  <el-form-item label="业务数据数量" prop="power">
+                    <el-input v-model="temp.serviceNum" style="width: 75%"/>
                   </el-form-item>
+                  <el-form-item label="音频输入源" prop="power">
+                    <el-input v-model="temp.audioSource" style="width: 75%"/>
+                  </el-form-item>
+
                 </el-col>
 
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="交织深度" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6IntvNum" style="width: 75%"/>
+                  <el-form-item label="声道" prop="power">
+                    <el-input v-model="temp.vocalTract" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6ExpandTime" style="width: 75%"/>
+                  <el-form-item label="预加重" prop="power">
+                    <el-input v-model="temp.preAggravation" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6SealMode" style="width: 75%"/>
+                  <el-form-item label="定时启动时间" prop="power">
+                    <el-date-picker v-model="temp.startTimeStamp" type="datetime" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service6AuthorList" style="width: 75%"/>
+                  <el-form-item label="时延补偿" prop="power">
+                    <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
                   </el-form-item>
                 </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="22">
+                  <el-form-item label="子帧长度" prop="power">
+                    <!--Slider滑块-->
+                    <el-slider
+                      v-model="temp.subFrameNum"
+                      min="2"
+                      max="255"
+                      show-input>
+                    </el-slider>
+                  </el-form-item>
+                  <el-form-item label="调制度" prop="power">
+                    <!--Slider滑块-->
+                    <el-slider
+                      v-model="temp.modulation"
+                      min="10"
+                      max="150"
+                      show-input>
+                    </el-slider>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="8">
+                  <el-form-item label="CDRadio" prop="power">
+                    <el-tooltip :content="'Switch value: ' + temp.cdRadioEnable" placement="top">
+                      <el-switch
+                        v-model="temp.cdRadioEnable"
+                        inactive-color="grey"
+                        active-text="开启"
+                        inactive-text="关闭"
+                        active-value="1"
+                        inactive-value="0">
+                      </el-switch>
+                    </el-tooltip>
+                  </el-form-item>
+                  <el-form-item label="自动上报" prop="power">
+                    <el-tooltip :content="'Switch value: ' + temp.reportEnable" placement="top">
+                      <el-switch
+                        v-model="temp.reportEnable"
+                        inactive-color="grey"
+                        active-text="开启"
+                        inactive-text="关闭"
+                        active-value="1"
+                        inactive-value="0">
+                      </el-switch>
+                    </el-tooltip>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
+                  <el-form-item label="Dpd" prop="power">
+                    <el-tooltip :content="'Switch value: ' + temp.dpdEnable" placement="top">
+                      <el-switch
+                        v-model="temp.dpdEnable"
+                        inactive-color="grey"
+                        active-text="开启"
+                        inactive-text="关闭"
+                        active-value="1"
+                        inactive-value="0">
+                      </el-switch>
+                    </el-tooltip>
+                  </el-form-item>
+                  <el-form-item label="FM" prop="power">
+                    <el-tooltip :content="'Switch value: ' + temp.fmEnable" placement="top">
+                      <el-switch
+                        v-model="temp.fmEnable"
+                        inactive-color="grey"
+                        active-text="开启"
+                        inactive-text="关闭"
+                        active-value="1"
+                        inactive-value="0">
+                      </el-switch>
+                    </el-tooltip>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
+                  <el-form-item label="授时" prop="power">
+                    <el-tooltip :content="'Switch value: ' + temp.timeServiceEnable" placement="top">
+                      <el-switch
+                        v-model="temp.timeServiceEnable"
+                        inactive-color="grey"
+                        active-text="开启"
+                        inactive-text="关闭"
+                        active-value="1"
+                        inactive-value="0">
+                      </el-switch>
+                    </el-tooltip>
+                  </el-form-item>
+                </el-col>
+
               </el-row>
-            </el-collapse-item>
+            <!--</el-form>-->
 
-            <el-collapse-item title="业务7" name="7">
-              <el-row :gutter="32">
-                <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="LDPC块数" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7LdpcNum" style="width: 85%"/>
-                  </el-form-item>
-                  <el-form-item label="LDPC码率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7LdpcRate" style="width: 85%"/>
-                  </el-form-item>
-                  <el-form-item label="星座映射方式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7MapMode" style="width: 85%"/>
-                  </el-form-item>
-                </el-col>
+          </el-tab-pane>
 
-                <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="交织深度" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7IntvNum" style="width: 75%"/>
-                  </el-form-item>
-                  <el-form-item label="扩展倍率" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7ExpandTime" style="width: 75%"/>
-                  </el-form-item>
-                  <el-form-item label="封装格式" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7SealMode" style="width: 75%"/>
-                  </el-form-item>
-                  <el-form-item label="授权序列" prop="power" label-width="150px">
-                    <el-input v-model="temp.service7AuthorList" style="width: 75%"/>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-collapse-item>
+          <!--第三个tabs/Collapse 折叠面板-->
+          <el-tab-pane label="业务配置">
+            <!--<el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">-->
 
-            </el-collapse>
+              <el-collapse v-model="activeNames" @change="handleChange">
+                <el-collapse-item title="业务1" name="1">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
 
-          </el-form>
+                      <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1LdpcNum" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1LdpcRate" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1MapMode" style="width: 85%"/>
+                      </el-form-item>
+                    </el-col>
 
-        </el-tab-pane>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="交织深度" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1IntvNum" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1ExpandTime" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="封装格式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1SealMode" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="授权序列" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
+                      </el-form-item>
 
-      </el-tabs>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+
+                <el-collapse-item title="业务2" name="2">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2LdpcNum" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2LdpcRate" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2MapMode" style="width: 85%"/>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="交织深度" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2IntvNum" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2ExpandTime" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="封装格式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2SealMode" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="授权序列" prop="power" label-width="150px">
+                        <el-input v-model="temp.service2AuthorList" style="width: 75%"/>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+
+                <el-collapse-item title="业务3" name="3">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3LdpcNum" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3LdpcRate" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3MapMode" style="width: 85%"/>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="交织深度" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3IntvNum" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3ExpandTime" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="封装格式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3SealMode" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="授权序列" prop="power" label-width="150px">
+                        <el-input v-model="temp.service3AuthorList" style="width: 75%"/>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+
+                <el-collapse-item title="业务4" name="4">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                        <el-input v-model="temp.service4LdpcNum" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service4LdpcRate" style="width: 85%"/>
+                      </el-form-item>
+                      <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service4MapMode" style="width: 85%"/>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="交织深度" prop="power" label-width="150px">
+                        <el-input v-model="temp.service4IntvNum" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                        <el-input v-model="temp.service4ExpandTime" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="封装格式" prop="power" label-width="150px">
+                        <el-input v-model="temp.service4SealMode" style="width: 75%"/>
+                      </el-form-item>
+                      <el-form-item label="授权序列" prop="power" label-width="150px">
+                        <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+
+              <el-collapse-item title="业务5" name="5">
+                <el-row :gutter="32">
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5LdpcNum" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5LdpcRate" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5MapMode" style="width: 85%"/>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5IntvNum" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5ExpandTime" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5SealMode" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service5AuthorList" style="width: 75%"/>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-collapse-item>
+
+              <el-collapse-item title="业务6" name="6">
+                <el-row :gutter="32">
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6LdpcNum" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6LdpcRate" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6MapMode" style="width: 85%"/>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6IntvNum" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6ExpandTime" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6SealMode" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service6AuthorList" style="width: 75%"/>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-collapse-item>
+
+              <el-collapse-item title="业务7" name="7">
+                <el-row :gutter="32">
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="LDPC块数" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7LdpcNum" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="LDPC码率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7LdpcRate" style="width: 85%"/>
+                    </el-form-item>
+                    <el-form-item label="星座映射方式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7MapMode" style="width: 85%"/>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :xs="24" :sm="24" :lg="12">
+                    <el-form-item label="交织深度" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7IntvNum" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="扩展倍率" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7ExpandTime" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="封装格式" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7SealMode" style="width: 75%"/>
+                    </el-form-item>
+                    <el-form-item label="授权序列" prop="power" label-width="150px">
+                      <el-input v-model="temp.service7AuthorList" style="width: 75%"/>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-collapse-item>
+
+              </el-collapse>
+            <!--</el-form>-->
+
+          </el-tab-pane>
+        </el-tabs>
+
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
@@ -931,6 +963,8 @@
           this.list = response.result
           this.total = response.result.length
 
+          this.$set(response, 'edit', false)
+          this.listQuery.location = response.location
           var result = response.result
           var state_arr = []
           var news_arr = []
@@ -1040,7 +1074,7 @@
           updateTime: ''
         }
       },
-      handleCreate() {
+      /*handleCreate() {
         this.resetTemp()
         //默认状态为备用
         this.temp.txState = 'backups'
@@ -1049,7 +1083,7 @@
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
-      },
+      },*/
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           // console.log(this.$refs['dataForm'])
@@ -1069,14 +1103,14 @@
         })
       },
       //进入编辑指令dialog
-      handleSingle(row) {
+      /*handleSingle(row) {
         this.temp = Object.assign({}, row) // copy obj
         this.dialogStatus = 'update'
         this.dialogSingleVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
-      },
+      },*/
       //进入编辑信息dialog
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
@@ -1182,13 +1216,12 @@
                 this.diffTemp[k] = this.temp[k];
               }
             }
-            // console.log(this.diffTemp)
             // 1.克隆原始数据
-            // console.log(this.temp)
             // temp Data.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
 
             updateArticle(this.diffTemp).then(response => {
-
+              console.log(this.diffTemp)
+              console.log('88888888888888888888888888888888')
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
@@ -1217,6 +1250,23 @@
           console.log(this.txData)
           this.outerVisible = true
           // this.dialogTableVisible = true
+        })
+      },
+      cancelEdit(row) {
+        row.location = this.listQuery.location
+        row.edit = false
+        this.$message({
+          message: '部署地点已恢复为原始值',
+          type: 'warning'
+        })
+      },
+      confirmEdit(row) {
+        this.listQuery = Object.assign({}, row)
+        row.edit = false
+        this.listQuery.location = row.location
+        this.$message({
+          message: '部署地点已被编辑',
+          type: 'success'
         })
       },
       handleDownload() {
