@@ -173,6 +173,9 @@
     <el-dialog :visible.sync="outerVisible" title="查看详情">
       <el-table :data="txData" style=" width: 100%">
         <el-table-column prop="avgPower" label="工作频点">
+          <template slot-scope="scope">
+            {{ scope.row.avgPower }}
+          </template>
         </el-table-column>
         <el-table-column prop="freq" label="输出频率">
         </el-table-column>
@@ -189,7 +192,7 @@
         <el-table-column prop="updateTime" label="配置更新时间">
         </el-table-column>
       </el-table>
-      <div style="display: flex">
+     <!-- <div style="display: flex">
         <div style="width:85px">{{txData.avgPower}}</div>
         <div style="width:85px">{{txData.freq}}</div>
         <div style="width:85px">{{txData.location}}</div>
@@ -198,7 +201,7 @@
         <div style="width:85px">{{txData.txState}}</div>
         <div style="width:85px">{{txData.lastPowerOnTime}}</div>
         <div style="width:85px">{{txData.updateTime}}</div>
-      </div>
+      </div>-->
       <template slot="empty">
         <div class="nodataTip">
           <img src="#" alt="" />
@@ -297,14 +300,14 @@
                     </el-slider>
                   </el-form-item>
                   <el-form-item label="频谱模式" prop="power">
-                    <el-radio v-model="temp.specMode" label="A1">A1</el-radio>
-                    <el-radio v-model="temp.specMode" label="A2">A2</el-radio>
-                    <el-radio v-model="temp.specMode" label="A3">A3</el-radio>
-                    <el-radio v-model="temp.specMode" label="A4">A4</el-radio>
-                    <el-radio v-model="temp.specMode" label="B1">B1</el-radio>
-                    <el-radio v-model="temp.specMode" label="B2">B2</el-radio>
-                    <el-radio v-model="temp.specMode" label="B3">B3</el-radio>
-                    <el-radio v-model="temp.specMode" label="B4">B4</el-radio>
+                    <el-radio v-model="temp.specMode" label="00">A1</el-radio>
+                    <el-radio v-model="temp.specMode" label="01">A2</el-radio>
+                    <el-radio v-model="temp.specMode" label="02">A3</el-radio>
+                    <el-radio v-model="temp.specMode" label="03">A4</el-radio>
+                    <el-radio v-model="temp.specMode" label="10">B1</el-radio>
+                    <el-radio v-model="temp.specMode" label="11">B2</el-radio>
+                    <el-radio v-model="temp.specMode" label="12">B3</el-radio>
+                    <el-radio v-model="temp.specMode" label="13">B4</el-radio>
                   </el-form-item>
                 </el-col>
 
@@ -395,8 +398,8 @@
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
-                        active-value="1"
-                        inactive-value="0">
+                        active-value="01"
+                        inactive-value="00">
                       </el-switch>
                     </el-tooltip>
                   </el-form-item>
@@ -407,8 +410,8 @@
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
-                        active-value="1"
-                        inactive-value="0">
+                        active-value="01"
+                        inactive-value="00">
                       </el-switch>
                     </el-tooltip>
                   </el-form-item>
@@ -422,8 +425,8 @@
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
-                        active-value="1"
-                        inactive-value="0">
+                        active-value="01"
+                        inactive-value="00">
                       </el-switch>
                     </el-tooltip>
                   </el-form-item>
@@ -434,8 +437,8 @@
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
-                        active-value="1"
-                        inactive-value="0">
+                        active-value="01"
+                        inactive-value="00">
                       </el-switch>
                     </el-tooltip>
                   </el-form-item>
@@ -449,8 +452,8 @@
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
-                        active-value="1"
-                        inactive-value="0">
+                        active-value="01"
+                        inactive-value="00">
                       </el-switch>
                     </el-tooltip>
                   </el-form-item>
@@ -1124,49 +1127,8 @@
         this.temp.subFrameNum = parseInt(sub)//子帧长度
         this.temp.modulation = parseInt(mo)  //调制度
 
-        // 开on=1
-        // 关off=0
-        // 将开关按钮字符串转int类型
-        var cdRadio = this.temp.cdRadioEnable
-        var fm = this.temp.fmEnable
-        var dpd = this.temp.dpdEnable
-        var timeService = this.temp.timeServiceEnable
-        var report = this.temp.reportEnable
-        if (cdRadio === 'on') {
-          this.temp.cdRadioEnable = '1'
-        }else if (cdRadio === 'off') {
-          this.temp.cdRadioEnable = '0'
-        }else {
-          this.temp.cdRadioEnable = '1'
-        }
-        if (dpd === 'on') {
-          this.temp.fmEnable = '1'
-        }else if (dpd === 'off') {
-          this.temp.fmEnable = '0'
-        }else {
-          this.temp.fmEnable = '0'
-        }
-        if (timeService === 'on') {
-          this.temp.dpdEnable = '1'
-        }else if (timeService === 'off') {
-          this.temp.dpdEnable = '0'
-        }else {
-          this.temp.dpdEnable = '0'
-        }
-        if (timeService === 'on') {
-          this.temp.timeServiceEnable = '1'
-        }else if (timeService === 'off') {
-          this.temp.timeServiceEnable = '0'
-        }else {
-          this.temp.timeServiceEnable = '0'
-        }
-        if (report === 'on') {
-          this.temp.reportEnable = '1'
-        }else if (report === 'off') {
-          this.temp.reportEnable = '0'
-        }else {
-          this.temp.reportEnable = '0'
-        }
+        // 开on=01
+        // 关off=00
 
         //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
