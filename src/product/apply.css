@@ -15,6 +15,9 @@
   top: 0;
 }
 
+.content-apply{
+  margin:  0 0 0 -65px;
+}
 .x-row-apply{
   margin: 65px 30px 0 30px;
 }

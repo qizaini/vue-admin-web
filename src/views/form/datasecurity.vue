@@ -15,7 +15,7 @@
 
 <style scoped>
   .el-carousel__item h3 {
-    color: #475669;
+    background-image: url("../../img/carouselMap1.png");
     font-size: 18px;
     opacity: 0.75;
     line-height: 300px;
@@ -23,7 +23,7 @@
   }
 
   .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
+    background-image: url("../../img/carouselMap2.png");
   }
 
   .el-carousel__item:nth-child(2n+1) {

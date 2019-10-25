@@ -1,6 +1,6 @@
 <template>
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
-    <div class="content">
+    <div class="content-monitoring">
       <h1>物联网节点监控</h1>
       <span>无线传感器网络</span><br><br>
       <span>实现主从节点之间的数据采集与传输</span>
@@ -36,7 +36,7 @@
               <div class="x-media-object number">2</div>
             </div>
             <div class="x-media-body x-media-middle text">
-              通过千寻自主研发的行人增强定位算法, 实现对用户运动状态下的准确记步、步幅计算、里程计算和步态分析。
+              通过基合自主研发的行人增强定位算法, 实现对用户运动状态下的准确记步、步幅计算、里程计算和步态分析。
             </div>
           </div>
         </div>

@@ -36,7 +36,7 @@
               <div class="x-media-object number">2</div>
             </div>
             <div class="x-media-body x-media-middle text">
-              通过千寻自主研发的行人增强定位算法, 实现对用户运动状态下的准确记步、步幅计算、里程计算和步态分析。
+              通过基合自主研发的行人增强定位算法, 实现对用户运动状态下的准确记步、步幅计算、里程计算和步态分析。
             </div>
           </div>
         </div>

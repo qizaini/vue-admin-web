@@ -931,7 +931,6 @@
           this.list = response.result
           this.total = response.result.length
 
-          console.log(this.list)
           this.$set(response, 'edit', false)
           this.listQuery.location = response.location
           var result = response.result

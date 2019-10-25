@@ -2,7 +2,7 @@
   <div class="app-container" style="background: #fff url(https://static0.qxwz.com/product/findu-bg.png) no-repeat top center; ">
 
     <div class="x-row-apply">
-      <div class="content">
+      <div class="content-apply">
         <h1 align="center">播出管理</h1>
         <span><h4 align="center">可为多个需要厘米级定位服务的行业提供实际应用</h4> </span>
       </div>
