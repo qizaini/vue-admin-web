@@ -99,7 +99,7 @@
         <template slot-scope="scope">
           <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-          <span>{{scope.row.updateTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
+          <span>{{scope.row.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -169,56 +169,6 @@
     </el-table>
 
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
-    <!--查看详情-->
-    <el-dialog :visible.sync="outerVisible" title="查看详情">
-      <el-table :data="txData" style=" width: 100%">
-        <el-table-column prop="avgPower" label="工作频点">
-          <template slot-scope="scope">
-            {{ scope.row.avgPower }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="freq" label="输出频率">
-        </el-table-column>
-        <el-table-column prop="location" label="部署地点">
-        </el-table-column>
-        <el-table-column prop="activeTime" label="激活时间">
-        </el-table-column>
-        <el-table-column prop="specMode" label="频谱模式">
-        </el-table-column>
-        <el-table-column prop="txState" label="状态">
-        </el-table-column>
-        <el-table-column prop="lastPowerOnTime" label="上次开机时间">
-        </el-table-column>
-        <el-table-column prop="updateTime" label="配置更新时间">
-        </el-table-column>
-      </el-table>
-     <!-- <div style="display: flex">
-        <div style="width:85px">{{txData.avgPower}}</div>
-        <div style="width:85px">{{txData.freq}}</div>
-        <div style="width:85px">{{txData.location}}</div>
-        <div style="width:85px">{{txData.activeTime}}</div>
-        <div style="width:85px">{{txData.specMode}}</div>
-        <div style="width:85px">{{txData.txState}}</div>
-        <div style="width:85px">{{txData.lastPowerOnTime}}</div>
-        <div style="width:85px">{{txData.updateTime}}</div>
-      </div>-->
-      <template slot="empty">
-        <div class="nodataTip">
-          <img src="#" alt="" />
-          暂无数据
-        </div>
-      </template>
-      <el-dialog
-        width="30%"
-        title="内层 Dialog"
-        :visible.sync="innerVisible"
-        append-to-body>
-      </el-dialog>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
-      </div>
-    </el-dialog>
 
     <!--查看日志-->
     <el-dialog
@@ -227,37 +177,50 @@
       width="30%">
       <span>this is log.</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
     </el-dialog>
 
-    <!--编辑指令-->
-    <!--<el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogSingleVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+    <!--查看详情-->
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="outerVisible">
+      <el-form :rules="rules" :model="temp" label-width="120px">
         <el-row :gutter="32">
           <el-col :xs="24" :sm="24" :lg="12">
-            <el-form-item label="部署地点" prop="power">
-              <el-select v-model="temp.location" placeholder="请选择部署地点">
-              </el-select>
+            <el-form-item label="工作频点:" prop="avgPower">
+              {{temp.avgPower}}
+            </el-form-item>
+            <el-form-item label="输出频率:" prop="freq">
+              {{temp.freq}}
+            </el-form-item>
+            <el-form-item label="工作频点:" prop="avgPower">
+              {{temp.avgPower}}
+            </el-form-item>
+            <el-form-item label="频谱模式:" prop="specMode">
+              {{temp.specMode}}
             </el-form-item>
           </el-col>
-            <el-col :xs="24" :sm="24" :lg="12">
-            <el-form-item label="运营商" prop="power">
-              <el-input v-model="temp.operator" style="width: 75%"/>
+          <el-col :xs="24" :sm="24" :lg="12">
+            <el-form-item label="激活时间:" prop="activeTime">
+              {{temp.activeTime}}
+            </el-form-item>
+            <el-form-item label="配置更新时间:" prop="updateTime">
+              {{temp.updateTime}}
+            </el-form-item>
+            <el-form-item label="上次开机时间:" prop="lastPowerOnTime">
+              {{temp.lastPowerOnTime}}
+            </el-form-item>
+            <el-form-item label="状态:" prop="txState">
+              {{temp.txState}}
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogSingleVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确定
-        </el-button>
+        <el-button @click="outerVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
       </div>
-    </el-dialog>-->
+    </el-dialog>
 
     <!--编辑信息-->
     <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible">
@@ -787,7 +750,7 @@
           sort: '+rowKey'
         },
         dialogTableVisible: false,
-        txData: [],
+        txData: {},
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
         showReviewer: false,
         temp: {
@@ -956,7 +919,7 @@
       getList() {
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {
-          console.log(this.listQuery.updateTime)
+          // console.log(this.listQuery.updateTime)
           var time_arr = this.listQuery.updateTime.toString().split(',')
           var start_time = new Date(time_arr[0]).getTime() / 1000
           var end_time = new Date(time_arr[1]).getTime() / 1000
@@ -966,6 +929,7 @@
           this.list = response.result
           this.total = response.result.length
 
+          console.log(this.list)
           this.$set(response, 'edit', false)
           this.listQuery.location = response.location
           var result = response.result
@@ -1206,13 +1170,8 @@
       handleFetchDetail(row) {
         this.temp = Object.assign({}, row)
         let rowKey = this.temp.rowKey
-        fetchTx(rowKey).then(response => {
-          this.txData  = response.result
-
-          console.log(this.txData)
-          this.outerVisible = true
-          // this.dialogTableVisible = true
-        })
+        this.dialogStatus = 'detail'
+        this.outerVisible = true
       },
       cancelEdit(row) {
         row.location = this.listQuery.location
