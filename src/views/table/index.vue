@@ -16,18 +16,18 @@
         <el-col :xs="24" :sm="24" :lg="12">
 
           <span class="demonstration">激活时间</span>&nbsp;
+          <!--validate-event="true" 输入时是否触发表单的校验	-->
           <el-date-picker
-            v-model="listQuery.updateTime"
+            v-model="listQuery.activeTime"
             type="daterange"
-            size="medium"
             align="right"
+            size="medium"
             unlink-panels
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :el-date-picker="pickerOptions"
-            validate-event="true"
-          />&nbsp;&nbsp;&nbsp;
+            :picker-options="pickerOptions">
+          </el-date-picker>&nbsp;&nbsp;&nbsp;
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
           <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
@@ -71,35 +71,39 @@
                 class="cancel-btn"
                 size="small"
                 type="warning"
-                @click="cancelEdit(row)"
-              >
+                @click="cancelEdit(row)">
                 取消
               </el-button>
             </template>
             <span v-else>{{ row.location }}</span>
           </template>
         </el-table-column>
-      <el-table-column prop="freq" label="频点(MHz)" align="center" width="200px">
+      <el-table-column prop="freq" label="频点(MHz)" align="center" >
         <template slot-scope="scope">
           {{ scope.row.freq }}
         </template>
       </el-table-column>
 
-      <el-table-column prop="avgPower" label="功率(w)" align="center" width="180">
+      <el-table-column prop="avgPower" label="功率(w)" align="center" >
         <template slot-scope="scope">
           <span>{{ scope.row.avgPower }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="specMode" label="频谱模式" align="center" width="180">
+      <el-table-column prop="specMode" label="频谱模式" align="center" >
         <template slot-scope="scope">
           <span>{{ scope.row.specMode }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" align="center" sortable label="激活时间" width="280">
+      <el-table-column prop="updateTime" align="center" sortable label="激活时间" >
         <template slot-scope="scope">
           <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
           <span>{{scope.row.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="updateTime" align="center" sortable label="开机时间" >
+        <template slot-scope="scope">
+          <span>{{scope.row.lastPowerOnTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -131,7 +135,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="320px">
         <template slot-scope="{row}">
           <el-button type="danger" size="mini" style="display: none">
             删除
@@ -749,8 +753,6 @@
           updateTime: '',
           sort: '+rowKey'
         },
-        dialogTableVisible: false,
-        txData: {},
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
         showReviewer: false,
         temp: {
@@ -1146,8 +1148,8 @@
             // temp Data.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
 
             updateArticle(this.diffTemp).then(response => {
-              console.log(this.diffTemp)
-              console.log('88888888888888888888888888888888')
+              // console.log(this.diffTemp)
+              // console.log('88888888888888888888888888888888')
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
@@ -1170,11 +1172,34 @@
       handleFetchDetail(row) {
         this.temp = Object.assign({}, row)
         let rowKey = this.temp.rowKey
+
+        var nowTime = this.temp.updateTime
+        this.temp.updateTime = nowTime * 1000
+        var status = row.txState
+        if (status === 'shutdown') {
+          this.temp.txState = "停止"
+        }
+        if (status === 'running') {
+          this.temp.txState = "运行"
+        }
+        if (status === 'updating') {
+          this.temp.txState = "升级"
+        }
+        if (status === 'backups') {
+          this.temp.txState = "备用"
+        }
+        if (status === 'warning') {
+          this.temp.txState = "警告"
+        }
+        if (status === 'breakdown') {
+          this.temp.txState = "故障"
+        }
         this.dialogStatus = 'detail'
         this.outerVisible = true
       },
       cancelEdit(row) {
         row.location = this.listQuery.location
+        console.log(row.location)
         row.edit = false
         this.$message({
           message: '部署地点已恢复为原始值',
