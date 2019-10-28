@@ -147,7 +147,7 @@ export const constantRoutes = [
       {
         path: 'tree2',
         name: 'Tree2',
-        component: () => import('@/views/form/signalquality'),
+        component: () => import('@/views/form/cors'),
         meta: { title: '基合CORS', icon: 'example' }
       }
     ]
