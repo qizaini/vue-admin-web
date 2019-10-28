@@ -182,21 +182,25 @@ dataSecurity
     margin: 0 10px;
   }
   .content-top1{
+    font-size: 18px;
     height: 100px;
     line-height: 100px;
     background: #f9ba4b;
   }
   .content-top2{
+    font-size: 18px;
     height: 100px;
     line-height: 100px;
     background: #e78482;
   }
   .content-top3{
+    font-size: 18px;
     height: 100px;
     line-height: 100px;
     background: #98c4fe;
   }
   .content-top4{
+    font-size: 18px;
     height: 100px;
     line-height: 100px;
     background: #A584D6;
