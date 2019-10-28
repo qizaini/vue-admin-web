@@ -209,7 +209,7 @@
               {{temp.activeTime}}
             </el-form-item>
             <el-form-item label="配置更新时间:" prop="updateTime">
-              {{temp.updateTime}}
+              {{temp.updateTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
             </el-form-item>
             <el-form-item label="上次开机时间:" prop="lastPowerOnTime">
               {{temp.lastPowerOnTime}}
@@ -1171,8 +1171,6 @@
         this.temp = Object.assign({}, row)
         let rowKey = this.temp.rowKey
 
-        var nowTime = this.temp.updateTime
-        this.temp.updateTime = nowTime * 1000
         var status = row.txState
         if (status === 'shutdown') {
           this.temp.txState = "停止"
