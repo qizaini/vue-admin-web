@@ -206,13 +206,13 @@
           </el-col>
           <el-col :xs="24" :sm="24" :lg="12">
             <el-form-item label="激活时间:" prop="activeTime">
-              {{temp.activeTime}}
+              {{temp.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
             </el-form-item>
             <el-form-item label="配置更新时间:" prop="updateTime">
               {{temp.updateTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
             </el-form-item>
             <el-form-item label="上次开机时间:" prop="lastPowerOnTime">
-              {{temp.lastPowerOnTime}}
+              {{temp.lastPowerOnTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
             </el-form-item>
             <el-form-item label="状态:" prop="txState">
               {{temp.txState}}
