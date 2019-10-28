@@ -889,7 +889,6 @@
     },
     created() {
       this.getList()
-      set(handles.slider1,'Max',1000,'Min',1,'Value',1)
     },
     mounted() {
 
