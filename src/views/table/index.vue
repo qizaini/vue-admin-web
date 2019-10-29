@@ -13,7 +13,7 @@
           </el-select>
         </el-col>
 
-        <el-col :xs="24" :sm="24" :lg="12">
+        <el-col :xs="24" :sm="24" :lg="13">
 
           <span class="demonstration">激活时间</span>&nbsp;
           <!--validate-event="true" 输入时是否触发表单的校验	-->
@@ -31,6 +31,9 @@
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
           <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
+          <!--关闭、重启、关闭服务、重启服务-->
+          <el-button type="primary" icon="el-icon-circle-close" circle @click="close"></el-button>
+          <el-button type="primary" icon="el-icon-refresh" circle @click="restart"></el-button>
         </el-col>
 
       </el-row>
@@ -309,30 +312,36 @@
                   <el-form-item label="硬件版本" prop="power">
                     <el-input v-model="temp.hardVersion" disabled="false" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="软件版本" prop="power">
-                    <el-input v-model="temp.softVersion" disabled="false" style="width: 75%"/>
+                  <el-form-item label="声道" prop="power">
+                    <el-input v-model="temp.vocalTract" style="width: 75%"/>
                   </el-form-item>
                   <el-form-item label="业务数据数量" prop="power">
                     <el-input v-model="temp.serviceNum" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="音频输入源" prop="power">
-                    <el-input v-model="temp.audioSource" style="width: 75%"/>
+                  <el-form-item label="定时启动时间" prop="power">
+                    <el-date-picker v-model="temp.startTimeStamp" type="datetime" style="width: 75%"/>
                   </el-form-item>
+                  <!--<el-form-item label="音频输入源" prop="power">
+                    <el-input v-model="temp.audioSource" style="width: 75%"/>
+                  </el-form-item>-->
 
                 </el-col>
 
                 <el-col :xs="24" :sm="24" :lg="12">
-                  <el-form-item label="声道" prop="power">
-                    <el-input v-model="temp.vocalTract" style="width: 75%"/>
+                  <el-form-item label="软件版本" prop="power">
+                    <el-input v-model="temp.softVersion" disabled="false" style="width: 75%"/>
                   </el-form-item>
                   <el-form-item label="预加重" prop="power">
                     <el-input v-model="temp.preAggravation" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="定时启动时间" prop="power">
-                    <el-date-picker v-model="temp.startTimeStamp" type="datetime" style="width: 75%"/>
-                  </el-form-item>
                   <el-form-item label="时延补偿" prop="power">
                     <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
+                  </el-form-item>
+                  <!--暂定只有以下值可选：自动（0100），数字（0001），模拟（0000）;自动：不可选，手动：可选数字、模拟-->
+                  <el-form-item label="音频输入源" prop="power">
+                    <el-radio v-model="temp.audioSource" label="0100">自动</el-radio>
+                    <el-radio v-model="temp.audioSource" label="0001">数字</el-radio>
+                    <el-radio v-model="temp.audioSource" label="0000">模拟</el-radio>
                   </el-form-item>
                 </el-col>
 
@@ -424,6 +433,7 @@
                       </el-switch>
                     </el-tooltip>
                   </el-form-item>
+
                 </el-col>
 
               </el-row>
@@ -917,6 +927,40 @@
           });
         })
       },
+      close(){
+        this.$confirm('此操作将关闭激励器, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'error'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      restart(){
+        this.$confirm('此操作将重启激励器, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
       getList() {
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {
@@ -1091,9 +1135,6 @@
         this.temp.subFrameNum = parseInt(sub)//子帧长度
         this.temp.modulation = parseInt(mo)  //调制度
 
-        // 开on=01
-        // 关off=00
-
         //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
         var status = row.txState
@@ -1193,22 +1234,26 @@
         this.dialogStatus = 'detail'
         this.outerVisible = true
       },
+      //取消编辑
       cancelEdit(row) {
-        row.location = this.listQuery.location
-        console.log(row.location)
+        this.listQuery.location = row.location
+
         row.edit = false
         this.$message({
           message: '部署地点已恢复为原始值',
           type: 'warning'
         })
       },
+      //编辑指令
       confirmEdit(row) {
         this.listQuery = Object.assign({}, row)
         row.edit = false
         this.listQuery.location = row.location
-        this.$message({
-          message: '部署地点已被编辑',
-          type: 'success'
+        updateArticle(this.listQuery.location).then(response => {
+          this.$message({
+            message: '部署地点已被编辑',
+            type: 'success'
+          })
         })
       },
       handleDownload() {
@@ -1216,7 +1261,7 @@
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['部署地点', '激活时间', '发射频点', '频谱模式', '发射功率', '状态']
           const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
-          console.log(filterVal)
+          // console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
             header: tHeader,
