@@ -145,7 +145,7 @@
           </el-button>
           <!--普通用户禁止编辑 disabled="false"-->
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑信息</el-button>
-          <!--<el-button type="warning" size="mini" @click="handleSingle(row)">编辑指令</el-button>-->
+          <!--<el-button type="warning" size="mini" @click="handleSingle(row)">编辑地点</el-button>-->
           <el-button
             v-if="row.edit"
             type="success"
@@ -161,7 +161,7 @@
             size="small"
             @click="row.edit=!row.edit"
           >
-            编辑指令
+            编辑地点
           </el-button>
           <el-button type="danger" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
         </template>
@@ -1098,7 +1098,7 @@
           }
         })
       },
-      //进入编辑指令dialog
+      //进入编辑地点dialog
       /*handleSingle(row) {
         this.temp = Object.assign({}, row) // copy obj
         this.dialogStatus = 'update'
@@ -1231,7 +1231,7 @@
           type: 'warning'
         })
       },
-      //编辑指令
+      //编辑地点
       confirmEdit(row) {
         this.listQuery = Object.assign({}, row)
         row.edit = false
