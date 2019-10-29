@@ -1072,7 +1072,7 @@
       },
       //状态筛选
       filterTag(value, row) {
-        return row.status === value
+        return row.txState === value
       },
       resetTemp() {
         this.temp = {
