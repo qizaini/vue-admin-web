@@ -255,18 +255,11 @@
                 <el-col :xs="24" :sm="24" :lg="22">
                   <el-form-item label="发射功率" prop="power">
                     <!--Slider滑块  set(handles.slider1,'Max',100,'Min',1,'Value',1)-->
-                    <el-slider
-                      v-model="temp.avgPower"
-                      max="1000"
-                      show-input>
+                    <el-slider v-model="temp.avgPower" :max="1000" show-input>
                     </el-slider>
                   </el-form-item>
                   <el-form-item label="模数功率比" prop="power">
-                    <el-slider
-                      v-model="temp.adPowerRatio"
-                      min="10"
-                      max="30"
-                      show-input>
+                    <el-slider v-model="temp.adPowerRatio" :min='10' :max='30' show-input>
                     </el-slider>
                   </el-form-item>
                   <el-form-item label="频谱模式" prop="power">
@@ -348,20 +341,12 @@
                 <el-col :xs="24" :sm="24" :lg="22">
                   <el-form-item label="子帧长度" prop="power">
                     <!--Slider滑块-->
-                    <el-slider
-                      v-model="temp.subFrameNum"
-                      min="2"
-                      max="255"
-                      show-input>
+                    <el-slider v-model="temp.subFrameNum" :min='2' :max='255' show-input>
                     </el-slider>
                   </el-form-item>
                   <el-form-item label="调制度" prop="power">
                     <!--Slider滑块-->
-                    <el-slider
-                      v-model="temp.modulation"
-                      min="10"
-                      max="150"
-                      show-input>
+                    <el-slider v-model="temp.modulation" :min='10' :max='150' show-input>
                     </el-slider>
                   </el-form-item>
                 </el-col>
@@ -1236,9 +1221,11 @@
       },
       //取消编辑
       cancelEdit(row) {
-        this.listQuery.location = row.location
+        // this.listQuery.location = row.location
 
         row.edit = false
+        this.listQuery.location = ''
+        this.listQuery.txState = ''
         this.$message({
           message: '部署地点已恢复为原始值',
           type: 'warning'
@@ -1248,7 +1235,8 @@
       confirmEdit(row) {
         this.listQuery = Object.assign({}, row)
         row.edit = false
-        this.listQuery.location = row.location
+        this.listQuery.location = ''
+        this.listQuery.txState = ''
         updateArticle(this.listQuery.location).then(response => {
           this.$message({
             message: '部署地点已被编辑',
