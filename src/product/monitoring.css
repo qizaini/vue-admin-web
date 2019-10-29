@@ -8,13 +8,30 @@
   text-align: center;
 }
 
-.div-monitoring{
+.div-monitoring-top{
+  display: flex;
+  height: 200px;
+  width: 900px;
+  margin: 50px 0 50px 200px;
+  padding: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);/*投影*/
+}
+.div-monitoring-center{
   display: flex;
   height: 200px;
   margin: 50px 400px;
   padding: 10px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);/*投影*/
 }
+.div-monitoring-bottom{
+  display: flex;
+  height: 200px;
+  width: 900px;
+  margin: 50px 0 50px 600px;
+  padding: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);/*投影*/
+}
+
 .monitoring-left{
   line-height: 30px;
   margin: 0 50px;
