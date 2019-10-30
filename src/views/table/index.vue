@@ -247,18 +247,18 @@
                 </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="12">
-                    <el-form-item label="发射频点" prop="power">
+                    <el-form-item label="发射频点(MHz)" prop="power">
                       <el-input v-model="temp.freq" style="width: 75%"/>
                     </el-form-item>
                   </el-col>
 
                 <el-col :xs="24" :sm="24" :lg="22">
-                  <el-form-item label="发射功率" prop="power">
+                  <el-form-item label="发射功率(w)" prop="power">
                     <!--Slider滑块  set(handles.slider1,'Max',100,'Min',1,'Value',1)-->
                     <el-slider v-model="temp.avgPower" :max="1000" show-input>
                     </el-slider>
                   </el-form-item>
-                  <el-form-item label="模数功率比" prop="power">
+                  <el-form-item label="模数功率比(w)" prop="power">
                     <el-slider v-model="temp.adPowerRatio" :min='10' :max='30' show-input>
                     </el-slider>
                   </el-form-item>
@@ -307,7 +307,7 @@
                   <el-form-item label="预加重" prop="power">
                     <el-input v-model="temp.preAggravation" style="width: 75%"/>
                   </el-form-item>
-                  <el-form-item label="时延补偿" prop="power">
+                  <el-form-item label="时延补偿(ns)" prop="power">
                     <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
                   </el-form-item>
                   <!--暂定只有以下值可选：自动（0100），数字（0001），模拟（0000）;自动：不可选，手动：可选数字、模拟-->

@@ -70,7 +70,7 @@ export const constantRoutes = [
         name: 'Form',
         component: () => import('@/views/table/index'),
         meta: {
-          // role: ['admin'],
+          role: ['admin'],
           title: '资源监控',
           icon: 'example'
         }
