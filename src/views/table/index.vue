@@ -30,7 +30,7 @@
           </el-date-picker>&nbsp;&nbsp;&nbsp;
           <el-button type="primary" size="medium" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
-          <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
+          <!--<el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
           <!--关闭、重启、关闭服务、重启服务-->
           <el-button type="info" icon="el-icon-circle-close" circle @click="close"></el-button>
           <el-button type="info" icon="el-icon-refresh" circle @click="restart"></el-button>
@@ -58,7 +58,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column v-if="false" prop="rowKey" label="rowKey" align="center" width="80px" :class-name="getSortClass('rowKey')">
+      <el-table-column v-if="true" prop="rowKey" label="rowKey" align="center" width="80px" :class-name="getSortClass('rowKey')">
         <template slot-scope="scope">
           <span>{{ scope.row.rowKey }}</span>
         </template>
@@ -237,7 +237,6 @@
           <!--第一个tabs-->
           <el-tab-pane label="基本配置">
 
-            <!--<el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">-->
               <el-row :gutter="32">
 
                 <el-col :xs="24" :sm="24" :lg="12">
@@ -275,13 +274,11 @@
                 </el-col>
 
               </el-row>
-            <!--</el-form>-->
           </el-tab-pane>
 
           <!--第二个tabs-->
           <el-tab-pane label="高级配置">
 
-            <!--<el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">-->
               <el-row :gutter="32">
 
                 <el-col :xs="24" :sm="24" :lg="12">
@@ -408,7 +405,6 @@
 
           <!--第三个tabs/Collapse 折叠面板-->
           <el-tab-pane label="业务配置">
-            <!--<el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">-->
 
               <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item title="业务1" name="1">
@@ -631,7 +627,6 @@
               </el-collapse-item>
 
               </el-collapse>
-            <!--</el-form>-->
 
           </el-tab-pane>
         </el-tabs>
@@ -927,6 +922,7 @@
         });
       },
       getList() {
+
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {
           var time_arr = this.listQuery.updateTime.toString().split(',')
@@ -935,12 +931,15 @@
           this.listQuery.updateTime = [start_time, end_time]
         }
         fetchList(this.listQuery).then(response => {
-          this.list = response.result
-          this.total = response.result.length
+          console.log(response)
+          // this.list = response.result
+          // this.total = response.result.length
+          this.list = response
+          this.total = response.length
 
           this.$set(response, 'edit', false)
           this.listQuery.location = response.location
-          var result = response.result
+          var result = response
           var state_arr = []
           var news_arr = []
           for (let i in result) {
@@ -1081,29 +1080,12 @@
         this.temp.subFrameNum = parseInt(sub)//子帧长度
         this.temp.modulation = parseInt(mo)  //调制度
 
-        //备份一份原始数据
-        this.cloneTemp = Object.assign({}, row)
-        // var status = row.txState
-        if (status === 'shutdown') {
-          this.temp.txState = "停止"
-        }
-        if (status === 'running') {
-          this.temp.txState = "运行"
-        }
-        if (status === 'updating') {
-          this.temp.txState = "升级"
-        }
-        if (status === 'backups') {
-          this.temp.txState = "备用"
-        }
-        if (status === 'warning') {
-          this.temp.txState = "警告"
-        }
-        if (status === 'breakdown') {
-          this.temp.txState = "故障"
-        }
+        // 乘以1000让组件日期显示正常
         var nowTime = this.temp.startTimeStamp
         this.temp.startTimeStamp = nowTime * 1000
+
+        //备份一份原始数据
+        this.cloneTemp = Object.assign({}, row)
 
         var rowKey = this.temp.rowKey
         this.dialogStatus = 'update'
@@ -1115,19 +1097,22 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            // var nowTime = this.temp.startTimeStamp
-            // this.temp.startTimeStamp = nowTime / 1000
-            console.log(this.temp.startTimeStamp)
+            var nowTime = this.temp.startTimeStamp
+            this.temp.startTimeStamp = nowTime / 1000
+            // console.log(this.temp.startTimeStamp)
+            // console.log(this.cloneTemp)
             for(let k in  this.temp) {
               //判断当前表单数据不等于克隆数据
               if(this.temp[k]  !=  this.cloneTemp[k]) {
                 if (!this.diffTemp) {
                   this.diffTemp = {};
                 }
+
                 this.diffTemp[k] = this.temp[k];
+                this.diffTemp['rowKey'] = this.temp.rowKey;
               }
             }
-            // console.log(this.diffTemp)
+            console.log(this.diffTemp)
             // 1.克隆原始数据
 
             updateArticle(this.diffTemp).then(response => {
@@ -1140,10 +1125,11 @@
                 }
               }
               this.dialogFormVisible = false
+              this.getList()
               this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
+                title: '成功',
+                message: '更新成功',
+                type: '成功',
                 duration: 2000
               })
             })
