@@ -297,9 +297,6 @@
                   <el-form-item label="定时启动时间" prop="power">
                     <el-date-picker v-model="temp.startTimeStamp" placeholder="选择日期时间" type="datetime" style="width: 75%"/>
                   </el-form-item>
-                  <!--<el-form-item label="音频输入源" prop="power">
-                    <el-input v-model="temp.audioSource" style="width: 75%"/>
-                  </el-form-item>-->
 
                 </el-col>
 
@@ -1105,8 +1102,8 @@
         if (status === 'breakdown') {
           this.temp.txState = "故障"
         }
-        // var nowTime = this.temp.updateTime
-        // this.temp.updateTime = nowTime * 1000
+        var nowTime = this.temp.startTimeStamp
+        this.temp.startTimeStamp = nowTime * 1000
 
         var rowKey = this.temp.rowKey
         this.dialogStatus = 'update'
@@ -1118,9 +1115,9 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            var time = this.temp.startTimeStamp / 1000
-            this.temp.startTimeStamp = time
-
+            // var nowTime = this.temp.startTimeStamp
+            // this.temp.startTimeStamp = nowTime / 1000
+            console.log(this.temp.startTimeStamp)
             for(let k in  this.temp) {
               //判断当前表单数据不等于克隆数据
               if(this.temp[k]  !=  this.cloneTemp[k]) {
