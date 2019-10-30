@@ -40,7 +40,7 @@ const actions = {
       })
     })
   },
-
+ 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {

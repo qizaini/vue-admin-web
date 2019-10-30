@@ -32,8 +32,8 @@ import Layout from '@/layout'
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ * 没有权限要求的基本页面
+ * 可以访问所有角色
  */
 /* eslint-disable */
 export const constantRoutes = [

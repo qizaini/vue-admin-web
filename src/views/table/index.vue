@@ -32,8 +32,8 @@
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
           <el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>
           <!--关闭、重启、关闭服务、重启服务-->
-          <el-button type="primary" icon="el-icon-circle-close" circle @click="close"></el-button>
-          <el-button type="primary" icon="el-icon-refresh" circle @click="restart"></el-button>
+          <el-button type="info" icon="el-icon-circle-close" circle @click="close"></el-button>
+          <el-button type="info" icon="el-icon-refresh" circle @click="restart"></el-button>
         </el-col>
 
       </el-row>
@@ -277,24 +277,7 @@
               </el-row>
             <!--</el-form>-->
           </el-tab-pane>
-          <!-- <el-form-item label="部署地点" prop="power">&lt;!&ndash;输入后匹配输入建议&ndash;&gt;
-                     <el-autocomplete
-                       v-model="location"
-                       style="width: 80%"
-                       class="inline-input"
-                       :fetch-suggestions="querySearch"
-                       placeholder="请输入内容"
-                       :trigger-on-focus="false"
-                       @select="handleSelect"
-                     />
-                   </el-form-item>-->
 
-                    <!--<el-form-item label="激活时间" prop="updateTime">
-                      <el-date-picker v-model="temp.updateTime" type="datetime" placeholder="请选择一个日期" style="width: 80%"/>
-                    </el-form-item>
-                    <el-form-item label="状态" prop="power">
-                      <el-input v-model="temp.txState" style="width: 62%" disabled="disabled"/>
-                    </el-form-item>-->
           <!--第二个tabs-->
           <el-tab-pane label="高级配置">
 
@@ -312,7 +295,7 @@
                     <el-input v-model="temp.serviceNum" style="width: 75%"/>
                   </el-form-item>
                   <el-form-item label="定时启动时间" prop="power">
-                    <el-date-picker v-model="temp.startTimeStamp" type="datetime" style="width: 75%"/>
+                    <el-date-picker v-model="temp.startTimeStamp" placeholder="选择日期时间" type="datetime" style="width: 75%"/>
                   </el-form-item>
                   <!--<el-form-item label="音频输入源" prop="power">
                     <el-input v-model="temp.audioSource" style="width: 75%"/>
@@ -661,7 +644,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus===updateData()">
           确定
         </el-button>
       </div>
@@ -949,7 +932,6 @@
       getList() {
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {
-          // console.log(this.listQuery.updateTime)
           var time_arr = this.listQuery.updateTime.toString().split(',')
           var start_time = new Date(time_arr[0]).getTime() / 1000
           var end_time = new Date(time_arr[1]).getTime() / 1000
@@ -1080,24 +1062,6 @@
           this.$refs['dataForm'].clearValidate()
         })
       },*/
-      createData() {
-        this.$refs['dataForm'].validate((valid) => {
-          // console.log(this.$refs['dataForm'])
-          if (valid) {
-            this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-            createArticle(this.temp).then(() => {
-              this.list.unshift(this.temp)
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Created Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
       //进入编辑地点dialog
       /*handleSingle(row) {
         this.temp = Object.assign({}, row) // copy obj
@@ -1122,7 +1086,7 @@
 
         //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
-        var status = row.txState
+        // var status = row.txState
         if (status === 'shutdown') {
           this.temp.txState = "停止"
         }
@@ -1141,8 +1105,8 @@
         if (status === 'breakdown') {
           this.temp.txState = "故障"
         }
-        var nowTime = this.temp.updateTime
-        this.temp.updateTime = nowTime * 1000
+        // var nowTime = this.temp.updateTime
+        // this.temp.updateTime = nowTime * 1000
 
         var rowKey = this.temp.rowKey
         this.dialogStatus = 'update'
@@ -1156,24 +1120,21 @@
           if (valid) {
             var time = this.temp.startTimeStamp / 1000
             this.temp.startTimeStamp = time
+
             for(let k in  this.temp) {
               //判断当前表单数据不等于克隆数据
               if(this.temp[k]  !=  this.cloneTemp[k]) {
                 if (!this.diffTemp) {
                   this.diffTemp = {};
                 }
-                // if (k === 'txState') {
-                //   continue
-                // }
                 this.diffTemp[k] = this.temp[k];
               }
             }
+            // console.log(this.diffTemp)
             // 1.克隆原始数据
-            // temp Data.updateTime = +new Date(tempData.updateTime) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
 
             updateArticle(this.diffTemp).then(response => {
-              // console.log(this.diffTemp)
-              // console.log('88888888888888888888888888888888')
+              console.log(response)
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
