@@ -32,8 +32,8 @@
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
           <!--<el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
           <!--关闭、重启、关闭服务、重启服务-->
-          <el-button type="info" icon="el-icon-circle-close" circle @click="close"></el-button>
-          <el-button type="info" icon="el-icon-refresh" circle @click="restart"></el-button>
+          <el-button type="info" icon="el-icon-circle-close" circle @click="closeTx"></el-button>
+          <el-button type="info" icon="el-icon-refresh" circle @click="restartTx"></el-button>
         </el-col>
 
       </el-row>
@@ -53,6 +53,15 @@
       @sort-change="sortChange"
     >
 
+      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange">
+        <el-checkbox>
+          <template slot-scope="scope">
+            <span>{{ scope.row.rowKey }}</span>
+          </template>
+        </el-checkbox>
+      </el-table-column>
+
+      <!--<el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange"></el-table-column>-->
       <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -307,11 +316,12 @@
                   <el-form-item label="时延补偿(ns)" prop="power">
                     <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
                   </el-form-item>
-                  <!--暂定只有以下值可选：自动（0100），数字（0001），模拟（0000）;自动：不可选，手动：可选数字、模拟-->
+                  <!--暂定只有以下值可选：自动（01），数字（01），模拟（00）;自动：不可选，手动：可选数字、模拟-->
+
                   <el-form-item label="音频输入源" prop="power">
-                    <el-radio v-model="temp.audioSource" label="0100">自动</el-radio>
-                    <el-radio v-model="temp.audioSource" label="0001">数字</el-radio>
-                    <el-radio v-model="temp.audioSource" label="0000">模拟</el-radio>
+                    <el-radio v-model="temp.automaticAudioSource" label="01">自动</el-radio>
+                    <el-radio v-model="temp.manualAudioSource" label="01">数字</el-radio>
+                    <el-radio v-model="temp.manualAudioSource" label="00">模拟</el-radio>
                   </el-form-item>
                 </el-col>
 
@@ -746,7 +756,8 @@
           reportEnable: '',
           subFrameNum: '',
           serviceNum: '',
-          audioSource: '',
+          automaticAudioSource: '',
+          manualAudioSource: '',
           vocalTract: '',
           preAggravation: '',
           modulation: '',
@@ -829,6 +840,7 @@
           service1SealMode: [{ required: true, message: 'service1SealMode is required', trigger: 'blur' }]
         },*/
         downloadLoading: false,
+        checkAll: false,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -875,6 +887,9 @@
           console.log(error);
         });
     },*/
+      handleCheckAllChange(val) {
+
+      },
       open() {
         this.$prompt('请输入激励器ID', '添加', {
           confirmButtonText: '确定',
@@ -888,7 +903,8 @@
           });
         })
       },
-      close(){
+      closeTx(){
+
         this.$confirm('此操作将关闭激励器, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -905,7 +921,7 @@
           });
         });
       },
-      restart(){
+      restartTx(){
         this.$confirm('此操作将重启激励器, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -1075,6 +1091,8 @@
         var ad = this.temp.adPowerRatio
         var sub = this.temp.subFrameNum
         var mo = this.temp.modulation
+        var aas = this.temp.automaticAudioSource//自动开启01
+
         //将滑块字符串转int类型
         this.temp.avgPower = parseInt(avg)   //模数功率比
         this.temp.adPowerRatio = parseInt(ad)//发射功率
@@ -1085,6 +1103,10 @@
         var nowTime = this.temp.startTimeStamp
         this.temp.startTimeStamp = nowTime * 1000
 
+        //当音频输入源为01开启，则数字、模拟不显示
+        if (aas === '01'){
+          this.temp.manualAudioSource = '11111'
+        }
         //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
 
@@ -1113,7 +1135,7 @@
               }
             }
             // console.log(this.diffTemp)
-            showFullScreenLoading('.el-dialog.editMessage')
+            showFullScreenLoading('.editMessage')
             // 1.克隆原始数据
             updateArticle(this.diffTemp).then(response => {
               // console.log(response)
