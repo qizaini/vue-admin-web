@@ -58,7 +58,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column v-if="true" prop="rowKey" label="rowKey" align="center" width="80px" :class-name="getSortClass('rowKey')">
+      <el-table-column v-if="true" prop="rowKey" label="rowKey" align="center" :class-name="getSortClass('rowKey')">
         <template slot-scope="scope">
           <span>{{ scope.row.rowKey }}</span>
         </template>
@@ -230,7 +230,7 @@
     </el-dialog>
 
     <!--编辑信息-->
-    <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible" custom-class="editMessage">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
 
         <el-tabs :tab-position="tabPosition">
@@ -651,10 +651,11 @@
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
-  import axios from 'axios'
+  import Vue from 'vue'
 
   export default {
-
+    showFullScreenLoading,
+    hideFullScreenLoading,
     components: { Pagination },
     directives: { waves },
     filters: {
@@ -1099,8 +1100,7 @@
           if (valid) {
             var nowTime = this.temp.startTimeStamp
             this.temp.startTimeStamp = nowTime / 1000
-            // console.log(this.temp.startTimeStamp)
-            // console.log(this.cloneTemp)
+
             for(let k in  this.temp) {
               //判断当前表单数据不等于克隆数据
               if(this.temp[k]  !=  this.cloneTemp[k]) {
@@ -1112,11 +1112,11 @@
                 this.diffTemp['rowKey'] = this.temp.rowKey;
               }
             }
-            console.log(this.diffTemp)
+            // console.log(this.diffTemp)
+            showFullScreenLoading('.el-dialog.editMessage')
             // 1.克隆原始数据
-
             updateArticle(this.diffTemp).then(response => {
-              console.log(response)
+              // console.log(response)
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
@@ -1125,11 +1125,12 @@
                 }
               }
               this.dialogFormVisible = false
+              hideFullScreenLoading()
               this.getList()
               this.$notify({
                 title: '成功',
                 message: '更新成功',
-                type: '成功',
+                type: 'success',
                 duration: 2000
               })
             })
@@ -1220,6 +1221,34 @@
             ? 'descending'
             : ''
       }
+    }
+  }
+  // loading框设置局部刷新，且所有请求完成后关闭loading框
+  let loading
+  let needLoadingRequestCount = 0 // 声明一个对象用于存储请求个数
+  function startLoading(targetdq) {
+    loading = Vue.prototype.$loading({
+      lock: true,
+      text: '努力加载中...',
+      background: 'rgba(255,255,255,.4)',
+      target: document.querySelector(targetdq) // 设置加载动画区域
+    })
+  }
+
+  function endLoading() {
+    loading.close()
+  }
+  export function showFullScreenLoading(targetdq) {
+    if (needLoadingRequestCount === 0) {
+      startLoading(targetdq)
+    }
+    needLoadingRequestCount++
+  }
+  export function hideFullScreenLoading() {
+    if (needLoadingRequestCount <= 0) return
+    needLoadingRequestCount--
+    if (needLoadingRequestCount === 0) {
+      endLoading()
     }
   }
 </script>
