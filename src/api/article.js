@@ -1,7 +1,9 @@
 import request from '@/utils/request'
 // qs请求数据转表单格式
 import qs from 'qs'
+/* eslint-disable */
 
+//url: 'v1/xxx'nginx服务器路径，url: 'xxx'本地路径
 export function fetchList(query) {
   return request({
     url: 'v1/tx/info',

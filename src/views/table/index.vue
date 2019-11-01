@@ -319,9 +319,9 @@
                   <!--暂定只有以下值可选：自动（01），数字（01），模拟（00）;自动：不可选，手动：可选数字、模拟-->
 
                   <el-form-item label="音频输入源" prop="power">
-                    <el-radio v-model="temp.automaticAudioSource" label="01">自动</el-radio>
-                    <el-radio v-model="temp.manualAudioSource" label="01">数字</el-radio>
-                    <el-radio v-model="temp.manualAudioSource" label="00">模拟</el-radio>
+                    <el-radio v-model="temp.automaticAudioSource" label="01" @change="automaticAudioSourceEvent">自动</el-radio>
+                    <el-radio v-model="temp.manualAudioSource" label="01" @change="maticAudioSourceEvent">数字</el-radio>
+                    <el-radio v-model="temp.manualAudioSource" label="00" @change="maticAudioSourceEvent">模拟</el-radio>
                   </el-form-item>
                 </el-col>
 
@@ -904,7 +904,6 @@
         })
       },
       closeTx(){
-
         this.$confirm('此操作将关闭激励器, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -939,7 +938,6 @@
         });
       },
       getList() {
-
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {
           var time_arr = this.listQuery.updateTime.toString().split(',')
@@ -948,7 +946,6 @@
           this.listQuery.updateTime = [start_time, end_time]
         }
         fetchList(this.listQuery).then(response => {
-          console.log(response)
           // this.list = response.result
           // this.total = response.result.length
           this.list = response
@@ -1000,11 +997,17 @@
           }, 1.5 * 1000)
         })
       },
+      automaticAudioSourceEvent(){
+        //当音频输入源为01开启，则数字、模拟不显示
+        this.temp.manualAudioSource = '11111'
+      },
+      maticAudioSourceEvent(){
+        //当音频输入源 数字、模拟为开启,则自动不显示
+        this.temp.automaticAudioSource = '11111'
+      },
       querySearch(queryString, cb) {
         var location = this.location
-        // console.log(location)
         var results = queryString ? location.filter(this.createFilter(queryString)) : location
-        // console.log(results)
         // 调用 callback 返回建议列表的数据
         cb(results)
       },
@@ -1021,7 +1024,6 @@
         ]
       },
       handleSelect(item) {
-        // console.log(item);
       },
       mounted() {
         this.location = this.loadAll()
@@ -1091,7 +1093,6 @@
         var ad = this.temp.adPowerRatio
         var sub = this.temp.subFrameNum
         var mo = this.temp.modulation
-        var aas = this.temp.automaticAudioSource//自动开启01
 
         //将滑块字符串转int类型
         this.temp.avgPower = parseInt(avg)   //模数功率比
@@ -1103,10 +1104,11 @@
         var nowTime = this.temp.startTimeStamp
         this.temp.startTimeStamp = nowTime * 1000
 
-        //当音频输入源为01开启，则数字、模拟不显示
-        if (aas === '01'){
+        //当音频为自动则数字、模拟不显示
+        if(this.temp.automaticAudioSource === '01'){
           this.temp.manualAudioSource = '11111'
         }
+
         //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
 
@@ -1138,7 +1140,6 @@
             showFullScreenLoading('.editMessage')
             // 1.克隆原始数据
             updateArticle(this.diffTemp).then(response => {
-              // console.log(response)
               for (const v of this.list) {
                 if (v.id === this.temp.id) {
                   const index = this.list.indexOf(v)
@@ -1216,7 +1217,6 @@
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['部署地点', '激活时间', '发射频点', '频谱模式', '发射功率', '状态']
           const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
-          // console.log(filterVal)
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
             header: tHeader,
