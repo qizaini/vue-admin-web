@@ -21,7 +21,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -38,7 +38,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -82,8 +82,12 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: '',
+        client_id: '',
+        client_secret: '',
+        grant_type: '',
+        scope: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -117,12 +121,17 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+          this.loginForm.client_id = 'client2'
+          this.loginForm.client_secret = '123456'
+          this.loginForm.grant_type = 'password'
+          this.loginForm.scope = 'app'
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             // // 1.将token缓存
             // setToken('后台响应数据里的token')
             // // 2.将权限标识缓存
             // setIdentity('后台响应数据里的identity')
             this.$router.push({ path: this.redirect || '/' })//切换路由
+            // console.log(this.redirect)
             this.loading = false
           }).catch(() => {
             this.loading = false

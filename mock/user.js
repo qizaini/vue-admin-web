@@ -52,9 +52,9 @@ export default [
     url: '/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
+      const token = config.query
       const info = users[token]
-
+      // console.log(info)
       // mock error
       if (!info) {
         return {

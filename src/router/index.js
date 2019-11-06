@@ -26,7 +26,7 @@ import Layout from '@/layout'
     title: 'title' //设置该路由在侧边栏和面包屑中展示的名字
     icon: 'svg-name' //设置该路由的图标
     noCache: true //如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
-    breadcrumb: false // 如果设置为false，则不会在breadcrumb面包屑中显示 activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    breadcrumb: false // 如果设置为false，则不会在breadcrumb面包屑中显示 activeMenu: '/example/list'  如果设置了路径，则侧边栏将突出显示您设置的路径
   }
  */
 

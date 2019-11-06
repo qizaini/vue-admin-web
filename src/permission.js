@@ -22,7 +22,7 @@ router.beforeEach(async(to, from, next) => {
 
   if (hasToken) {
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
+      // 如果已登录，请重定向到主页
       next({ path: '/' })
       NProgress.done()
     } else {

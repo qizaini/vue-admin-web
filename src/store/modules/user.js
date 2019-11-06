@@ -27,13 +27,14 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, client_id, client_secret, grant_type, scope } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        Cookies.set('Token', response.data.token) //登录成功后将token存储在cookie之中
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+      login({ username: username.trim(), password: password, client_id:client_id, client_secret:client_secret, grant_type:grant_type, scope:scope}).then(response => {
+        const data = response
+        Cookies.set('type', response.token_type) //登录成功后将token存储在cookie之中
+        Cookies.set('token', response.access_token) //登录成功后将token存储在cookie之中
+        commit('SET_TOKEN', data.access_token)
+        // setToken(data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -41,14 +42,15 @@ const actions = {
     })
   },
  
-  // get user info
+  // 获取用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+
+        const data = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录.')
         }
 
         const { name, avatar } = data

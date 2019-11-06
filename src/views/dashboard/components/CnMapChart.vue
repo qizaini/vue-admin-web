@@ -16,15 +16,13 @@
     <!--点击-->
     <!--</el-button>-->
 
-    <!--<el-button @click=openAlert() type="pirmary" plain class="forward" style="margin: 0 0 0 20px; position: absolute;top: 5px;left: 50px;">返回</el-button>-->
     <div ref="myEchart" :style="{height:'800px',width:'100%'}" />
-
-  </div>
+    </div>
 
 </template>
 
 <script>
-
+/* eslint-disable */
 import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 import 'echarts/map/js/world.js'
@@ -86,6 +84,7 @@ export default {
   // props: ["userJson"],
   data() {
     return {
+      comeBack: '返回',
       myMapName: 'china',
       drawer: false, // 抽屉
       direction: 'rtl', // 方位 ltr从左到右，rtl从右到左
@@ -167,10 +166,7 @@ export default {
           this.chart.dispose()
           this.$options.methods.openSubMap.bind(this)('china')
           this.$options.methods.initMap.bind(this)('china')
-
-          // alert('yes')
         })
-
         this.chart.on('click', 'series', (params) => {
           // this.$options.methods.openDrawer.bind(this)()
           this.drawer = true
@@ -259,6 +255,7 @@ export default {
             return params.name + ' : ' + params.value[2] + ' : ' + params.value[0] + ' : ' + params.value[1] + ' : ' + params.value[3]
           }
         },
+
         // 图例
         legend: {
           orient: 'vertical', // 图例列表的布局朝向，水平：'horizontal'，垂直：'vertical'
@@ -397,18 +394,61 @@ export default {
     },
 
     setOptionsSub(paraMapName) {
+      let _self = this
       this.chart.setOption({
         backgroundColor: 'rgba(2,175,219,0.9)', // #02AFDB
         title: {
-          text: paraMapName + '   激励器部署图',
+          text: paraMapName + '   激励器部署图' ,
           padding: 20,
-          left: 'center',
+          left: 700,
           textStyle: {
             color: '#fff',
             fontSize: 20
+          },
+        },
+        toolbox: {
+          itemSize: 40,
+          right: 50,
+          feature: {
+            dataView: {//数据视图
+              show: false
+            },
+            dataZoom: {//数据区域缩放
+              show: false
+            },
+            saveAsImage: {//保存为图片
+              show: false
+            },
+            myTool1: {
+              show: true,
+              title: '按钮',
+              icon: 'image://../../../image/pre.png',// icon : ' image://（图片／图标的路径) '
+              onclick: function (){
+                _self.chart.dispose()
+                _self.$options.methods.openSubMap.bind(_self)('china')
+                _self.$options.methods.initMap.bind(_self)('china')
+              }
+            },
+            restore: {//配置项还原
+              show: true,
+              onclick: function (){
+                _self.chart.dispose()
+                _self.$options.methods.openSubMap.bind(_self)('china')
+                _self.$options.methods.initMap.bind(_self)('china')
+              },
+            },
+            myTool2: {
+              show: true,
+              title: '返回',
+              icon: 'image://http://echarts.baidu.com/images/favicon.png',
+              onclick: function (){
+                _self.chart.dispose()
+                _self.$options.methods.openSubMap.bind(_self)('china')
+                _self.$options.methods.initMap.bind(_self)('china')
+              },
+              }
           }
         },
-
         // 鼠标移到图里面的浮动提示框
         // tooltip: {
         //   trigger: 'item',
@@ -472,12 +512,11 @@ export default {
             }
           },
           data:
-            [['108.320004', '22.82402', 80],
-              ['109.119254', '21.473343', 20]]
-
-        }
-
-        ]
+            [
+              ['108.320004', '22.82402', 80],
+              ['109.119254', '21.473343', 20]
+            ]
+        }]
       })
     }
 

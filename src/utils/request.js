@@ -2,16 +2,16 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken, getIdentity } from '@/utils/auth'
+import { getTokenType, getToken, getIdentity } from '@/utils/auth'
 
-// create an axios instance
+// 创建一个axios实例
 const service = axios.create({
   headers:{
     'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
   },
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // baseURL: "/v1", // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
+  // baseURL: "/", // url = base url + request url
+  // withCredentials: true, // 跨域请求时发送Cookie
   timeout: 5000 // request timeout
 })
 
@@ -24,7 +24,8 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // config.headers['authorization'] = getToken()
+      config.headers['authorization'] = getTokenType() + " " + getToken()
     }
     // if (store.getters.identity) {
     //   config.headers['identity'] = getIdentity()
@@ -42,7 +43,7 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   /**
-   * If you want to get http information such as headers or status
+   * 如果要获取http信息（例如标题或状态）
    * Please return  response => response
   */
 
@@ -53,15 +54,13 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    // console.log(res)
     const code = res.code
     const status = response.status
-    // console.log(status)
     if (status === 200) {
       return res
     }
 
-    // if the custom code is not 20000, it is judged as an error.
+    // 如果自定义代码不是20000，则将其判断为错误.
     if (code !== 20000) {
       Message({
         message: res.message || 'Error',
@@ -93,7 +92,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: '用户名或密码不正确！请重新输入！',
       type: 'error',
       duration: 5 * 1000
     })

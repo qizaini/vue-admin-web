@@ -340,9 +340,9 @@
 
                 <el-col :xs="24" :sm="24" :lg="8">
                   <el-form-item label="CDRadio" prop="power">
-                    <el-tooltip :content="'Switch value: ' + temp.cdRadioEnable" placement="top">
+                    <el-tooltip :content="'Switch value: ' + temp.cDRadioEnable" placement="top">
                       <el-switch
-                        v-model="temp.cdRadioEnable"
+                        v-model="temp.cDRadioEnable"
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
@@ -379,9 +379,9 @@
                     </el-tooltip>
                   </el-form-item>
                   <el-form-item label="FM" prop="power">
-                    <el-tooltip :content="'Switch value: ' + temp.fmEnable" placement="top">
+                    <el-tooltip :content="'Switch value: ' + temp.fMEnable" placement="top">
                       <el-switch
-                        v-model="temp.fmEnable"
+                        v-model="temp.fMEnable"
                         inactive-color="grey"
                         active-text="开启"
                         inactive-text="关闭"
@@ -743,14 +743,14 @@
           location: '',
           avgPower: '',
           freq: '',
-          adPowerRatio: '',
+          aDPowerRatio: '',
           txState : '',
           specMode: '',
           updateTime: '',
           hardVersion: '',
           softVersion: '',
-          cdRadioEnable: '',
-          fmEnable: '',
+          cDRadioEnable: '',//
+          fMEnable: '',//
           dpdEnable: '',
           timeServiceEnable: '',
           reportEnable: '',
@@ -999,11 +999,11 @@
       },
       automaticAudioSourceEvent(){
         //当音频输入源为01开启，则数字、模拟不显示
-        this.temp.manualAudioSource = '11111'
+        this.temp.manualAudioSource = '22'
       },
       maticAudioSourceEvent(){
         //当音频输入源 数字、模拟为开启,则自动不显示
-        this.temp.automaticAudioSource = '11111'
+        this.temp.automaticAudioSource = '22'
       },
       querySearch(queryString, cb) {
         var location = this.location
@@ -1106,7 +1106,7 @@
 
         //当音频为自动则数字、模拟不显示
         if(this.temp.automaticAudioSource === '01'){
-          this.temp.manualAudioSource = '11111'
+          this.temp.manualAudioSource = '22'
         }
 
         //备份一份原始数据
