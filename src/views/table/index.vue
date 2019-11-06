@@ -270,15 +270,16 @@
                     <el-slider v-model="temp.adPowerRatio" :min='10' :max='30' show-input>
                     </el-slider>
                   </el-form-item>
+                  <!--1->A1  2->A2  3->A3  4->A4 || 5->B1  6->B2  7->B3  8->B4-->
                   <el-form-item label="频谱模式" prop="power">
-                    <el-radio v-model="temp.specMode" label="00">A1</el-radio>
-                    <el-radio v-model="temp.specMode" label="01">A2</el-radio>
-                    <el-radio v-model="temp.specMode" label="02">A3</el-radio>
-                    <el-radio v-model="temp.specMode" label="03">A4</el-radio>
-                    <el-radio v-model="temp.specMode" label="10">B1</el-radio>
-                    <el-radio v-model="temp.specMode" label="11">B2</el-radio>
-                    <el-radio v-model="temp.specMode" label="12">B3</el-radio>
-                    <el-radio v-model="temp.specMode" label="13">B4</el-radio>
+                    <el-radio v-model="temp.specMode" label="1">A1</el-radio>
+                    <el-radio v-model="temp.specMode" label="2">A2</el-radio>
+                    <el-radio v-model="temp.specMode" label="3">A3</el-radio>
+                    <el-radio v-model="temp.specMode" label="4">A4</el-radio>
+                    <el-radio v-model="temp.specMode" label="5">B1</el-radio>
+                    <el-radio v-model="temp.specMode" label="6">B2</el-radio>
+                    <el-radio v-model="temp.specMode" label="7">B3</el-radio>
+                    <el-radio v-model="temp.specMode" label="8">B4</el-radio>
                   </el-form-item>
                 </el-col>
 
@@ -319,9 +320,10 @@
                   <!--暂定只有以下值可选：自动（01），数字（01），模拟（00）;自动：不可选，手动：可选数字、模拟-->
 
                   <el-form-item label="音频输入源" prop="power">
-                    <el-radio v-model="temp.automaticAudioSource" label="01" @change="automaticAudioSourceEvent">自动</el-radio>
-                    <el-radio v-model="temp.manualAudioSource" label="01" @change="maticAudioSourceEvent">数字</el-radio>
-                    <el-radio v-model="temp.manualAudioSource" label="00" @change="maticAudioSourceEvent">模拟</el-radio>
+                    <el-radio v-if="((temp.audioSource === '0101') || (temp.audioSource === '0000') || (temp.audioSource === '0001'))" v-model="temp.audioSource" label="0101" @change="audioSourceEvent">自动</el-radio>
+                    <el-radio v-if="temp.audioSource === '0100'" v-model="temp.audioSource" label="0100" @change="audioSourceEvent">自动</el-radio>
+                    <el-radio v-model="temp.audioSource" label="0001">数字</el-radio>
+                    <el-radio v-model="temp.audioSource" label="0000">模拟</el-radio>
                   </el-form-item>
                 </el-col>
 
@@ -756,8 +758,7 @@
           reportEnable: '',
           subFrameNum: '',
           serviceNum: '',
-          automaticAudioSource: '',
-          manualAudioSource: '',
+          audioSource: '',
           vocalTract: '',
           preAggravation: '',
           modulation: '',
@@ -997,14 +998,14 @@
           }, 1.5 * 1000)
         })
       },
-      automaticAudioSourceEvent(){
+     /* automaticAudioSourceEvent(){
         //当音频输入源为01开启，则数字、模拟不显示
         this.temp.manualAudioSource = '22'
       },
       maticAudioSourceEvent(){
         //当音频输入源 数字、模拟为开启,则自动不显示
         this.temp.automaticAudioSource = '22'
-      },
+      },*/
       querySearch(queryString, cb) {
         var location = this.location
         var results = queryString ? location.filter(this.createFilter(queryString)) : location
@@ -1105,9 +1106,6 @@
         this.temp.startTimeStamp = nowTime * 1000
 
         //当音频为自动则数字、模拟不显示
-        if(this.temp.automaticAudioSource === '01'){
-          this.temp.manualAudioSource = '22'
-        }
 
         //备份一份原始数据
         this.cloneTemp = Object.assign({}, row)
