@@ -92,7 +92,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: '用户名或密码不正确！请重新输入！',
+      message: error.message,
       type: 'error',
       duration: 5 * 1000
     })

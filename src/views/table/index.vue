@@ -4,11 +4,11 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.location" placeholder="" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="$event.target.blur" @change="handleFilter"/>
+          <el-input v-model="listQuery.location" placeholder="请输入部署地点" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="getList" @change="getList"/>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
-          <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="handleFilter">
+          <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="getList">
             <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value"/>
           </el-select>
         </el-col>
@@ -67,12 +67,12 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column v-if="true" prop="rowKey" label="rowKey" align="center" :class-name="getSortClass('rowKey')">
+      <el-table-column v-if="true" prop="rowKey" label="激励器" align="center" :class-name="getSortClass('rowKey')">
         <template slot-scope="scope">
           <span>{{ scope.row.rowKey }}</span>
         </template>
       </el-table-column>
-        <el-table-column prop="location" label="部署地点" align="center" width="230px">
+        <el-table-column prop="location" label="部署地点" align="center" width="200px">
           <!--<template slot-scope="scope">
             <span>{{ scope.row.location }}</span>
           </template>-->
@@ -80,11 +80,12 @@
             <template v-if="row.edit">
               <el-input v-model="row.location" class="edit-input" size="small" style="width: 140px"/>
               <el-button
+                circle
+                icon="el-icon-circle-close"
                 class="cancel-btn"
                 size="small"
                 type="warning"
                 @click="cancelEdit(row)">
-                取消
               </el-button>
             </template>
             <span v-else>{{ row.location }}</span>
@@ -106,14 +107,14 @@
           <span>{{ scope.row.specMode }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" align="center" sortable label="激活时间" >
+      <el-table-column prop="updateTime" align="center" sortable label="激活时间" width="170px">
         <template slot-scope="scope">
           <!--<i class="el-icon-time"/>-->
           <!--<span>{{ scope.row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
           <span>{{scope.row.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" align="center" sortable label="开机时间" >
+      <el-table-column prop="updateTime" align="center" sortable label="开机时间" width="170px">
         <template slot-scope="scope">
           <span>{{scope.row.lastPowerOnTime | msgDateFormat('yyyy-mm-dd HH:mm:ss') }}</span>
         </template>
@@ -751,8 +752,8 @@
           updateTime: '',
           hardVersion: '',
           softVersion: '',
-          cDRadioEnable: '',//
-          fMEnable: '',//
+          cDRadioEnable: '',
+          fMEnable: '',
           dpdEnable: '',
           timeServiceEnable: '',
           reportEnable: '',

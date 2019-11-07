@@ -1,28 +1,11 @@
 <template>
   <el-card class="box-card-component" style="margin-left:8px;height: 300px">
     <div slot="header" class="box-card-header">
-      <!--<img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">-->
-      <img src="http://i8.hexunimg.cn/2015-10-05/179629267.jpg">
+      <img src="../../../img/satellite.jpg">
     </div>
     <div style="position:relative;">
-      <pan-thumb :image="avatar" class="panThumb" />
+      <pan-thumb :image="avatar" class="panThumb" ></pan-thumb>
       <mallki class-name="mallki-text" text="基合系统部署图" />
-      <!--<div style="padding-top:35px;" class="progress-item">
-        <span>广西</span>
-        <el-progress :percentage="70" />
-      </div>
-      <div class="progress-item">
-        <span>北京</span>
-        <el-progress :percentage="18" />
-      </div>
-      <div class="progress-item">
-        <span>内蒙古</span>
-        <el-progress :percentage="12" />
-      </div>
-      <div class="progress-item">
-        <span>新疆</span>
-        <el-progress :percentage="100" status="success" />
-      </div>-->
     </div>
   </el-card>
 </template>
