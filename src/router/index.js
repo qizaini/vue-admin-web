@@ -127,6 +127,11 @@ export const constantRoutes = [
     meta: { title: '产品服务', icon: 'price-tag-2-fill' },
     children: [
       {
+        path: 'tree2',
+        name: 'Tree2',
+        component: () => import('@/views/form/cors'),
+        meta: { title: '基合CORS', icon: 'example' }
+      },{
         path: 'broadcast',
         name: 'broadcast',
         component: () => import('@/views/form/broadcast'),
@@ -143,12 +148,6 @@ export const constantRoutes = [
         name: 'Table',
         component: () => import('@/views/form/millimeter'),
         meta: { title: '基合见毫', icon: 'coupon-5-line' }
-      },
-      {
-        path: 'tree2',
-        name: 'Tree2',
-        component: () => import('@/views/form/cors'),
-        meta: { title: '基合CORS', icon: 'example' }
       }
     ]
   },
