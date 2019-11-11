@@ -218,9 +218,9 @@
       </el-dialog>
 
       <!--编辑信息-->
-      <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible" custom-class="editMessage" v-dialogDrag :close-on-click-modal="false">
+      <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible" custom-class="editMessage" v-dialogDrag :close-on-click-modal="false" width="40%">
         <div style="height: 300px;">
-            <el-form ref="dataForm" :rules="rules" :model="temp" label-width="120px">
+            <el-form ref="dataForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="120px">
 
             <el-tabs :tab-position="tabPosition">
               <!--第一个tabs-->
@@ -228,15 +228,15 @@
 
                   <el-row :gutter="32">
 
-                    <el-col :xs="24" :sm="24" :lg="12">
+                    <el-col :xs="24" :sm="24" :lg="22">
                       <el-form-item label="部署地点" prop="power">
-                        <el-input v-model="temp.location" style="width: 75%"/>
+                        <el-input v-model="temp.location" style="width: 65%"/>
                       </el-form-item>
                     </el-col>
 
-                      <el-col :xs="24" :sm="24" :lg="12">
+                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="发射频点(MHz)" prop="power">
-                          <el-input v-model="temp.freq" style="width: 75%"/>
+                          <el-input v-model="temp.freq" style="width: 65%"/>
                         </el-form-item>
                       </el-col>
 
@@ -270,30 +270,35 @@
               <el-tab-pane label="高级配置">
 
                   <el-row :gutter="32">
-                    <el-col :xs="24" :sm="24" :lg="12">
+                    <el-col :xs="24" :sm="24" :lg="22">
                       <el-form-item label="硬件版本" prop="power">
-                        <el-input v-model="temp.hardVersion" disabled="false" style="width: 75%"/>
+                        <el-input v-model="temp.hardVersion" disabled="false" style="width: 65%"/>
                       </el-form-item>
-                      <el-form-item label="通道数量" prop="power">
-                        <el-input v-model="temp.serviceNum" style="width: 75%"/>
+                      <el-form-item label="软件版本" prop="power">
+                        <el-input v-model="temp.softVersion" disabled="false" style="width: 65%"/>
                       </el-form-item>
-
                       <!--<el-form-item label="定时启动时间" prop="power">
-                        <el-date-picker placeholder="选择日期时间" type="datetime" style="width: 75%"/>
+                        <el-date-picker placeholder="选择日期时间" type="datetime" style="width: 65%"/>
                       </el-form-item>-->
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :lg="12">
-                      <el-form-item label="软件版本" prop="power">
-                        <el-input v-model="temp.softVersion" disabled="false" style="width: 75%"/>
+                    <el-col :xs="24" :sm="24" :lg="22">
+                      <el-form-item label="通道数量" prop="power">
+                        <el-input v-model="temp.serviceNum" style="width: 65%"/>
                       </el-form-item>
                       <el-form-item label="时延补偿(ns)" prop="power">
-                        <el-input v-model="temp.timeDelayCompensation" style="width: 75%"/>
+                        <el-input v-model="temp.timeDelayCompensation" style="width: 65%"/>
                       </el-form-item>
-
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :lg="8">
+                    <el-col :xs="24" :sm="24" :lg="22">
+                      <el-form-item label="超帧长度" prop="power">
+                        <!--Slider滑块-->
+                        <el-slider v-model="temp.subFrameNum" :min='2' :max='255' show-input>
+                        </el-slider>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="22">
                       <el-form-item label="CDRadio" prop="power">
                         <el-tooltip :content="'Switch value: ' + temp.cDRadioEnable" placement="top">
                           <el-switch
@@ -308,7 +313,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
+                    <el-col :xs="24" :sm="24" :lg="22">
                       <el-form-item label="预失真" prop="power">
                         <el-tooltip :content="'Switch value: ' + temp.dpdEnable" placement="top">
                           <el-switch
@@ -323,7 +328,7 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :lg="8" style="margin-left: -30px;">
+                    <el-col :xs="24" :sm="24" :lg="22">
                       <el-form-item label="授时" prop="power">
                         <el-tooltip :content="'Switch value: ' + temp.timeServiceEnable" placement="top">
                           <el-switch
@@ -338,13 +343,6 @@
                       </el-form-item>
                     </el-col>
 
-                    <el-col :xs="24" :sm="24" :lg="22">
-                      <el-form-item label="超帧长度" prop="power">
-                        <!--Slider滑块-->
-                        <el-slider v-model="temp.subFrameNum" :min='2' :max='255' show-input>
-                        </el-slider>
-                      </el-form-item>
-                    </el-col>
                   </el-row>
                 <!--</el-form>-->
 
@@ -353,7 +351,7 @@
               <!--第三个tabs/Collapse 折叠面板-->
               <el-tab-pane label="FM    配置">
                 <el-row :gutter="32">
-                  <el-col :xs="24" :sm="24" :lg="12">
+                  <el-col :xs="24" :sm="24" :lg="24">
                     <el-form-item label="FM" prop="power">
                       <el-tooltip :content="'Switch value: ' + temp.fMEnable" placement="top">
                         <el-switch
@@ -367,14 +365,9 @@
                         </el-switch>
                       </el-tooltip>
                     </el-form-item>
-                    <el-form-item label="FM预加重" prop="power">
-                      <el-radio v-model="temp.preAggravation" label="00" :disabled="closePre" class="radio">关闭</el-radio>
-                      <el-radio v-model="temp.preAggravation" label="01" :disabled="closePre" class="radio">50us</el-radio>
-                      <el-radio v-model="temp.preAggravation" label="02" :disabled="closePre" class="radio">75us</el-radio>
-                    </el-form-item>
                   </el-col>
 
-                  <el-col :xs="24" :sm="24" :lg="12">
+                  <el-col :xs="24" :sm="24" :lg="24">
                     <el-form-item label="FM声道" prop="power">
                       <el-radio v-model="temp.vocalTract" :disabled="closePre" label="02">立体声</el-radio>
                       <el-radio v-model="temp.vocalTract" :disabled="closePre" label="01">单声道</el-radio>
@@ -386,7 +379,11 @@
                       <el-radio v-model="temp.audioSource" label="0001" :disabled="closePre" >数字</el-radio>
                       <el-radio v-model="temp.audioSource" label="0000" :disabled="closePre" >模拟</el-radio>
                     </el-form-item>
-                  </el-col>
+                    <el-form-item label="FM预加重" prop="power">
+                      <el-radio v-model="temp.preAggravation" label="00" :disabled="closePre" class="radio">关闭</el-radio>
+                      <el-radio v-model="temp.preAggravation" label="01" :disabled="closePre" class="radio">50us</el-radio>
+                      <el-radio v-model="temp.preAggravation" label="02" :disabled="closePre" class="radio">75us</el-radio>
+                    </el-form-item> </el-col>
 
                   <el-col :xs="24" :sm="24" :lg="22">
                     <el-form-item label="FM调制度" prop="power">
@@ -423,41 +420,41 @@
                             </el-slider>
                           </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
+                        <el-col :xs="24" :sm="24" :lg="24">
                           <el-form-item label="LDPC码率" prop="power">
-                            <el-select v-model="temp.service1LdpcRate" placeholder="请选择LDPC码率">
+                            <el-select v-model="temp.service1LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
-                                v-for="item in options"
+                                v-for="item in service1LdpcRate"
                                 :key="item.service1LdpcRate"
-                                :label="item.label"
-                                :value="item.service1LdpcRate">
-                              </el-option>
-                            </el-select>
-                          </el-form-item>
-                          <el-form-item label="映射方式" prop="power">
-                            <el-select v-model="temp.service1MapMode" placeholder="请选择映射方式">
-                              <el-option
-                                v-for="item in options"
-                                :key="item.service1MapMode"
-                                :label="item.label"
-                                :value="item.service1MapMode">
+                                :label="item.name"
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
-                          <el-form-item label="封装格式" prop="power">
-                            <el-select v-model="temp.service1SealMode" placeholder="请选择映射方式">
+                          <el-col :xs="24" :sm="24" :lg="24">
+                          <el-form-item label="映射方式" prop="power">
+                            <el-select v-model="temp.service1MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service1SealMode"
-                                :label="item.label"
-                                :value="item.service1SealMode">
+                                v-for="item in service1MapMode"
+                                :key="item.service1MapMode"
+                                :label="item.name"
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
-                          <el-form-item label="授权序列" prop="power">
-                            <el-input v-model="temp.service1AuthorList" style="width: 75%"/>
+                          <el-form-item label="封装格式" prop="power">
+                            <el-select v-model="temp.service1SealMode" placeholder="请选择映射方式" style="width: 60%">
+                              <el-option
+                                v-for="item in service1SealMode"
+                                :key="item"
+                                :label="item.name"
+                                :value="item.value">
+                              </el-option>
+                            </el-select>
+                          </el-form-item>
+                            <el-form-item label="授权序列" prop="power">
+                            <el-input v-model="temp.service1AuthorList" style="width: 60%"/>
                           </el-form-item>
                         </el-col>
 
@@ -484,9 +481,9 @@
                             </el-slider>
                           </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
+                        <el-col :xs="24" :sm="24" :lg="24">
                           <el-form-item label="LDPC码率" prop="power">
-                            <el-select v-model="temp.service2LdpcRate" placeholder="请选择LDPC码率">
+                            <el-select v-model="temp.service2LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service2LdpcRate"
@@ -496,7 +493,7 @@
                             </el-select>
                           </el-form-item>
                           <el-form-item label="映射方式" prop="power">
-                            <el-select v-model="temp.service2MapMode" placeholder="请选择映射方式">
+                            <el-select v-model="temp.service2MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service2MapMode"
@@ -505,10 +502,8 @@
                               </el-option>
                             </el-select>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
                           <el-form-item label="封装格式" prop="power">
-                            <el-select v-model="temp.service2SealMode" placeholder="请选择映射方式">
+                            <el-select v-model="temp.service2SealMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service2SealMode"
@@ -518,7 +513,7 @@
                             </el-select>
                           </el-form-item>
                           <el-form-item label="授权序列" prop="power">
-                            <el-input v-model="temp.service2AuthorList" style="width: 75%"/>
+                            <el-input v-model="temp.service2AuthorList" style="width: 60%"/>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -544,9 +539,9 @@
                             </el-slider>
                           </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
+                        <el-col :xs="24" :sm="24" :lg="24">
                           <el-form-item label="LDPC码率" prop="power">
-                            <el-select v-model="temp.service3LdpcRate" placeholder="请选择LDPC码率">
+                            <el-select v-model="temp.service3LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service3LdpcRate"
@@ -556,7 +551,7 @@
                             </el-select>
                           </el-form-item>
                           <el-form-item label="映射方式" prop="power">
-                            <el-select v-model="temp.service3MapMode" placeholder="请选择映射方式">
+                            <el-select v-model="temp.service3MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service3MapMode"
@@ -565,10 +560,8 @@
                               </el-option>
                             </el-select>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
                           <el-form-item label="封装格式" prop="power">
-                            <el-select v-model="temp.service3SealMode" placeholder="请选择映射方式">
+                            <el-select v-model="temp.service3SealMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service3SealMode"
@@ -578,7 +571,7 @@
                             </el-select>
                           </el-form-item>
                           <el-form-item label="授权序列" prop="power">
-                            <el-input v-model="temp.service3AuthorList" style="width: 75%"/>
+                            <el-input v-model="temp.service3AuthorList" style="width: 60%"/>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -604,9 +597,9 @@
                             </el-slider>
                           </el-form-item>
                         </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
+                        <el-col :xs="24" :sm="24" :lg="24">
                           <el-form-item label="LDPC码率" prop="power">
-                            <el-select v-model="temp.service4LdpcRate" placeholder="请选择LDPC码率">
+                            <el-select v-model="temp.service4LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service4LdpcRate"
@@ -616,7 +609,7 @@
                             </el-select>
                           </el-form-item>
                           <el-form-item label="映射方式" prop="power">
-                            <el-select v-model="temp.service4MapMode" placeholder="请选择映射方式">
+                            <el-select v-model="temp.service4MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service4MapMode"
@@ -625,10 +618,8 @@
                               </el-option>
                             </el-select>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="12">
                           <el-form-item label="封装格式" prop="power">
-                            <el-select v-model="temp.service4SealMode" placeholder="请选择映射方式">
+                            <el-select v-model="temp.service4SealMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in options"
                                 :key="item.service4SealMode"
@@ -638,7 +629,7 @@
                             </el-select>
                           </el-form-item>
                           <el-form-item label="授权序列" prop="power">
-                            <el-input v-model="temp.service4AuthorList" style="width: 75%"/>
+                            <el-input v-model="temp.service4AuthorList" style="width: 60%"/>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -664,9 +655,9 @@
                           </el-slider>
                         </el-form-item>
                       </el-col>
-                      <el-col :xs="24" :sm="24" :lg="12">
+                      <el-col :xs="24" :sm="24" :lg="24">
                         <el-form-item label="LDPC码率" prop="power">
-                          <el-select v-model="temp.service5LdpcRate" placeholder="请选择LDPC码率">
+                          <el-select v-model="temp.service5LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service5LdpcRate"
@@ -676,7 +667,7 @@
                           </el-select>
                         </el-form-item>
                         <el-form-item label="映射方式" prop="power">
-                          <el-select v-model="temp.service5MapMode" placeholder="请选择映射方式">
+                          <el-select v-model="temp.service5MapMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service5MapMode"
@@ -685,10 +676,8 @@
                             </el-option>
                           </el-select>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="12">
                         <el-form-item label="封装格式" prop="power">
-                          <el-select v-model="temp.service5SealMode" placeholder="请选择映射方式">
+                          <el-select v-model="temp.service5SealMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service5SealMode"
@@ -698,7 +687,7 @@
                           </el-select>
                         </el-form-item>
                         <el-form-item label="授权序列" prop="power">
-                          <el-input v-model="temp.service5AuthorList" style="width: 75%"/>
+                          <el-input v-model="temp.service5AuthorList" style="width: 60%"/>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -724,9 +713,9 @@
                           </el-slider>
                         </el-form-item>
                       </el-col>
-                      <el-col :xs="24" :sm="24" :lg="12">
+                      <el-col :xs="24" :sm="24" :lg="24">
                         <el-form-item label="LDPC码率" prop="power">
-                          <el-select v-model="temp.service6LdpcRate" placeholder="请选择LDPC码率">
+                          <el-select v-model="temp.service6LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service6LdpcRate"
@@ -736,7 +725,7 @@
                           </el-select>
                         </el-form-item>
                         <el-form-item label="映射方式" prop="power">
-                          <el-select v-model="temp.service6MapMode" placeholder="请选择映射方式">
+                          <el-select v-model="temp.service6MapMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service6MapMode"
@@ -745,10 +734,8 @@
                             </el-option>
                           </el-select>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="12">
                         <el-form-item label="封装格式" prop="power">
-                          <el-select v-model="temp.service6SealMode" placeholder="请选择映射方式">
+                          <el-select v-model="temp.service6SealMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service6SealMode"
@@ -758,7 +745,7 @@
                           </el-select>
                         </el-form-item>
                         <el-form-item label="授权序列" prop="power">
-                          <el-input v-model="temp.service6AuthorList" style="width: 75%"/>
+                          <el-input v-model="temp.service6AuthorList" style="width: 60%"/>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -784,9 +771,9 @@
                           </el-slider>
                         </el-form-item>
                       </el-col>
-                      <el-col :xs="24" :sm="24" :lg="12">
+                      <el-col :xs="24" :sm="24" :lg="24">
                         <el-form-item label="LDPC码率" prop="power">
-                          <el-select v-model="temp.service7LdpcRate" placeholder="请选择LDPC码率">
+                          <el-select v-model="temp.service7LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service7LdpcRate"
@@ -796,7 +783,7 @@
                           </el-select>
                         </el-form-item>
                         <el-form-item label="映射方式" prop="power">
-                          <el-select v-model="temp.service7MapMode" placeholder="请选择映射方式">
+                          <el-select v-model="temp.service7MapMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service7MapMode"
@@ -805,10 +792,8 @@
                             </el-option>
                           </el-select>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="12">
                         <el-form-item label="封装格式" prop="power">
-                          <el-select v-model="temp.service7SealMode" placeholder="请选择映射方式">
+                          <el-select v-model="temp.service7SealMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
                               v-for="item in options"
                               :key="item.service7SealMode"
@@ -818,7 +803,7 @@
                           </el-select>
                         </el-form-item>
                         <el-form-item label="授权序列" prop="power">
-                          <el-input v-model="temp.service7AuthorList" style="width: 75%"/>
+                          <el-input v-model="temp.service7AuthorList" style="width: 60%"/>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -898,6 +883,7 @@
     },
     data() {
       return {
+        labelPosition: 'left',
         tabPosition: 'left',// tabs位置
         location: '',
         activeNames: ['1'],
@@ -910,6 +896,9 @@
         list: [],
         total: 0,
         txState: [],
+        service1SealMode: [],
+        service1MapMode: [],
+        service1LdpcRate: [],
         updateTime: [],
         listLoading: true,
         listQuery: {
@@ -1272,6 +1261,12 @@
     var ad = this.temp.adPowerRatio
     var sub = this.temp.subFrameNum
     var mo = this.temp.modulation
+    var s1sRow = row.service1SealMode
+    var s1sRow_arr = []
+    var s1mRow = row.service1MapMode
+    var s1mRow_arr = []
+    var s1lRow = row.service1LdpcRate
+    var s1lRow_arr = []
 
     //将滑块字符串转int类型
     this.temp.avgPower = parseInt(avg)   //模数功率比
@@ -1279,14 +1274,38 @@
     this.temp.subFrameNum = parseInt(sub)//子帧长度
     this.temp.modulation = parseInt(mo)  //调制度
 
+    //备份一份原始数据
+    this.cloneTemp = Object.assign({}, row)
+
     // 乘以1000让组件日期显示正常
     var nowTime = this.temp.startTimeStamp
     this.temp.startTimeStamp = nowTime * 1000
 
-    //备份一份原始数据
-    this.cloneTemp = Object.assign({}, row)
+    //service1SealMode为1业务流，service1SealMode为2业务包
+    if (s1sRow === '2'){
+      s1sRow_arr.push({name:'业务包', value:s1sRow})
+    }else if (s1sRow === '1') {
+      s1sRow_arr.push({name:'业务流', value:s1sRow})
+    }
 
-    var rowKey = this.temp.rowKey
+    if (s1mRow === '0'){
+      s1mRow_arr.push({name:'0', value:s1mRow})
+    }else if (s1mRow === 'QPSK') {
+      s1mRow_arr.push({name:'QPSK', value:s1mRow})
+    }
+
+    if (s1lRow === '0.4'){
+      s1mRow_arr.push({name:'0.4', value:s1lRow})
+    }else if (s1lRow === '0.5') {
+      s1lRow_arr.push({name:'0.5', value:s1lRow})
+    } else if (s1lRow === '0.6') {
+      s1lRow_arr.push({name:'0.6', value:s1lRow})
+    }
+
+    this.service1SealMode = s1sRow_arr
+    this.service1MapMode = s1mRow_arr
+    this.service1LdpcRate = s1lRow_arr
+
     this.dialogStatus = 'update'
     this.dialogFormVisible = true
     this.$nextTick(() => {
