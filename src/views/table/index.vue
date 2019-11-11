@@ -10,6 +10,7 @@
           <span class="demonstration">状态</span>&nbsp;
           <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="getList">
             <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value"/>
+            </el-option>
           </el-select>
         </el-col>
 
@@ -218,8 +219,8 @@
       </el-dialog>
 
       <!--编辑信息-->
-      <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible" custom-class="editMessage" v-dialogDrag :close-on-click-modal="false" width="40%">
-        <div style="height: 300px;">
+      <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible" custom-class="editMessage" v-dialogDrag :close-on-click-modal="false" width="45%">
+        <div style="height: 330px;">
             <el-form ref="dataForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="120px">
 
             <el-tabs :tab-position="tabPosition">
@@ -425,20 +426,18 @@
                             <el-select v-model="temp.service1LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
                                 v-for="item in service1LdpcRate"
-                                :key="item.service1LdpcRate"
-                                :label="item.name"
+                                :key="item"
+                                :label="item.label"
                                 :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
-                        </el-col>
-                          <el-col :xs="24" :sm="24" :lg="24">
                           <el-form-item label="映射方式" prop="power">
                             <el-select v-model="temp.service1MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
                                 v-for="item in service1MapMode"
-                                :key="item.service1MapMode"
-                                :label="item.name"
+                                :key="item"
+                                :label="item.label"
                                 :value="item.value">
                               </el-option>
                             </el-select>
@@ -448,7 +447,7 @@
                               <el-option
                                 v-for="item in service1SealMode"
                                 :key="item"
-                                :label="item.name"
+                                :label="item.label"
                                 :value="item.value">
                               </el-option>
                             </el-select>
@@ -485,30 +484,30 @@
                           <el-form-item label="LDPC码率" prop="power">
                             <el-select v-model="temp.service2LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service2LdpcRate"
+                                v-for="item in service2LdpcRate"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service2LdpcRate">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item label="映射方式" prop="power">
                             <el-select v-model="temp.service2MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service2MapMode"
+                                v-for="item in service2MapMode"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service2MapMode">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item label="封装格式" prop="power">
                             <el-select v-model="temp.service2SealMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service2SealMode"
+                                v-for="item in service2SealMode"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service2SealMode">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
@@ -543,30 +542,30 @@
                           <el-form-item label="LDPC码率" prop="power">
                             <el-select v-model="temp.service3LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service3LdpcRate"
+                                v-for="item in service3LdpcRate"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service3LdpcRate">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item label="映射方式" prop="power">
                             <el-select v-model="temp.service3MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service3MapMode"
+                                v-for="item in service3MapMode"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service3MapMode">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item label="封装格式" prop="power">
                             <el-select v-model="temp.service3SealMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service3SealMode"
+                                v-for="item in service3SealMode"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service3SealMode">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
@@ -601,30 +600,30 @@
                           <el-form-item label="LDPC码率" prop="power">
                             <el-select v-model="temp.service4LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service4LdpcRate"
+                                v-for="item in service4LdpcRate"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service4LdpcRate">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item label="映射方式" prop="power">
                             <el-select v-model="temp.service4MapMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service4MapMode"
+                                v-for="item in service4MapMode"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service4MapMode">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
                           <el-form-item label="封装格式" prop="power">
                             <el-select v-model="temp.service4SealMode" placeholder="请选择映射方式" style="width: 60%">
                               <el-option
-                                v-for="item in options"
-                                :key="item.service4SealMode"
+                                v-for="item in service4SealMode"
+                                :key="item"
                                 :label="item.label"
-                                :value="item.service4SealMode">
+                                :value="item.value">
                               </el-option>
                             </el-select>
                           </el-form-item>
@@ -657,32 +656,32 @@
                       </el-col>
                       <el-col :xs="24" :sm="24" :lg="24">
                         <el-form-item label="LDPC码率" prop="power">
-                          <el-select v-model="temp.service5LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
+                          <el-select v-model="temp.service4SealMode" placeholder="请选择LDPC码率" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service5LdpcRate"
+                              v-for="item in service4SealMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service5LdpcRate">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
                         <el-form-item label="映射方式" prop="power">
                           <el-select v-model="temp.service5MapMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service5MapMode"
+                              v-for="item in service5MapMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service5MapMode">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
                         <el-form-item label="封装格式" prop="power">
                           <el-select v-model="temp.service5SealMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service5SealMode"
+                              v-for="item in service5SealMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service5SealMode">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
@@ -717,30 +716,30 @@
                         <el-form-item label="LDPC码率" prop="power">
                           <el-select v-model="temp.service6LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service6LdpcRate"
+                              v-for="item in service6LdpcRate"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service6LdpcRate">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
                         <el-form-item label="映射方式" prop="power">
                           <el-select v-model="temp.service6MapMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service6MapMode"
+                              v-for="item in service6MapMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service6MapMode">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
                         <el-form-item label="封装格式" prop="power">
                           <el-select v-model="temp.service6SealMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service6SealMode"
+                              v-for="item in service6SealMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service6SealMode">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
@@ -775,7 +774,7 @@
                         <el-form-item label="LDPC码率" prop="power">
                           <el-select v-model="temp.service7LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
                             <el-option
-                              v-for="item in options"
+                              v-for="item in service7LdpcRate"
                               :key="item.service7LdpcRate"
                               :label="item.label"
                               :value="item.service7LdpcRate">
@@ -785,20 +784,20 @@
                         <el-form-item label="映射方式" prop="power">
                           <el-select v-model="temp.service7MapMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service7MapMode"
+                              v-for="item in service7MapMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service7MapMode">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
                         <el-form-item label="封装格式" prop="power">
                           <el-select v-model="temp.service7SealMode" placeholder="请选择映射方式" style="width: 60%">
                             <el-option
-                              v-for="item in options"
-                              :key="item.service7SealMode"
+                              v-for="item in service7SealMode"
+                              :key="item"
                               :label="item.label"
-                              :value="item.service7SealMode">
+                              :value="item.value">
                             </el-option>
                           </el-select>
                         </el-form-item>
@@ -896,9 +895,153 @@
         list: [],
         total: 0,
         txState: [],
-        service1SealMode: [],
-        service1MapMode: [],
-        service1LdpcRate: [],
+        service1LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service2LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service3LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service4LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service5LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service6LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service7LdpcRate: [{
+          value: '01',
+          label: '0.4'
+        }, {
+          value: '02',
+          label: '0.5'
+        }, {
+          value: '03',
+          label: '0.6'
+        }],
+        service1MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service2MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service3MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service4MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service5MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service6MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service7MapMode: [{
+          value: '0',
+          label: 'QPSK'
+        }],
+        service1SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
+        service2SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
+        service3SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
+        service4SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
+        service5SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
+        service6SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
+        service7SealMode: [{
+          value: '1',
+          label: '业务流'
+        }, {
+          value: '2',
+          label: '业务包'
+        }],
         updateTime: [],
         listLoading: true,
         listQuery: {
@@ -1282,7 +1425,7 @@
     this.temp.startTimeStamp = nowTime * 1000
 
     //service1SealMode为1业务流，service1SealMode为2业务包
-    if (s1sRow === '2'){
+    /*if (s1sRow === '2'){
       s1sRow_arr.push({name:'业务包', value:s1sRow})
     }else if (s1sRow === '1') {
       s1sRow_arr.push({name:'业务流', value:s1sRow})
@@ -1304,7 +1447,7 @@
 
     this.service1SealMode = s1sRow_arr
     this.service1MapMode = s1mRow_arr
-    this.service1LdpcRate = s1lRow_arr
+    this.service1LdpcRate = s1lRow_arr*/
 
     this.dialogStatus = 'update'
     this.dialogFormVisible = true
