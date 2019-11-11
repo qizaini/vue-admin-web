@@ -9,7 +9,7 @@
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
           <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="getList">
-            <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value"/>
+            <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value">
             </el-option>
           </el-select>
         </el-col>
@@ -179,43 +179,310 @@
     </el-dialog>
 
     <!--查看详情-->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="outerVisible">
-        <el-form :rules="rules" :model="temp" label-width="120px">
-          <el-row :gutter="32">
-            <el-col :xs="24" :sm="24" :lg="12">
-              <el-form-item label="工作频点:" prop="avgPower">
-                {{temp.avgPower}}
-              </el-form-item>
-              <el-form-item label="输出频率:" prop="freq">
-                {{temp.freq}}
-              </el-form-item>
-              <el-form-item label="工作频点:" prop="avgPower">
-                {{temp.avgPower}}
-              </el-form-item>
-              <el-form-item label="频谱模式:" prop="specMode">
-                {{temp.specMode}}
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="24" :lg="12">
-              <el-form-item label="激活时间:" prop="activeTime">
-                {{temp.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
-              </el-form-item>
-              <el-form-item label="配置更新时间:" prop="updateTime">
-                {{temp.updateTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
-              </el-form-item>
-              <el-form-item label="上次开机时间:" prop="lastPowerOnTime">
-                {{temp.lastPowerOnTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
-              </el-form-item>
-              <el-form-item label="状态:" prop="txState">
-                {{temp.txState}}
-              </el-form-item>
-            </el-col>
-          </el-row>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="outerVisible" v-dialogDrag width="55%">
+      <div style="height: 400px;">
+        <el-form :rules="rules" :model="temp" label-width="120px" :label-position="labelPosition" fullscreen="true">
+              <el-collapse v-model="activeDetails">
+
+                <el-collapse-item title="基本配置" name="1">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="部署地点:" prop="avgPower">
+                        {{temp.location}}
+                      </el-form-item>
+                      <el-form-item label="发射频点(MHz):" prop="freq">
+                        {{temp.freq}}
+                      </el-form-item>
+                      <el-form-item label="发射功率(w):" prop="avgPower">
+                        {{temp.avgPower}}
+                      </el-form-item>
+                      <el-form-item label="频谱模式:" prop="specMode">
+                        {{temp.specMode}}
+                      </el-form-item>
+                      <el-form-item label="模数功率比(dB):" prop="specMode">
+                        {{temp.adPowerRatio}}
+                      </el-form-item>
+                      <el-form-item label="通道数量:" prop="serviceNum">
+                        {{temp.serviceNum}}
+                      </el-form-item>
+                      <el-form-item label="时延补偿(ns):" prop="specMode">
+                        {{temp.timeDelayCompensation}}
+                      </el-form-item>
+                      <el-form-item label="CDRadio:" prop="cDRadioEnable">
+                        {{temp.cDRadioEnable}}
+                      </el-form-item>
+                      <el-form-item label="授权开关:" prop="timeServiceEnable">
+                        {{temp.timeServiceEnable}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="激活时间:" prop="activeTime">
+                        {{temp.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
+                      </el-form-item>
+                      <el-form-item label="配置更新时间:" prop="updateTime">
+                        {{temp.updateTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
+                      </el-form-item>
+                      <el-form-item label="上次开机时间:" prop="lastPowerOnTime">
+                        {{temp.lastPowerOnTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}
+                      </el-form-item>
+                      <el-form-item label="状态:" prop="txState">
+                        {{temp.txState}}
+                      </el-form-item>
+                      <el-form-item label="软件版本:" prop="txState">
+                        {{temp.hardVersion}}
+                      </el-form-item>
+                      <el-form-item label="硬件版本:" prop="softVersion">
+                        {{temp.softVersion}}
+                      </el-form-item>
+                      <el-form-item label="超帧长度:" prop="subFrameNum">
+                        {{temp.subFrameNum}}
+                      </el-form-item>
+                      <el-form-item label="预失真:" prop="dpdEnable">
+                        {{temp.dpdEnable}}
+                      </el-form-item>
+                      <el-form-item label="自动上报开关:" prop="reportEnable">
+                        {{temp.reportEnable}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+
+                <el-collapse-item title="FM配置" name="2">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="FM:" prop="fMEnable">
+                        {{temp.fMEnable}}
+                      </el-form-item>
+                      <el-form-item label="FM声道:" prop="vocalTract">
+                        {{temp.vocalTract}}
+                      </el-form-item>
+                      <el-form-item label="FM音频输入源:" prop="audioSource">
+                        {{temp.audioSource}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="FM预加重:" prop="preAggravation">
+                        {{temp.preAggravation}}
+                      </el-form-item>
+                      <el-form-item label="FM调制度:" prop="modulation">
+                        {{temp.modulation}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置1" name="3">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service1LdpcNum">
+                        {{temp.service1LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service1IntvNum">
+                        {{temp.service1IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service1LdpcRate">
+                        {{temp.service1LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service1ExpandTime">
+                        {{temp.service1ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service1MapMode">
+                        {{temp.service1MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service1SealMode">
+                        {{temp.service1SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service1AuthorList">
+                        {{temp.service1AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置2" name="4">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service2LdpcNum">
+                        {{temp.service2LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service2IntvNum">
+                        {{temp.service2IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service2LdpcRate">
+                        {{temp.service2LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service2ExpandTime">
+                        {{temp.service2ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service2MapMode">
+                        {{temp.service2MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service2SealMode">
+                        {{temp.service2SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service2AuthorList">
+                        {{temp.service2AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置3" name="5">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service3LdpcNum">
+                        {{temp.service3LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service3IntvNum">
+                        {{temp.service3IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service3LdpcRate">
+                        {{temp.service3LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service3ExpandTime">
+                        {{temp.service3ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service3MapMode">
+                        {{temp.service3MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service3SealMode">
+                        {{temp.service3SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service3AuthorList">
+                        {{temp.service3AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置4" name="6">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service4LdpcNum">
+                        {{temp.service4LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service4IntvNum">
+                        {{temp.service4IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service4LdpcRate">
+                        {{temp.service4LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service4ExpandTime">
+                        {{temp.service4ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service4MapMode">
+                        {{temp.service4MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service4SealMode">
+                        {{temp.service4SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service4AuthorList">
+                        {{temp.service4AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置5" name="7">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service5LdpcNum">
+                        {{temp.service5LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service5IntvNum">
+                        {{temp.service5IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service5LdpcRate">
+                        {{temp.service5LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service5ExpandTime">
+                        {{temp.service5ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service5MapMode">
+                        {{temp.service5MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service5SealMode">
+                        {{temp.service5SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service5AuthorList">
+                        {{temp.service5AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置6" name="8">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service6LdpcNum">
+                        {{temp.service6LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service6IntvNum">
+                        {{temp.service6IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service6LdpcRate">
+                        {{temp.service6LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service6ExpandTime">
+                        {{temp.service6ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service6MapMode">
+                        {{temp.service6MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service6SealMode">
+                        {{temp.service6SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service6AuthorList">
+                        {{temp.service6AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="业务配置7" name="9">
+                  <el-row :gutter="32">
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="LDPC块数:" prop="service7LdpcNum">
+                        {{temp.service7LdpcNum}}
+                      </el-form-item>
+                      <el-form-item label="交织深度:" prop="service7IntvNum">
+                        {{temp.service7IntvNum}}
+                      </el-form-item>
+                      <el-form-item label="LDPC码率:" prop="service7LdpcRate">
+                        {{temp.service7LdpcRate}}
+                      </el-form-item>
+                      <el-form-item label="扩展倍率:" prop="service7ExpandTime">
+                        {{temp.service7ExpandTime}}
+                      </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :lg="12">
+                      <el-form-item label="映射方式:" prop="service7MapMode">
+                        {{temp.service7MapMode}}
+                      </el-form-item>
+                      <el-form-item label="封装格式:" prop="service7SealMode">
+                        {{temp.service7SealMode}}
+                      </el-form-item>
+                      <el-form-item label="授权序列:" prop="service7AuthorList">
+                        {{temp.service7AuthorList}}
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+
+              </el-collapse>
+
         </el-form>
+
+      </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="outerVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
-        </div>
+            <el-button @click="outerVisible = false">取消</el-button>
+            <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
+          </div>
       </el-dialog>
 
       <!--编辑信息-->
@@ -886,6 +1153,7 @@
         tabPosition: 'left',// tabs位置
         location: '',
         activeNames: ['1'],
+        activeDetails: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
         dialogVisible: false,
         innerVisible: false,
         outerVisible: false,
@@ -1520,6 +1788,229 @@
     if (status === 'breakdown') {
       this.temp.txState = "故障"
     }
+
+    if (this.temp.cDRadioEnable === '00') {
+      this.temp.cDRadioEnable = "关闭"
+    }else if (this.temp.cDRadioEnable === '01') {
+      this.temp.cDRadioEnable = "开启"
+    }
+
+    if (this.temp.fMEnable === '00') {
+      this.temp.fMEnable = "关闭"
+    }else if (this.temp.fMEnable === '01') {
+      this.temp.fMEnable = "开启"
+    }
+
+    //预失真开关
+    if (this.temp.dpdEnable === '00') {
+      this.temp.dpdEnable = "关闭"
+    }else if (this.temp.dpdEnable === '01') {
+      this.temp.dpdEnable = "开启"
+    }
+
+    //授时开关
+    if (this.temp.timeServiceEnable === '00') {
+      this.temp.timeServiceEnable = "关闭"
+    }else if (this.temp.timeServiceEnable === '01') {
+      this.temp.timeServiceEnable = "开启"
+    }
+
+    //自动上报开关
+    if (this.temp.reportEnable === '00') {
+      this.temp.reportEnable = "关闭"
+    }else if (this.temp.reportEnable === '01') {
+      this.temp.reportEnable = "开启"
+    }
+
+    //FM音频输入源
+    if (this.temp.audioSource === '0100' || this.temp.audioSource === '0101'){
+      this.temp.audioSource = '自动'
+    }else if (this.temp.audioSource === '0001'){
+      this.temp.audioSource = '数字'
+    }else if (this.temp.audioSource === '0000'){
+      this.temp.audioSource = '模拟'
+    }
+
+    //FM声道
+    if (this.temp.vocalTract === '02') {
+      this.temp.vocalTract = "立体声"
+    }else if (this.temp.vocalTract === '01') {
+      this.temp.vocalTract = "单声道"
+    }
+
+    //FM预加重
+    if (this.temp.preAggravation === '00') {
+      this.temp.preAggravation = "关闭"
+    }else if (this.temp.preAggravation === '01') {
+      this.temp.preAggravation = "50us"
+    }else if (this.temp.preAggravation === '02') {
+      this.temp.preAggravation = "75us"
+    }
+
+    //业务1
+    if (this.temp.service1LdpcRate === '01') {
+      this.temp.service1LdpcRate = "0.4"
+    }else if (this.temp.service1LdpcRate === '02') {
+      this.temp.service1LdpcRate = "0.5"
+    }else if (this.temp.service1LdpcRate === '03') {
+      this.temp.service1LdpcRate = "0.6"
+    }
+
+    if (this.temp.service1MapMode === '0') {
+        this.temp.service1MapMode = "QPSK"
+    }
+
+    if (this.temp.service1SealMode === '1') {
+      this.temp.service1SealMode = "业务流"
+    }else if (this.temp.service1SealMode === '2') {
+      this.temp.service1SealMode = "业务包"
+    }
+
+    //业务2
+    if (this.temp.service2LdpcRate === '01') {
+      this.temp.service2LdpcRate = "0.4"
+    }else if (this.temp.service2LdpcRate === '02') {
+      this.temp.service2LdpcRate = "0.5"
+    }else if (this.temp.service2LdpcRate === '03') {
+      this.temp.service2LdpcRate = "0.6"
+    }
+
+    if (this.temp.service2MapMode === '0') {
+      this.temp.service2MapMode = "QPSK"
+    }
+
+    if (this.temp.service2SealMode === '1') {
+      this.temp.service2SealMode = "业务流"
+    }else if (this.temp.service2SealMode === '2') {
+      this.temp.service2SealMode = "业务包"
+    }
+
+    //业务3
+    if (this.temp.service3LdpcRate === '01') {
+      this.temp.service3LdpcRate = "0.4"
+    }else if (this.temp.service3LdpcRate === '02') {
+      this.temp.service3LdpcRate = "0.5"
+    }else if (this.temp.service3LdpcRate === '03') {
+      this.temp.service3LdpcRate = "0.6"
+    }
+
+    if (this.temp.service3MapMode === '0') {
+      this.temp.service3MapMode = "QPSK"
+    }
+
+    if (this.temp.service3SealMode === '1') {
+      this.temp.service3SealMode = "业务流"
+    }else if (this.temp.service3SealMode === '2') {
+      this.temp.service3SealMode = "业务包"
+    }
+
+    //业务4
+    if (this.temp.service4LdpcRate === '01') {
+      this.temp.service4LdpcRate = "0.4"
+    }else if (this.temp.service4LdpcRate === '02') {
+      this.temp.service4LdpcRate = "0.5"
+    }else if (this.temp.service4LdpcRate === '03') {
+      this.temp.service4LdpcRate = "0.6"
+    }
+
+    if (this.temp.service4MapMode === '0') {
+      this.temp.service4MapMode = "QPSK"
+    }
+
+    if (this.temp.service4SealMode === '1') {
+      this.temp.service4SealMode = "业务流"
+    }else if (this.temp.service4SealMode === '2') {
+      this.temp.service4SealMode = "业务包"
+    }
+
+    //业务5
+    if (this.temp.service5LdpcRate === '01') {
+      this.temp.service5LdpcRate = "0.4"
+    }else if (this.temp.service5LdpcRate === '02') {
+      this.temp.service5LdpcRate = "0.5"
+    }else if (this.temp.service5LdpcRate === '03') {
+      this.temp.service5LdpcRate = "0.6"
+    }
+
+    if (this.temp.service5MapMode === '0') {
+      this.temp.service5MapMode = "QPSK"
+    }
+
+    if (this.temp.service5SealMode === '1') {
+      this.temp.service5SealMode = "业务流"
+    }else if (this.temp.service5SealMode === '2') {
+      this.temp.service5SealMode = "业务包"
+    }
+
+    //业务6
+    if (this.temp.service6LdpcRate === '01') {
+      this.temp.service6LdpcRate = "0.4"
+    }else if (this.temp.service6LdpcRate === '02') {
+      this.temp.service6LdpcRate = "0.5"
+    }else if (this.temp.service6LdpcRate === '03') {
+      this.temp.service6LdpcRate = "0.6"
+    }
+
+    if (this.temp.service6MapMode === '0') {
+      this.temp.service6MapMode = "QPSK"
+    }
+
+    if (this.temp.service6SealMode === '1') {
+      this.temp.service6SealMode = "业务流"
+    }else if (this.temp.service6SealMode === '2') {
+      this.temp.service6SealMode = "业务包"
+    }
+
+    //业务7
+    if (this.temp.service7LdpcRate === '01') {
+      this.temp.service7LdpcRate = "0.4"
+    }else if (this.temp.service7LdpcRate === '02') {
+      this.temp.service7LdpcRate = "0.5"
+    }else if (this.temp.service7LdpcRate === '03') {
+      this.temp.service7LdpcRate = "0.6"
+    }
+
+    if (this.temp.service7MapMode === '0') {
+      this.temp.service7MapMode = "QPSK"
+    }
+
+    if (this.temp.service1SealMode === '1') {
+      this.temp.service1SealMode = "业务流"
+    }else if (this.temp.service1SealMode === '2') {
+      this.temp.service1SealMode = "业务包"
+    }
+    if (this.temp.service2SealMode === '1') {
+      this.temp.service2SealMode = "业务流"
+    }else if (this.temp.service2SealMode === '2') {
+      this.temp.service2SealMode = "业务包"
+    }
+    if (this.temp.service3SealMode === '1') {
+      this.temp.service3SealMode = "业务流"
+    }else if (this.temp.service3SealMode === '2') {
+      this.temp.service3SealMode = "业务包"
+    }
+    if (this.temp.service4SealMode === '1') {
+      this.temp.service4SealMode = "业务流"
+    }else if (this.temp.service4SealMode === '2') {
+      this.temp.service4SealMode = "业务包"
+    }
+    if (this.temp.service5SealMode === '1') {
+      this.temp.service5SealMode = "业务流"
+    }else if (this.temp.service5SealMode === '2') {
+      this.temp.service5SealMode = "业务包"
+    }
+    if (this.temp.service6SealMode === '1') {
+      this.temp.service6SealMode = "业务流"
+    }else if (this.temp.service6SealMode === '2') {
+      this.temp.service6SealMode = "业务包"
+    }
+    if (this.temp.service7SealMode === '1') {
+      this.temp.service7SealMode = "业务流"
+    }else if (this.temp.service7SealMode === '2') {
+      this.temp.service7SealMode = "业务包"
+    }
+
+
     this.dialogStatus = 'detail'
     this.outerVisible = true
   },
