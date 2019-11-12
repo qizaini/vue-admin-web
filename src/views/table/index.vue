@@ -45,7 +45,7 @@
     </div>
     <br>
 
-    <!--列表-->
+    <!--列表 @selection-change=监听选中的所有值-->
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -55,22 +55,12 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      @selection-change="handleCheckAllChange"
       @sort-change="sortChange"
     >
-
-      <!--<el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange">
-        <el-checkbox>
-          <template slot-scope="scope">
-            <span>{{ scope.row.rowKey }}</span>
-          </template>
-        </el-checkbox>
-      </el-table-column>-->
-
-      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange">
+      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox">
       </el-table-column>
-      <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="f此操作将关闭激励器, 是否继续?
-
-alse" 隐藏列-->
+      <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="f此操作将关闭激励器, 是否继续? false" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -149,7 +139,6 @@ alse" 隐藏列-->
           </el-button>
           <!--普通用户禁止编辑 disabled="false"-->
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑信息</el-button>
-          <!--<el-button type="warning" size="mini" @click="handleSingle(row)">编辑地点</el-button>-->
           <el-button
             v-if="row.edit"
             type="success"
@@ -159,7 +148,7 @@ alse" 隐藏列-->
           >
             确定编辑
           </el-button>
-          <el-button type="warning" size="mini" @click="handleFetchDetail(row) ">查看详情</el-button>
+          <el-button type="warning" size="mini" @click="handleFetchDetail(row)">查看详情</el-button>
         </template>
       </el-table-column>
 
@@ -709,24 +698,7 @@ alse" 隐藏列-->
                   <el-collapse v-model="activeNames">
                     <el-collapse-item title="业务1" name="1">
                       <el-row :gutter="32">
-                        <el-col :xs="24" :sm="24" :lg="22">
-                          <el-form-item label="LDPC块数" prop="power">
-                            <el-slider v-model="temp.service1LdpcNum" :min='1' :max='31' show-stops show-input>
-                            </el-slider>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
-                          <el-form-item label="交织深度" prop="power">
-                            <el-slider v-model="temp.service1IntvNum" :min='1' :max='16' show-stops show-input>
-                            </el-slider>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
-                          <el-form-item label="扩展倍率" prop="power">
-                            <el-slider v-model="temp.service1ExpandTime" :min='1' :max='16' show-stops show-input>
-                            </el-slider>
-                          </el-form-item>
-                        </el-col>
+
                         <el-col :xs="24" :sm="24" :lg="24">
                           <el-form-item label="LDPC码率" prop="power">
                             <el-select v-model="temp.service1LdpcRate" placeholder="请选择LDPC码率" style="width: 60%">
@@ -758,12 +730,23 @@ alse" 隐藏列-->
                               </el-option>
                             </el-select>
                           </el-form-item>
-                            <el-form-item label="授权序列" prop="power">
+                          <el-form-item label="授权序列" prop="power">
                             <el-input v-model="temp.service1AuthorList" style="width: 60%"/>
                           </el-form-item>
-                        </el-col>
 
+                          <el-form-item label="LDPC块数" prop="power">
+                            <el-input v-model="temp.service1LdpcNum" style="width: 60%"/>
+                          </el-form-item>
+                          <el-form-item label="交织深度" prop="power">
+                            <el-input v-model="temp.service1IntvNum" style="width: 60%"/>
+                          </el-form-item>
+                          <el-form-item label="扩展倍率" prop="power">
+                            <el-input v-model="temp.service1ExpandTime" style="width: 60%"/>
+                          </el-form-item>
+
+                        </el-col>
                       </el-row>
+
                     </el-collapse-item>
 
                     <el-collapse-item title="业务2" name="2">
@@ -773,14 +756,10 @@ alse" 隐藏列-->
                             <el-slider v-model="temp.service2LdpcNum" :min='1' :max='31' show-stops show-input>
                             </el-slider>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
                           <el-form-item label="交织深度" prop="power">
                             <el-slider v-model="temp.service2IntvNum" :min='1' :max='16' show-stops show-input>
                             </el-slider>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
                           <el-form-item label="扩展倍率" prop="power">
                             <el-slider v-model="temp.service2ExpandTime" :min='1' :max='16' show-stops show-input>
                             </el-slider>
@@ -831,14 +810,10 @@ alse" 隐藏列-->
                             <el-slider v-model="temp.service3LdpcNum" :min='1' :max='31' show-stops show-input>
                             </el-slider>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
                           <el-form-item label="交织深度" prop="power">
                             <el-slider v-model="temp.service3IntvNum" :min='1' :max='16' show-stops show-input>
                             </el-slider>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
                           <el-form-item label="扩展倍率" prop="power">
                             <el-slider v-model="temp.service3ExpandTime" :min='1' :max='16' show-stops show-input>
                             </el-slider>
@@ -889,14 +864,10 @@ alse" 隐藏列-->
                             <el-slider v-model="temp.service4LdpcNum" :min='1' :max='31' show-stops show-input>
                             </el-slider>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
                           <el-form-item label="交织深度" prop="power">
                             <el-slider v-model="temp.service4IntvNum" :min='1' :max='16' show-stops show-input>
                             </el-slider>
                           </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :lg="22">
                           <el-form-item label="扩展倍率" prop="power">
                             <el-slider v-model="temp.service4ExpandTime" :min='1' :max='16' show-stops show-input>
                             </el-slider>
@@ -947,14 +918,10 @@ alse" 隐藏列-->
                           <el-slider v-model="temp.service5LdpcNum" :min='1' :max='31' show-stops show-input>
                           </el-slider>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="交织深度" prop="power">
                           <el-slider v-model="temp.service5IntvNum" :min='1' :max='16' show-stops show-input>
                           </el-slider>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="扩展倍率" prop="power">
                           <el-slider v-model="temp.service5ExpandTime" :min='1' :max='16' show-stops show-input>
                           </el-slider>
@@ -1005,14 +972,10 @@ alse" 隐藏列-->
                           <el-slider v-model="temp.service6LdpcNum" :min='1' :max='31' show-stops show-input>
                           </el-slider>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="交织深度" prop="power">
                           <el-slider v-model="temp.service6IntvNum" :min='1' :max='16' show-stops show-input>
                           </el-slider>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="扩展倍率" prop="power">
                           <el-slider v-model="temp.service6ExpandTime" :min='1' :max='16' show-stops show-input>
                           </el-slider>
@@ -1063,14 +1026,10 @@ alse" 隐藏列-->
                           <el-slider v-model="temp.service7LdpcNum" :min='1' :max='31' show-stops show-input>
                           </el-slider>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="交织深度" prop="power">
                           <el-slider v-model="temp.service7IntvNum" :min='1' :max='16' show-stops show-input>
                           </el-slider>
                         </el-form-item>
-                      </el-col>
-                      <el-col :xs="24" :sm="24" :lg="22">
                         <el-form-item label="扩展倍率" prop="power">
                           <el-slider v-model="temp.service7ExpandTime" :min='1' :max='16' show-stops show-input>
                           </el-slider>
@@ -1136,7 +1095,7 @@ alse" 隐藏列-->
 </template>
 <script>
 /* eslint-disable */
-  import { fetchList, fetchTx, createArticle, updateArticle } from '@/api/article'
+  import { fetchList, fetchTx, createArticle, updateArticle, restartArticle } from '@/api/article'
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -1516,6 +1475,23 @@ alse" 隐藏列-->
           console.log(error);
         });
     },*/
+      handleCheckAllChange(event) {
+        //如果没有选中一个复选框给提示
+        if (event === ''){
+          this.$message({
+            showClose: true,
+            message: '请至少选中一条数据！',
+            type: 'warning'
+          });
+        }else{
+          //循环遍历获取选中的txId
+          for (let i in event) {
+            let txId = event[i].txId
+            return txId
+            console.log(txId)
+          }
+        }
+      },
       open() {
         this.$prompt('请输入激励器ID', '添加', {
           confirmButtonText: '确定',
@@ -1547,6 +1523,10 @@ alse" 隐藏列-->
         });
       },
       restartTx(){
+        restartArticle(this.txId).then(response => {
+
+        })
+
         this.$confirm('此操作将重启激励器服务, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

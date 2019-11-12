@@ -13,14 +13,6 @@ export function fetchList(query) {
   })
 }
 
-export function fetchArticle(id) {
-  return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
-  })
-}
-
 export function fetchTx(id) {
   return request({
     url: 'v1/api-tx/tx/device/' + id,
@@ -46,3 +38,20 @@ export function updateArticle(data) {
     data: qs.stringify(data)
   })
 }
+
+export function restartArticle(data) {
+  return request({
+    url: 'v1/api-tx/tx/service/restart',
+    // url: 'api-tx/tx/service/restart',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+/*export function fetchArticle(id) {
+  return request({
+    url: '/article/detail',
+    method: 'get',
+    params: { id }
+  })
+}*/
