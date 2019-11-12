@@ -33,8 +33,12 @@
           <el-button type="primary" size="medium" icon="el-icon-edit" @click="open">添加</el-button>
           <!--<el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
           <!--关闭、重启、关闭服务、重启服务-->
-          <el-button type="info" icon="el-icon-circle-close" circle @click="closeTx"></el-button>
-          <el-button type="info" icon="el-icon-refresh" circle @click="restartTx"></el-button>
+          <el-tooltip class="item" effect="dark" content="停止激励器服务" placement="bottom">
+            <el-button type="danger" icon="el-icon-video-pause" circle @click="closeTx"></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="重启激励器服务" placement="bottom">
+            <el-button type="success" icon="el-icon-refresh" circle @click="restartTx"></el-button>
+          </el-tooltip>
         </el-col>
 
       </el-row>
@@ -181,10 +185,20 @@
     <!--查看详情-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="outerVisible" v-dialogDrag width="55%">
       <div style="height: 400px;">
+
+        <div slot="footer" style="margin: -70px 0 10px  85%;">
+          <!--<el-button @click="outerVisible = false">取消</el-button>-->
+          <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
+        </div>
+
         <el-form :rules="rules" :model="temp" label-width="120px" :label-position="labelPosition" fullscreen="true">
               <el-collapse v-model="activeDetails">
 
-                <el-collapse-item title="基本配置" name="1">
+                <el-collapse-item name="1">
+                  <template slot="title">
+                    <h3>基本配置</h3>
+                    <i class="header-icon el-icon-info"></i>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="部署地点:" prop="avgPower">
@@ -247,7 +261,11 @@
                   </el-row>
                 </el-collapse-item>
 
-                <el-collapse-item title="FM配置" name="2">
+                <el-collapse-item name="2">
+                  <template slot="title">
+                    <h3>FM     配置</h3>
+                    <i class="header-icon el-icon-info"></i>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="FM:" prop="fMEnable">
@@ -270,7 +288,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置1" name="3">
+                <el-collapse-item name="3">
+                  <template slot="title">
+                    <h3>业务配置1</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service1LdpcNum">
@@ -299,7 +320,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置2" name="4">
+                <el-collapse-item name="4">
+                  <template slot="title">
+                    <h3>业务配置2</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service2LdpcNum">
@@ -328,7 +352,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置3" name="5">
+                <el-collapse-item name="5">
+                  <template slot="title">
+                    <h3>业务配置3</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service3LdpcNum">
@@ -357,7 +384,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置4" name="6">
+                <el-collapse-item name="6">
+                  <template slot="title">
+                    <h3>业务配置4</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service4LdpcNum">
@@ -386,7 +416,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置5" name="7">
+                <el-collapse-item name="7">
+                  <template slot="title">
+                    <h3>业务配置5</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service5LdpcNum">
@@ -415,7 +448,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置6" name="8">
+                <el-collapse-item name="8">
+                  <template slot="title">
+                    <h3>业务配置6</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service6LdpcNum">
@@ -444,7 +480,10 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="业务配置7" name="9">
+                <el-collapse-item name="9">
+                  <template slot="title">
+                    <h3>业务配置7</h3>
+                  </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="LDPC块数:" prop="service7LdpcNum">
@@ -479,10 +518,7 @@
         </el-form>
 
       </div>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="outerVisible = false">取消</el-button>
-            <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
-          </div>
+
       </el-dialog>
 
       <!--编辑信息-->
