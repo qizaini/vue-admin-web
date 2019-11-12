@@ -58,16 +58,19 @@
       @sort-change="sortChange"
     >
 
-      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange">
+      <!--<el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange">
         <el-checkbox>
           <template slot-scope="scope">
             <span>{{ scope.row.rowKey }}</span>
           </template>
         </el-checkbox>
-      </el-table-column>
+      </el-table-column>-->
 
-      <!--<el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange"></el-table-column>-->
-      <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="false" 隐藏列-->
+      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" @change="handleCheckAllChange">
+      </el-table-column>
+      <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="f此操作将关闭激励器, 是否继续?
+
+alse" 隐藏列-->
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -1527,7 +1530,7 @@
         })
       },
       closeTx(){
-        this.$confirm('此操作将关闭激励器, 是否继续?', '提示', {
+        this.$confirm('此操作将关闭激励器服务, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'error'
@@ -1544,7 +1547,7 @@
         });
       },
       restartTx(){
-        this.$confirm('此操作将重启激励器, 是否继续?', '提示', {
+        this.$confirm('此操作将重启激励器服务, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
