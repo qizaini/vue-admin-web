@@ -184,7 +184,7 @@
 
     <!--查看详情-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="outerVisible" v-dialogDrag width="55%">
-      <div style="height: 400px;">
+      <div style="height: 480px;">
 
         <div slot="footer" style="margin: -70px 0 10px  85%;">
           <!--<el-button @click="outerVisible = false">取消</el-button>-->
