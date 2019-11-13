@@ -114,7 +114,7 @@ export default {
       var data3 = [];
       var data4 = [];
 
-      for (var i = 0; i < 10; i++) {
+      for (var i = 1; i <= 15; i++) {
         xAxisData.push('Class' + i);
         data1.push((Math.random() * 2).toFixed(2));
         data2.push(-Math.random().toFixed(2));
