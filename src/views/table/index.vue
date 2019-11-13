@@ -1111,7 +1111,8 @@
   }
 
   .el-table .success-row {
-    background: linear-gradient(#f0f9eb, #d5ebc6, #c7e7c4);
+    background: #f0f9eb;
+    /*background: linear-gradient(#f0f9eb, #d5ebc6, #c7e7c4);*/
   }
 </style>
 
@@ -1568,8 +1569,7 @@
         }
       },
       //重启激励器服务
-      restartTx(rows){
-        var _self = this
+      restartTx(){
         if (this.multipleSelection.length === 0) {
           this.$message({
             showClose: true,
