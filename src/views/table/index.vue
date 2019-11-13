@@ -34,7 +34,7 @@
           <!--<el-button type="primary" size="medium" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
           <!--关闭、重启、关闭服务、重启服务-->
           <el-tooltip class="item" effect="dark" content="停止激励器服务" placement="bottom">
-            <el-button type="danger" icon="el-icon-video-pause" circle @click="closeTx"></el-button>
+            <el-button type="danger" icon="el-icon-video-pause" circle @click="stopTx"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="重启激励器服务" placement="bottom">
             <el-button type="success" icon="el-icon-refresh" circle @click="restartTx"></el-button>
@@ -55,10 +55,10 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      @selection-change="handleCheckAllChange"
+      @selection-change="handleSelectionChange"
       @sort-change="sortChange"
     >
-      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox">
+      <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" >
       </el-table-column>
       <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="f此操作将关闭激励器, 是否继续? false" 隐藏列-->
         <template slot-scope="scope">
@@ -1095,7 +1095,7 @@
 </template>
 <script>
 /* eslint-disable */
-  import { fetchList, fetchTx, createArticle, updateArticle, restartArticle } from '@/api/article'
+  import { fetchList, fetchTx, createArticle, updateArticle, restartArticle, stopArticle } from '@/api/article'
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -1150,6 +1150,7 @@
         labelPosition: 'left',
         tabPosition: 'left',// tabs位置
         location: '',
+        txId: '',
         activeNames: ['1'],
         activeDetails: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
         dialogVisible: false,
@@ -1158,8 +1159,9 @@
         dialogFormVisible: false,
         dialogSingleVisible: false,
         tableKey: 0,
-        list: [],
         total: 0,
+        list: [],
+        multipleSelection: [],
         txState: [],
         service1LdpcRate: [{
           value: '01',
@@ -1475,22 +1477,8 @@
           console.log(error);
         });
     },*/
-      handleCheckAllChange(event) {
-        //如果没有选中一个复选框给提示
-        if (event === ''){
-          this.$message({
-            showClose: true,
-            message: '请至少选中一条数据！',
-            type: 'warning'
-          });
-        }else{
-          //循环遍历获取选中的txId
-          for (let i in event) {
-            let txId = event[i].txId
-            return txId
-            console.log(txId)
-          }
-        }
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
       },
       open() {
         this.$prompt('请输入激励器ID', '添加', {
@@ -1505,44 +1493,92 @@
           });
         })
       },
-      closeTx(){
-        this.$confirm('此操作将关闭激励器服务, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'error'
-        }).then(() => {
+      //停止激励器服务
+      stopTx(){
+        if (this.multipleSelection.length === 0) {
           this.$message({
-            type: 'success',
-            message: '关闭成功!'
+            showClose: true,
+            message: '请至少选中一条数据！',
+            type: 'warning'
           });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消关闭'
+        }else {
+          this.$confirm('此操作将停止激励器服务, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error'
+          }).then(() => {
+            for (let i in this.multipleSelection){
+              let txId = this.multipleSelection[i].txId
+              var time = 0
+              stopArticle({txId: txId, time: time}).then(response => {
+                if (response === true) {
+                  this.$message({
+                    type: 'success',
+                    message: '停止激励器服务成功!'
+                  });
+                  //改变状态为重启
+                  this.temp.txState = 'running'
+                }else{
+                  this.$message({
+                    type: 'info',
+                    message: '停止激励器服务失败!'
+                  });
+                }
+              })
+            }
+          }).catch(action => {
+            this.$message({
+              type: 'info',
+              message: action === 'cancel'
+                ? '取消停止激励器服务'
+                : '停留在当前页面'
+            })
           });
-        });
+        }
       },
+      //重启激励器服务
       restartTx(){
-        restartArticle(this.txId).then(response => {
-
-        })
-
-        this.$confirm('此操作将重启激励器服务, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+        if (this.multipleSelection.length === 0) {
+          this.$message({
+            showClose: true,
+            message: '请至少选中一条数据！',
+            type: 'warning'
+          });
+        }else {
+          this.$confirm('此操作将重启激励器服务, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '重启成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消重启'
-          });
-        });
-      },
+            for (let i in this.multipleSelection){
+              let txId = this.multipleSelection[i].txId
+              var time = 0
+              restartArticle({txId: txId, time: time}).then(response => {
+                if (response === true) {
+                  this.$message({
+                    type: 'success',
+                    message: '重启激励器服务成功!'
+                  });
+                  //改变状态为重启
+                  this.temp.txState = 'running'
+                }else{
+                  this.$message({
+                    type: 'info',
+                    message: '重启激励器服务失败!'
+                  });
+                }
+              })
+            }
+          }).catch(action => {
+              this.$message({
+                type: 'info',
+                message: action === 'cancel'
+                  ? '取消重启激励器服务'
+                  : '停留在当前页面'
+              })
+            });
+          }
+        },
       getList() {
         this.listLoading = false
         if (this.listQuery.updateTime !== '') {
