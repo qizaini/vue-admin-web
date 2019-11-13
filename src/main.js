@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import echarts from 'echarts'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
@@ -26,6 +27,8 @@ import '@/permission' // permission control
  */
 /* eslint-disable */
 import { mockXHR } from '../mock'
+
+Vue.prototype.$echarts = echarts;
 
 if (process.env.NODE_ENV === 'production') {
   mockXHR()

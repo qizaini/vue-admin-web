@@ -20,7 +20,7 @@
     "@smallwei/avue": "^2.1.2",
     "axios": "^0.18.1",
     "chart": "^0.1.2",
-    "echarts": "^4.3.0",
+    "echarts": "^4.4.0",
     "element-ui": "^2.11.1",
     "file-saver": "^2.0.2",
     "js-cookie": "2.2.0",
