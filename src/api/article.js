@@ -51,7 +51,7 @@ export function restartArticle(data) {
 export function stopArticle(data) {
   return request({
     url: 'v1/api-tx/tx/service/stop',
-    // url: 'api-tx/tx/service/restart',
+    // url: 'api-tx/tx/service/stop',
     method: 'post',
     data: qs.stringify(data)
   })

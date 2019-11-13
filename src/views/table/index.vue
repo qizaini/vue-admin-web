@@ -37,7 +37,7 @@
             <el-button type="danger" icon="el-icon-video-pause" circle @click="stopTx"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="重启激励器服务" placement="bottom">
-            <el-button type="success" icon="el-icon-refresh" circle @click="restartTx"></el-button>
+            <el-button type="success" icon="el-icon-refresh" circle @click="restartTx()"></el-button>
           </el-tooltip>
         </el-col>
 
@@ -57,7 +57,7 @@
       style="width: 100%;"
       @selection-change="handleSelectionChange"
       @sort-change="sortChange"
-    >
+      :row-class-name="tableRowClassName">
       <el-table-column type="selection" :indeterminate="isIndeterminate" :class="checkbox" >
       </el-table-column>
       <el-table-column v-if="true" align="center" label="序号" width="70"><!--v-if="f此操作将关闭激励器, 是否继续? false" 隐藏列-->
@@ -89,6 +89,17 @@
       <el-table-column prop="specMode" label="频谱模式" align="center" >
         <template slot-scope="scope">
           <span>{{ scope.row.specMode }}</span>
+        </template>
+
+        <template slot-scope="scope" prop="specMode">
+          <span v-if="scope.row.specMode === '1'" :type="'info'" disable-transitions>A1</span>
+          <span v-else-if="scope.row.specMode === '2'">A2</span>
+          <span v-else-if="scope.row.specMode === '3'">A3</span>
+          <span v-else-if="scope.row.specMode === '4'">A4</span>
+          <span v-else-if="scope.row.specMode === '5'">B1</span>
+          <span v-else-if="scope.row.specMode === '6'">B2</span>
+          <span v-else-if="scope.row.specMode === '7'">B3</span>
+          <span v-else-if="scope.row.specMode === '8'">B4</span>
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" align="center" sortable label="激活时间" width="180px">
@@ -1093,6 +1104,17 @@
 
   </div>
 </template>
+
+<style>
+  .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: linear-gradient(#f0f9eb, #d5ebc6, #c7e7c4);
+  }
+</style>
+
 <script>
 /* eslint-disable */
   import { fetchList, fetchTx, createArticle, updateArticle, restartArticle, stopArticle } from '@/api/article'
@@ -1480,6 +1502,14 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      //偶数行绿色，奇数行无色
+      tableRowClassName({row, rowIndex}) {
+        if(rowIndex % 2 === 0) {
+          return 'success-row'
+        } else {
+          return ''
+        }
+      },
       open() {
         this.$prompt('请输入激励器ID', '添加', {
           confirmButtonText: '确定',
@@ -1510,14 +1540,15 @@
             for (let i in this.multipleSelection){
               let txId = this.multipleSelection[i].txId
               var time = 0
+              this.listLoading = true
               stopArticle({txId: txId, time: time}).then(response => {
                 if (response === true) {
                   this.$message({
                     type: 'success',
                     message: '停止激励器服务成功!'
                   });
-                  //改变状态为重启
-                  this.temp.txState = 'running'
+                  //改变状态为停止
+                  this.listQuery.txState = 'shutdown'
                 }else{
                   this.$message({
                     type: 'info',
@@ -1537,15 +1568,18 @@
         }
       },
       //重启激励器服务
-      restartTx(){
+      restartTx(rows){
+        var _self = this
         if (this.multipleSelection.length === 0) {
           this.$message({
             showClose: true,
             message: '请至少选中一条数据！',
             type: 'warning'
           });
-        }else {
-          this.$confirm('此操作将重启激励器服务, 是否继续?', '提示', {
+          return;
+        }
+
+        this.$confirm('此操作将重启激励器服务, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -1553,6 +1587,7 @@
             for (let i in this.multipleSelection){
               let txId = this.multipleSelection[i].txId
               var time = 0
+              this.listLoading = true
               restartArticle({txId: txId, time: time}).then(response => {
                 if (response === true) {
                   this.$message({
@@ -1560,24 +1595,25 @@
                     message: '重启激励器服务成功!'
                   });
                   //改变状态为重启
-                  this.temp.txState = 'running'
-                }else{
+                  this.multipleSelection[i].txState = 'running'
+                }
+                if (response === false){
                   this.$message({
                     type: 'info',
                     message: '重启激励器服务失败!'
                   });
                 }
+                this.getList()
               })
             }
           }).catch(action => {
-              this.$message({
+          this.$message({
                 type: 'info',
                 message: action === 'cancel'
                   ? '取消重启激励器服务'
                   : '停留在当前页面'
               })
-            });
-          }
+          });
         },
       getList() {
         this.listLoading = false
