@@ -1,118 +1,144 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div style="height:700px" ref="chart"></div>
 </template>
 
 <script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
 
-const animationDuration = 1000
-
+/* eslint-disable */
 export default {
-  mixins: [resize],
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '300px'
-    },
-    autoResize: {
-      type: Boolean,
-      default: true
-    },
-    chartData: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  watch: {
-    chartData: {
-      deep: true,
-      handler(val) {
-        this.setOptions(val)
-      }
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    this.chart.dispose()
-    this.chart = null
-  },
   methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
-    },
-    setOptions({ txData, actualData } = {}) {
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+    initCharts () {
+      let myChart = this.$echarts.init(this.$refs.chart);
+      // console.log(this.$refs.chart)
+      var xAxisData = ['南宁', '柳州', '北海', '桂林', '崇左', '百色', '钦州','南宁', '柳州', '北海', '桂林', '崇左', '百色', '钦州'];
+      var data1 = [];
+      var data2 = [];
+
+      for (var i = 1; i <= 15; i++) {
+        data1.push((Math.random() * 2).toFixed(2));
+        data2.push(-Math.random().toFixed(2));
+      }
+
+      var itemStyle = {
+        normal: {
+        },
+        emphasis: {
+          barBorderWidth: 1,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowOffsetY: 0,
+          shadowColor: 'rgba(0,0,0,0.5)'
+        }
+      };
+
+      // 绘制图表
+      myChart.setOption({
+        legend: {
+          data: ['正在运行的激励器', '停止运行的激励器'],
+          align: 'left',
+          left: 10
+        },
+        brush: {
+          toolbox: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
+          xAxisIndex: 0
+        },
+        toolbox: {
+          feature: {
+            magicType: {
+              type: ['stack', 'tiled']
+            },
+            dataView: {}
           }
         },
-        legend: {
-          show: true,
-          data: ['正在运行的激励器', '停止运行的激励器']
+        tooltip: {},
+        xAxis: {
+          data: xAxisData,
+          name: 'X Axis',
+          silent: false,
+          axisLine: {onZero: true},
+          splitLine: {show: false},
+          splitArea: {show: false}
+        },
+        yAxis: {
+          inverse: true,
+          splitArea: {show: false}
         },
         grid: {
-          top: 10,
-          left: '2%',
-          right: '2%',
-          bottom: '3%',
-          containLabel: true
+          left: 100
         },
-        xAxis: [{
-          type: 'category',
-          data: ['南宁', '柳州', '北海', '桂林', '崇左', '百色', '钦州'],
-          axisTick: {
-            alignWithLabel: true
+        visualMap: {
+          type: 'continuous',
+          dimension: 1,
+          text: ['High', 'Low'],
+          inverse: true,
+          itemHeight: 200,
+          calculable: true,
+          min: -2,
+          max: 6,
+          top: 60,
+          left: 10,
+          inRange: {
+            colorLightness: [0.4, 0.8]
+          },
+          outOfRange: {
+            color: '#bbb'
+          },
+          controller: {
+            inRange: {
+              color: '#2f4554'
+            }
           }
-        }],
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
-          }
-        }],
-        series: [{
-          name: '正在运行的激励器',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '30%',
-          data: txData,
-          animationDuration
         },
-        {
-          name: '停止运行的激励器',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '30%',
-          data: actualData,
-          animationDuration
-        }]
-      })
-    }
-  }
+        series: [
+          {
+            name: '停止运行的激励器',
+            type: 'bar',
+            color: '#ffcb8c',
+            stack: 'one',
+            itemStyle: itemStyle,
+            data: data1
+          },
+          {
+            name: '正在运行的激励器',
+            type: 'bar',
+            color: '#32dadd',
+            stack: 'one',
+            itemStyle: itemStyle,
+            data: data2
+          }
+        ]
+      });
+      myChart.on('brushSelected', renderBrushed);
+
+      function renderBrushed(params) {
+        var brushed = [];
+        var brushComponent = params.batch[0];
+
+        for (var sIdx = 0; sIdx < brushComponent.selected.length; sIdx++) {
+          var rawIndices = brushComponent.selected[sIdx].dataIndex;
+          brushed.push('[Series ' + sIdx + '] ' + rawIndices.join(', '));
+        }
+
+        myChart.setOption({
+          title: {
+            backgroundColor: '#333',
+            text: 'SELECTED DATA INDICES: \n' + brushed.join('\n'),
+            bottom: 0,
+            right: 0,
+            width: 100,
+            textStyle: {
+              fontSize: 12,
+              color: '#fff'
+            }
+          }
+        });
+      }
+    },
+  },
+
+  mounted () {
+    this.initCharts();
+  },
+
 }
 </script>

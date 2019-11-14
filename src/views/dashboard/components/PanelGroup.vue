@@ -3,7 +3,7 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetBarChartData('newVisitis')">
+      <div class="card-panel" @click="forwardPie()">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="tx-sum" class-name="card-panel-icon" />
         </div>
@@ -67,14 +67,19 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import PieChart from './PieChart'
 
 export default {
   components: {
-    CountTo
+    CountTo,
+    PieChart
   },
   methods: {
     handleSetBarChartData(type) {
       this.$emit('handleSetBarChartData', type)
+    },
+    forwardPie() {
+      this.element.scrollTop = this.element.scrollHeight
     }
   }
 }
