@@ -21,16 +21,15 @@
           <bar-chart :chart-data="lineChartData" />
         </div>
       </el-col>
-
     </el-row>
 
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="9">
+      <!--<el-col :xs="24" :sm="24" :lg="9">
         <div class="chart-wrapper">
           <raddar-chart />
         </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="9">
+      </el-col>-->
+      <el-col :xs="24" :sm="24" :lg="16">
         <div class="chart-wrapper">
           <pie-chart />
         </div>

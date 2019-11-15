@@ -6,6 +6,11 @@
 
 /* eslint-disable */
 export default {
+
+  mounted () {
+    this.initCharts();
+  },
+
   methods: {
     initCharts () {
       let myChart = this.$echarts.init(this.$refs.chart);
@@ -32,7 +37,7 @@ export default {
       };
 
       // 绘制图表
-      myChart.setOption({
+        myChart.setOption({
         legend: {
           data: ['正在运行的激励器', '停止运行的激励器'],
           align: 'left',
@@ -134,10 +139,6 @@ export default {
         });
       }
     },
-  },
-
-  mounted () {
-    this.initCharts();
   },
 
 }

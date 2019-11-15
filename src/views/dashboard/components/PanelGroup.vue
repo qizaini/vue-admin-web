@@ -1,86 +1,149 @@
 <!-- 资源中心总体显示卡片 -->
 
-<template>
-  <el-row :gutter="40" class="panel-group">
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="forwardPie()">
-        <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="tx-sum" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            激励器总数
+  <template>
+    <el-row :gutter="40" class="panel-group">
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel scrollBottom" @click="scrollBottom">
+          <div class="card-panel-icon-wrapper icon-people">
+            <svg-icon icon-class="tx-sum" class-name="card-panel-icon" />
           </div>
-          <div class="sum-num-color">
-            <count-to :start-val="0" :end-val="50" :duration="5000" class="card-panel-num" />
-          </div>
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetBarChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="tx-running" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            运行中的激励器
-          </div>
-          <div class="running-num-color">
-            <count-to :start-val="0" :end-val="25" :duration="3000" class="card-panel-num" />
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              激励器总数
+            </div>
+            <div class="sum-num-color">
+              <count-to :start-val="0" :end-val="50" :duration="5000" class="card-panel-num" />
+            </div>
           </div>
         </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetBarChartData('purchases')">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="tx-stop" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            停止的激励器
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleSetBarChartData('messages')">
+          <div class="card-panel-icon-wrapper icon-message">
+            <svg-icon icon-class="tx-running" class-name="card-panel-icon" />
           </div>
-          <div class="stop-num-color">
-            <count-to :start-val="0" :end-val="4" :duration="3200" class="card-panel-num" />
-          </div>
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetBarChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="tx-warning" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            异常的激励器
-          </div>
-          <div class="warning-num-color">
-            <count-to :start-val="0" :end-val="2" :duration="3600" class="card-panel-num" />
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              运行中的激励器
+            </div>
+            <div class="running-num-color">
+              <count-to :start-val="0" :end-val="25" :duration="3000" class="card-panel-num" />
+            </div>
           </div>
         </div>
-      </div>
-    </el-col>
-  </el-row>
-</template>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleSetBarChartData('purchases')">
+          <div class="card-panel-icon-wrapper icon-money">
+            <svg-icon icon-class="tx-stop" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              停止的激励器
+            </div>
+            <div class="stop-num-color">
+              <count-to :start-val="0" :end-val="4" :duration="3200" class="card-panel-num" />
+            </div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleSetBarChartData('shoppings')">
+          <div class="card-panel-icon-wrapper icon-shopping">
+            <svg-icon icon-class="tx-warning" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              异常的激励器
+            </div>
+            <div class="warning-num-color">
+              <count-to :start-val="0" :end-val="2" :duration="3600" class="card-panel-num" />
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+  </template>
 
 <script>
 import CountTo from 'vue-count-to'
 import PieChart from './PieChart'
-
+/* eslint-disable */
 export default {
+  name: 'ScrollTop',
+  data() {
+    return {
+      // 定义滚动条默认位置
+      scrollTop: null,
+
+      // 定义按钮默认状态
+      isScrollTop: false
+    }
+  },
+  props: {
+    el: String
+  },
   components: {
     CountTo,
     PieChart
+  },
+  mounted() {
+    // 监听滚动事件
+    window.addEventListener('scroll', () => {
+      this.scrollTop = document.documentElement.scrollTop ||
+        window.pageYOffset ||
+        document.body.scrollTop ||
+        document.querySelector(this.el).scrollTop;
+
+      // 控制滚动按钮的隐藏或显示
+      if (this.scrollTop > 150) {
+        this.isScrollTop = true;
+      } else {
+        this.isScrollTop = false;
+      }
+    }, true);
   },
   methods: {
     handleSetBarChartData(type) {
       this.$emit('handleSetBarChartData', type)
     },
-    forwardPie() {
-      this.element.scrollTop = this.element.scrollHeight
-    }
+    /**
+     * 滚动到顶部
+     */
+    scrollBottom() {
+      let $this = this;
+      // 返回顶部动画特效
+      setTimeout(function animation() {
+        if ($this.scrollTop > 0) {
+          setTimeout(() => {
+            // 步进速度
+            $this.scrollTop = $this.scrollTop - 15;
+            // 返回顶部
+            if(document.documentElement.scrollTop > 0) {
+              document.documentElement.scrollTop = $this.scrollTop - 15;
+            } else if (window.pageYOffset > 0) {
+              window.pageYOffset = $this.scrollTop - 15;
+            } else if (document.body.scrollTop > 0) {
+              document.body.scrollTop = $this.scrollTop - 15;
+            } else if (document.querySelector($this.el).scrollTop) {
+              document.querySelector($this.el).scrollTop = $this.scrollTop - 15;
+            }
+            animation();
+          }, 1);
+        }
+      }, 1);
+    },
+    // 滚动到底部
+   /* scrollBottom() {
+      var container = this.$el.querySelector('.scrollBottom')
+      this.$nextTick(() => {
+        setTimeout(() => {
+          container.scrollTop = container.scrollHeight
+          console.log(container.scrollTop)
+          console.log(container.scrollHeight)
+        }, 13)
+      })
+    }*/
   }
 }
 </script>

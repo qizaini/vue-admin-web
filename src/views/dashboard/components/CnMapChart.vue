@@ -3,18 +3,12 @@
   <div class="echarts">
 
     <el-drawer title="激励器信息" :visible.sync="drawer" :direction="direction" size="50%">
-
       <el-table :data="gridData">
         <el-table-column property="date" label="日期" width="150" />
         <el-table-column property="name" label="姓名" width="200" />
         <el-table-column property="address" label="地址" />
-
       </el-table>
     </el-drawer>
-
-    <!--<el-button @click=openAlert() type="primary" style="margin-left: 16px; position: absolute;top: 5px;left: 50px;text-align: center; ">-->
-    <!--点击-->
-    <!--</el-button>-->
 
     <div ref="myEchart" :style="{height:'800px',width:'100%'}" />
     </div>
@@ -62,22 +56,93 @@ import 'echarts/map/js/province/chongqing.js'
 import 'echarts/map/js/province/xianggang.js'
 import 'echarts/map/js/province/aomen.js'
 
-const geoCoordMap = {
-  '北京': [116.46, 39.92],
-  '内蒙古': [111.670801, 40.818311],
-  '广西': [108.320004, 22.82402]
-
-}
-
 const provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen']
 const provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门']
 
-const sanData = [
-  { name: '北京', value: 50 },
-  { name: '内蒙古', value: 30 },
-  { name: '广西', value: 100 }
-
+var json = [
+  {
+    "provinceName": "广西",
+    "provinceTotal": 100,
+    "running": 50,
+    "warning": 30,
+    "shutdown": 20,
+    "citys": [
+      {
+        "cityName": "南宁市",
+        "txId": "123456789",
+        "total": 20,
+        "running": 10,
+        "warning": 5,
+        "shutdown": 5
+      },
+      {
+        "cityName": "玉林市",
+        "txId": "0007",
+        "total": 20,
+        "running": 10,
+        "warning": 5,
+        "shutdown": 5
+      },
+      {
+        "cityName": "柳州市",
+        "txId": "0008",
+        "total": 10,
+        "running": 10,
+        "warning": 0,
+        "shutdown": 0
+      }
+    ]
+  },
+  {
+    "provinceName": "北京",
+    "provinceTotal": 50,
+    "running": 50,
+    "warning": 0,
+    "shutdown": 0,
+    "citys": [
+      {
+        "cityName": "朝阳市",
+        "txId": "0009",
+        "total": 20,
+        "running": 0,
+        "warning": 0,
+        "shutdown": 0
+      },
+      {
+        "cityName": "海淀市",
+        "txId": "0010",
+        "total": 20,
+        "running": 0,
+        "warning": 0,
+        "shutdown": 0
+      },
+      {
+        "cityName": "西域市",
+        "txId": "0011",
+        "total": 10,
+        "running": 0,
+        "warning": 0,
+        "shutdown": 0
+      }
+    ]
+  }
 ]
+
+//省份激励器总数
+const sanData = []
+
+const geoCoordMap = {
+  '北京': [116.46, 39.92],
+  '广西': [108.320004, 22.82402]
+}
+
+for (let i in json){
+  var provinceName = json[i].provinceName
+  var provinceTotal = json[i].provinceTotal
+  var cityName = json[i].citys
+  sanData.push({name: provinceName, value: provinceTotal})
+  // console.log(cityName)
+}
 
 export default {
   name: 'CnMapChart',
@@ -155,14 +220,13 @@ export default {
         this.chart.on('click', (params) => {
           // 销毁实例
           this.chart.dispose()
+          console.log(params.name)
           this.$options.methods.openSubMap.bind(this)(params.name)
           this.$options.methods.initMap.bind(this)(params.name)
-
-          // alert('yes')
         })
       } else {
-        this.setOptionsSub(this.myMapName)
-        this.chart.on('dblclick', () => {
+          this.setOptionsSub(this.myMapName)
+          this.chart.on('dblclick', () => {
           this.chart.dispose()
           this.$options.methods.openSubMap.bind(this)('china')
           this.$options.methods.initMap.bind(this)('china')
@@ -170,7 +234,6 @@ export default {
         this.chart.on('click', 'series', (params) => {
           // this.$options.methods.openDrawer.bind(this)()
           this.drawer = true
-          // alert('yes')
         })
       }
     },
@@ -230,10 +293,6 @@ export default {
     /* openDrawer: function(){
       this.drawer = true;
     },*/
-
-    openAlert: function() {
-      alert('hi~~')
-    },
 
     setOptions(paraMapName) {
       this.chart.setOption({
@@ -355,40 +414,6 @@ export default {
             ['108.320004', '22.82402', 50], ['104.05325', '25.646273', 25], ['94.05325', '30.646273', 1]]
 
         }
-          // {
-          //   name: '正在运行的激励器', // 浮动框的标题
-          //   type: 'map',
-          //   geoIndex: 0,
-          //   data: [{
-          //     'name': '北京',
-          //     'value': 599
-          //   }, {
-          //     'name': '上海',
-          //     'value': 142
-          //   }, {
-          //     'name': '黑龙江',
-          //     'value': 44
-          //   }, {
-          //     'name': '深圳',
-          //     'value': 92
-          //   }, {
-          //     'name': '湖北',
-          //     'value': 810
-          //   }, {
-          //     'name': '四川',
-          //     'value': 453
-          //   }]
-          // },
-          // {
-          //   name: '停止运行的激励器', // 浮动框的标题
-          //   type: 'map',
-          //   geoIndex: 0,
-          //   data: [{
-          //     'name': '新疆',
-          //     'value': 599
-          //   }]
-          // },
-
         ]
       })
     },
