@@ -41,23 +41,23 @@ var json = [
   },
   {
     "provinceName": "北京",
-    "provinceTotal": 50,
-    "running": 50,
+    "provinceTotal": 36,
+    "running": 30,
     "warning": 0,
-    "shutdown": 0,
+    "shutdown": -6,
     "citys": [
       {
         "cityName": "朝阳",
         "txId": "0009",
-        "total": 20,
+        "total": 10,
         "running": 20,
         "warning": 0,
-        "shutdown": 0
+        "shutdown": 6
       },
       {
         "cityName": "海淀",
         "txId": "0010",
-        "total": 20,
+        "total": 5,
         "running": 20,
         "warning": 0,
         "shutdown": 0
@@ -65,7 +65,7 @@ var json = [
       {
         "cityName": "西域",
         "txId": "0011",
-        "total": 10,
+        "total": 15,
         "running": 10,
         "warning": 0,
         "shutdown": 0
