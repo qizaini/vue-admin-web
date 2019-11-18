@@ -169,7 +169,7 @@ export default {
         },
         xAxis: {
           data: xAxisData,
-          name: 'X Axis',
+          name: '',
           silent: false,
           axisLine: {onZero: true},
           splitLine: {show: false},
