@@ -222,7 +222,7 @@ export default {
           {
             name: '停止运行的激励器',
             type: 'bar',
-            color: '#ffcb8c',
+            color: '#f4516c',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
@@ -231,7 +231,7 @@ export default {
           {
             name: '正在运行的激励器',
             type: 'bar',
-            color: '#32dadd',
+            color: '#36a3f7',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
