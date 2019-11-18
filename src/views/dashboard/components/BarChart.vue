@@ -5,6 +5,121 @@
 <script>
 
 /* eslint-disable */
+var json = [
+  {
+    "provinceName": "广西",
+    "provinceTotal": 100,
+    "running": 50,
+    "warning": 30,
+    "shutdown": -20,
+    "citys": [
+      {
+        "cityName": "南宁",
+        "txId": "123456789",
+        "total": 50,
+        "running": 30,
+        "warning": 15,
+        "shutdown": 5
+      },
+      {
+        "cityName": "玉林",
+        "txId": "0007",
+        "total": 20,
+        "running": 10,
+        "warning": 5,
+        "shutdown": 5
+      },
+      {
+        "cityName": "柳州",
+        "txId": "0008",
+        "total": 30,
+        "running": 10,
+        "warning": 10,
+        "shutdown": 10
+      }
+    ]
+  },
+  {
+    "provinceName": "北京",
+    "provinceTotal": 50,
+    "running": 50,
+    "warning": 0,
+    "shutdown": 0,
+    "citys": [
+      {
+        "cityName": "朝阳",
+        "txId": "0009",
+        "total": 20,
+        "running": 20,
+        "warning": 0,
+        "shutdown": 0
+      },
+      {
+        "cityName": "海淀",
+        "txId": "0010",
+        "total": 20,
+        "running": 20,
+        "warning": 0,
+        "shutdown": 0
+      },
+      {
+        "cityName": "西域",
+        "txId": "0011",
+        "total": 10,
+        "running": 10,
+        "warning": 0,
+        "shutdown": 0
+      }
+    ]
+  },
+  {
+    "provinceName": "湖南",
+    "provinceTotal": 50,
+    "running": 50,
+    "warning": 0,
+    "shutdown": 0,
+    "citys": [
+      {
+        "cityName": "长沙",
+        "txId": "0009",
+        "total": 20,
+        "running": 20,
+        "warning": 0,
+        "shutdown": 0
+      },
+      {
+        "cityName": "株洲",
+        "txId": "0010",
+        "total": 20,
+        "running": 20,
+        "warning": 0,
+        "shutdown": 0
+      },
+      {
+        "cityName": "湘潭",
+        "txId": "0011",
+        "total": 10,
+        "running": 10,
+        "warning": 0,
+        "shutdown": 0
+      }
+    ]
+  }
+]
+
+var provinceName_arr = []
+var shutdown_arr = []
+var running_arr = []
+for (let i in json){
+  var provinceName = json[i].provinceName
+  var provinceTotal = json[i].provinceTotal
+  var running = json[i].running
+  var shutdown = json[i].shutdown
+  provinceName_arr.push({name:provinceName, value:provinceName})
+  shutdown_arr.push({name:shutdown, value:shutdown})
+  running_arr.push({name:running, value:running})
+}
+
 export default {
 
   mounted () {
@@ -15,9 +130,9 @@ export default {
     initCharts () {
       let myChart = this.$echarts.init(this.$refs.chart);
       // console.log(this.$refs.chart)
-      var xAxisData = ['南宁', '柳州', '北海', '桂林', '崇左', '百色', '钦州','南宁', '柳州', '北海', '桂林', '崇左', '百色', '钦州'];
-      var data1 = [];
-      var data2 = [];
+      var xAxisData = provinceName_arr
+      var data1 = running_arr;
+      var data2 = shutdown_arr;
 
       for (var i = 1; i <= 15; i++) {
         data1.push((Math.random() * 2).toFixed(2));
@@ -43,19 +158,15 @@ export default {
           align: 'left',
           left: 10
         },
-        brush: {
-          toolbox: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
-          xAxisIndex: 0
-        },
-        toolbox: {
-          feature: {
-            magicType: {
-              type: ['stack', 'tiled']
-            },
-            dataView: {}
+        tooltip: {
+          formatter:function(value) {
+            if (value.data.name < 0) {
+                return '停止运行的激励器：' + -value.data.name;
+            }else {
+                return '正在运行的激励器：' + value.data.name;
+            }
           }
         },
-        tooltip: {},
         xAxis: {
           data: xAxisData,
           name: 'X Axis',
@@ -66,7 +177,20 @@ export default {
         },
         yAxis: {
           inverse: true,
-          splitArea: {show: false}
+          splitArea: {show: false},
+          axisLabel:{   //Y轴数据
+            formatter:function(value){
+              return Math.abs(value);   //负数取绝对值变正数
+              // if (value<0) {  //另一写法
+              //     return -value;
+              //           }else {
+              //     return value;
+              // }
+            },
+            textStyle: {   //Y轴数据字体设置
+              color: '#666'
+            }
+          },
         },
         grid: {
           left: 100
@@ -78,7 +202,7 @@ export default {
           inverse: true,
           itemHeight: 200,
           calculable: true,
-          min: -2,
+          min: 0,
           max: 6,
           top: 60,
           left: 10,
@@ -101,7 +225,8 @@ export default {
             color: '#ffcb8c',
             stack: 'one',
             itemStyle: itemStyle,
-            data: data1
+            barWidth: 50,
+            data: data2
           },
           {
             name: '正在运行的激励器',
@@ -109,7 +234,8 @@ export default {
             color: '#32dadd',
             stack: 'one',
             itemStyle: itemStyle,
-            data: data2
+            barWidth: 50,
+            data: data1
           }
         ]
       });

@@ -66,9 +66,10 @@
   </template>
 
 <script>
-import CountTo from 'vue-count-to'
+  /* eslint-disable */
+  import CountTo from 'vue-count-to'
 import PieChart from './PieChart'
-/* eslint-disable */
+
 export default {
   name: 'ScrollTop',
   data() {
