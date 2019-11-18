@@ -373,9 +373,12 @@ for (let i in json){
   for (let j in citys){
     var cityName = citys[j].cityName
     var cityTotal = citys[j].total
+    //存放市总数
     cityData.push({name: cityName, value: cityTotal})
   }
+  //存放省份总数
   sanData.push({name: provinceName, value: provinceTotal})
+  //存放停止的激励器总数
   shutdownData.push({name: provinceName, value: shutdown})
 }
 
@@ -640,7 +643,12 @@ export default {
             normal: {
               show: true,
               formatter: function(params) {
-                return params.data.value[2]
+                //负数改为正数
+                if (params.data.value[2] < 0) {
+                  return -params.data.value[2];
+                }else {
+                  return params.data.value[2]
+                }
               },
             }
           },

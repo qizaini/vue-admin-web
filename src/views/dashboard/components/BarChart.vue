@@ -160,6 +160,7 @@ export default {
         },
         tooltip: {
           formatter:function(value) {
+            //负数改为正数
             if (value.data.name < 0) {
                 return '停止运行的激励器：' + -value.data.name;
             }else {
@@ -180,7 +181,8 @@ export default {
           splitArea: {show: false},
           axisLabel:{   //Y轴数据
             formatter:function(value){
-              return Math.abs(value);   //负数取绝对值变正数
+              //负数取绝对值变正数
+              return Math.abs(value);
               // if (value<0) {  //另一写法
               //     return -value;
               //           }else {
