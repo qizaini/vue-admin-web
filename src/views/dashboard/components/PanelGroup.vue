@@ -66,7 +66,7 @@
   </template>
 
 <script>
-  /* eslint-disable */
+/* eslint-disable */
   import CountTo from 'vue-count-to'
 import PieChart from './PieChart'
 
@@ -111,7 +111,7 @@ export default {
     /**
      * 滚动到顶部
      */
-    scrollBottom() {
+   /* scrollBottom() {
       let $this = this;
       // 返回顶部动画特效
       setTimeout(function animation() {
@@ -133,18 +133,17 @@ export default {
           }, 1);
         }
       }, 1);
-    },
+    },*/
     // 滚动到底部
-   /* scrollBottom() {
-      var container = this.$el.querySelector('.scrollBottom')
+    scrollBottom() {
+      let $this = this;
       this.$nextTick(() => {
         setTimeout(() => {
-          container.scrollTop = container.scrollHeight
-          console.log(container.scrollTop)
-          console.log(container.scrollHeight)
-        }, 13)
+          $this.scrollTop = $this.scrollTop - 150;
+          window.scrollTo(0, document.documentElement.scrollHeight-document.documentElement.clientHeight);
+        }, 300)
       })
-    }*/
+    }
   }
 }
 </script>

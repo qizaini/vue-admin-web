@@ -167,10 +167,10 @@ const cityData = []
 const shutdownData = []
 // 中国地图经纬度： https://www.echartsjs.com/examples/zh/editor.html?c=map-polygon
   const geoCoordMap = {
-    '北京': [116.46, 39.92],
-    '朝阳': [116.46, 39.92],
-    '海淀': [116.29845, 39.95933],
-    '西域': [116.32434357617186, 39.914025397993264],
+    '北京': [116.46,39.92],
+    '朝阳': [116.46,39.92],
+    '海淀': [116.29845,39.95933],
+    '西域': [116.32434357617186,39.914025397993264],
     '湖南': [113,28.21],
     '海门':[121.15,31.89],
     '鄂尔多斯':[109.781327,39.608266],
@@ -224,7 +224,7 @@ const shutdownData = []
     '河源':[114.68,23.73],
     '淮安':[119.15,33.5],
     '泰州':[119.9,32.49],
-    '广西': [108.320004, 22.82402],
+    '广西': [108.320004,22.82402],
     '南宁':[108.33,22.84],
     '玉林':[110.05125, 22.57957],
     '营口':[122.18,40.65],
@@ -365,28 +365,12 @@ const shutdownData = []
     '大庆':[125.03,46.58]
   }
 
-for (let i in json){
-  var provinceName = json[i].provinceName
-  var provinceTotal = json[i].provinceTotal
-  var shutdown = json[i].shutdown
-  var citys = json[i].citys
-  for (let j in citys){
-    var cityName = citys[j].cityName
-    var cityTotal = citys[j].total
-    //存放市总数
-    cityData.push({name: cityName, value: cityTotal})
-  }
-  //存放省份总数
-  sanData.push({name: provinceName, value: provinceTotal})
-  //存放停止的激励器总数
-  shutdownData.push({name: provinceName, value: shutdown})
-}
-
 export default {
   name: 'CnMapChart',
   // props: ["userJson"],
   data() {
     return {
+      provinceName: '',
       comeBack: '返回',
       myMapName: 'china',
       drawer: false, // 抽屉
@@ -437,43 +421,77 @@ export default {
   methods: {
 
     // 地图数据转换
-    convertData: function(data) {
+    convertData: function(flag) {
       var res = []
-      for (var i = 0; i < data.length; i++) {
-        var geoCoord = geoCoordMap[data[i].name] // 数据的名字对应的经纬度
-        if (geoCoord) { // 如果数据data对应上，
+
+      // 如果flag == true 表示渲染省份
+      if (flag === true) {
+        for (let i = 0; i < json.length; i++) {
+          let province = json[i]
+          // 省份 geo
+          let pGeo = geoCoordMap[province.provinceName]
+          // 省份总数
+          let pTotal = province.provinceTotal
+          // 省份名称
+          let pName = province.provinceName
           res.push({
-            name: data[i].name,
-            value: geoCoord.concat(data[i].value)
+            name: pName,
+            value: pGeo.concat(pTotal)
           })
+        }
+        return res
+      }
+
+      // 渲染城市
+      // 获得当前点击的省份名称
+      let currentProvinceName = this.provinceName
+      for (let i = 0; i < json.length; i++) {
+        let province = json[i]
+        if (province.provinceName === currentProvinceName) {
+          for (let j = 0; j < province.citys.length; j++) {
+            let city = province.citys[j]
+            // 城市 geo
+            let cityGeo = geoCoordMap[city.cityName]
+            // 城市名称
+            let cityName = city.cityName
+            // 城市总数
+            let cityTotal = city.total
+            res.push({
+              name: cityName,
+              value: cityGeo.concat(cityTotal)
+            })
+          }
         }
       }
       return res
     },
 
-    initMap: function(mapName) {
-      this.chart = echarts.init(this.$refs.myEchart, 'macarons')
-      if (mapName === 'china') {
-        this.setOptions(this.myMapName)
-        this.chart.on('click', (params) => {
-          // 销毁实例
-          this.chart.dispose()
-          this.$options.methods.openSubMap.bind(this)(params.name)
-          this.$options.methods.initMap.bind(this)(params.name)
-        })
-      } else {
+      initMap: function(mapName) {
+        this.chart = echarts.init(this.$refs.myEchart, 'macarons')
+        if (mapName === 'china') {
+          this.setOptions(this.myMapName)
+          this.chart.on('click', (params) => {
+            var pName = params.name
+            // 给省份名称赋值
+            this.provinceName = pName
+            // 销毁实例
+            this.chart.dispose()
+            this.$options.methods.openSubMap.bind(this)(params.name)
+            this.$options.methods.initMap.bind(this)(params.name)
+          })
+        } else {
           this.setOptionsSub(this.myMapName)
           this.chart.on('dblclick', () => {
-          this.chart.dispose()
-          this.$options.methods.openSubMap.bind(this)('china')
-          this.$options.methods.initMap.bind(this)('china')
-        })
-        this.chart.on('click', 'series', (params) => {
-          // this.$options.methods.openDrawer.bind(this)()
-          this.drawer = true
-        })
-      }
-    },
+            this.chart.dispose()
+            this.$options.methods.openSubMap.bind(this)('china')
+            this.$options.methods.initMap.bind(this)('china')
+          })
+          this.chart.on('click', 'series', (params) => {
+            // this.$options.methods.openDrawer.bind(this)()
+            this.drawer = true
+          })
+        }
+      },
 
     // initChart() {
     //   this.chart = echarts.init(this.$refs.myEchart, 'macarons')
@@ -617,6 +635,9 @@ export default {
             normal: {
               show: true,
               formatter: function(params) {
+                //激励器省份的经纬度
+                var provinceName = params.data.name
+                //激励器省份的总数
                 return params.data.value[2]
               },
               textStyle: {
@@ -625,7 +646,7 @@ export default {
               }
             }
           },
-          data: this.convertData(sanData)
+          data: this.convertData(true)
           // data:
           //   [['116.347927', '39.948795', 100, this.drawer],
           //    ['100.06376' , '30.554698', 75 , this.drawer],
@@ -663,7 +684,7 @@ export default {
       this.chart.setOption({
         backgroundColor: 'rgba(2,175,219,0.9)', // #02AFDB
         title: {
-          text: paraMapName + '   激励器部署图' ,
+          text: paraMapName + '   激励器部署图',
           padding: 20,
           left: 700,
           textStyle: {
@@ -687,7 +708,7 @@ export default {
             myTool1: {
               show: true,
               title: '按钮',
-              icon: 'image://../../../image/pre.png',// icon : ' image://（图片／图标的路径) '
+              icon: 'image://image/pre.png',// icon : ' image://图片／图标的路径'  icon:'image://image/restore.png'
               onclick: function (){
                 _self.chart.dispose()
                 _self.$options.methods.openSubMap.bind(_self)('china')
@@ -757,22 +778,24 @@ export default {
             }
           }
         },
-        series: [{
-          name: '激励器总数',
-          type: 'scatter',
-          coordinateSystem: 'geo', // 对应上方配置
-          symbol: 'pin',
-          symbolSize: '50',
-          label: {
-            normal: {
-              show:  true,
-                formatter: function(params) {
-                return params.data.value[2]
-              },
-            }
-          },
-          data: this.convertData(cityData)
-        }]
+        series: [
+            {
+            name: '激励器总数',
+            type: 'scatter',
+            coordinateSystem: 'geo', // 对应上方配置
+            symbol: 'pin',
+            symbolSize: '50',
+            label: {
+              normal: {
+                show:  true,
+                  formatter: function(params) {
+                    return params.data.value[2]
+                },
+              }
+            },
+            data: this.convertData(false)
+          }
+        ]
       })
     }
 
