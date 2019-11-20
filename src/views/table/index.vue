@@ -4,7 +4,7 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.location" placeholder="请输入部署地点" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="getList" @change="getList"/>
+          <el-input v-model="listQuery.city" placeholder="请输入部署地点" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="getList" @change="getList"/>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
@@ -70,9 +70,9 @@
           <span>{{ scope.row.rowKey }}</span>
         </template>
       </el-table-column>
-        <el-table-column prop="location" label="部署地点" align="center">
+        <el-table-column prop="city" label="部署地点" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.location }}</span>
+            <span>{{ scope.row.city }}</span>
           </template>
         </el-table-column>
       <el-table-column prop="freq" label="频点(MHz)" align="center" >
@@ -121,12 +121,13 @@
         label="状态"
         width="180"
         align="center"
-        :filters="[{ text: '运行', value: 'running' },
-                   { text: '升级', value: 'updating' },
-                   { text: '故障', value: 'breakdown' },
-                   { text: '备用', value: 'backups' },
-                   { text: '停止', value: 'shutdown' },
-                   { text: '警告', value: 'warning' },
+        :filters="[
+                   { text: '关机', value: '0' },
+                   { text: '停止', value: '1' },
+                   { text: '运行', value: '2' },
+                   { text: '故障', value: '3' },
+                   { text: '备用', value: '4' },
+                   { text: '升级', value: '5' },
         ]"
         :filter-method="filterTag"
       >
@@ -134,12 +135,12 @@
           <el-tag effect="dark" :type="scope.row.txState | statusFilter">{{ scope.row.txState }}</el-tag>
         </template>
         <template slot-scope="scope" prop="txState">
-          <el-tag v-if="scope.row.txState === 'shutdown'" :type="'info'" disable-transitions>停止</el-tag>
-          <el-tag v-else-if="scope.row.txState === 'running'" :type="'success'" disable-transitions>运行</el-tag>
-          <el-tag v-else-if="scope.row.txState === 'warning'" :type="'warning'" disable-transitions>警告</el-tag>
-          <el-tag v-else-if="scope.row.txState === 'breakdown'" :type="'danger'" disable-transitions>故障</el-tag>
-          <el-tag v-else-if="scope.row.txState === 'backups'" :type="'plain'" disable-transitions>备用</el-tag>
-          <el-tag v-else-if="scope.row.txState === 'updating'" :type="'primary'" disable-transitions>升级</el-tag>
+          <el-tag v-if="scope.row.txState === '0'" :type="'warning'" disable-transitions>关机</el-tag>
+          <el-tag v-else-if="scope.row.txState === '1'" :type="'info'" disable-transitions>停止</el-tag>
+          <el-tag v-else-if="scope.row.txState === '2'" :type="'success'" disable-transitions>运行</el-tag>
+          <el-tag v-else-if="scope.row.txState === '3'" :type="'danger'" disable-transitions>故障</el-tag>
+          <el-tag v-else-if="scope.row.txState === '4'" :type="'plain'" disable-transitions>备用</el-tag>
+          <el-tag v-else-if="scope.row.txState === '5'" :type="'primary'" disable-transitions>升级</el-tag>
         </template>
       </el-table-column>
 
@@ -205,7 +206,7 @@
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
                       <el-form-item label="部署地点:" prop="avgPower">
-                        {{temp.location}}
+                        {{temp.city}}
                       </el-form-item>
                       <el-form-item label="发射频点(MHz):" prop="freq">
                         {{temp.freq}}
@@ -537,7 +538,7 @@
 
                     <el-col :xs="24" :sm="24" :lg="22">
                       <el-form-item label="部署地点" prop="power">
-                        <el-input v-model="temp.location" style="width: 65%"/>
+                        <el-input v-model="temp.city" style="width: 65%"/>
                       </el-form-item>
                     </el-col>
 
@@ -1156,14 +1157,14 @@
         return y + '-' + m + '-' + d + ' ' + h + ':' + mi + ':' + s
       },
       statusFilter(txState) {
-        // '运行running', '备用backups', '警告warning','停止shutdown','故障breakdown'，'升级updating'
+        // '关机0', '停止1', '运行2', '故障3', '备用4', '升级5'
         const statusMap = {
-          running: 'success',
-          updating: 'primary',
-          breakdown: 'danger',
-          backups: 'plain',
-          shutdown: 'info',
-          warning: 'warning'
+          0: 'warning',
+          1: 'info',
+          2: 'success',
+          3: 'danger',
+          4: 'plain',
+          5: 'primary'
         }
         return statusMap[txState]
       }
@@ -1172,7 +1173,7 @@
       return {
         labelPosition: 'left',
         tabPosition: 'left',// tabs位置
-        location: '',
+        city: '',
         txId: '',
         activeNames: ['1'],
         activeDetails: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
@@ -1338,7 +1339,7 @@
         listQuery: {
           // page: 1,
           // limit: 20,
-          location: '',
+          city: '',
           rowKey: '',
           avgPower: '',
           freq: '',
@@ -1354,7 +1355,7 @@
           id: undefined,
           rowKey: '',
           txId: '',
-          location: '',
+          city: '',
           avgPower: '',
           freq: '',
           aDPowerRatio: '',
@@ -1630,7 +1631,8 @@
           this.total = response.length
 
           this.$set(response, 'edit', false)
-          this.listQuery.location = response.location
+          this.listQuery.city = response.city
+          console.log(this.listQuery)
           var result = response
           var state_arr = []
           var news_arr = []
@@ -1643,28 +1645,28 @@
 
           for (let i = 0; i < state_arr.length; i++) {
             var s = state_arr[i]
-            if (s === 'shutdown') {
+            if (s === '0') {
+              news_arr.push({ name: '关机', value: s })
+              continue
+            }
+            if (s === '1') {
               news_arr.push({ name: '停止', value: s })
               continue
             }
-            if (s === 'running') {
+            if (s === '2') {
               news_arr.push({ name: '运行', value: s })
               continue
             }
-            if (s === 'updating') {
-              news_arr.push({ name: '升级', value: s })
+            if (s === '3') {
+              news_arr.push({ name: '故障', value: s })
               continue
             }
-            if (s === 'backups') {
+            if (s === '4') {
               news_arr.push({ name: '备用', value: s })
               continue
             }
-            if (s === 'warning') {
-              news_arr.push({ name: '警告', value: s })
-              continue
-            }
-            if (s === 'breakdown') {
-              news_arr.push({ name: '故障', value: s })
+            if (s === '5') {
+              news_arr.push({ name: '升级', value: s })
             }
           }
           //绑定txState下拉框
@@ -1676,8 +1678,8 @@
         })
       },
       querySearch(queryString, cb) {
-        var location = this.location
-        var results = queryString ? location.filter(this.createFilter(queryString)) : location
+        var city = this.city
+        var results = queryString ? city.filter(this.createFilter(queryString)) : city
         // 调用 callback 返回建议列表的数据
         cb(results)
       },
@@ -1696,7 +1698,7 @@
       handleSelect(item) {
       },
       mounted() {
-        this.location = this.loadAll()
+        this.city = this.loadAll()
       },
 
       sortChange(data) {
@@ -1716,7 +1718,7 @@
       //搜索
       handleFilter() {
         // this.listQuery.page = 1
-        if (this.listQuery.updateTime === '' && this.listQuery.location === '' && this.listQuery.txState === '' ){
+        if (this.listQuery.updateTime === '' && this.listQuery.city === '' && this.listQuery.txState === '' ){
           // 后期可以提醒用户输入查询条件
         }else {
           this.getList()
@@ -1729,7 +1731,7 @@
       resetTemp() {
         this.temp = {
           id: undefined,
-          location: '',
+          city: '',
           avgPower: '',
           freq: '',
           service1SealMode: '',
@@ -1861,23 +1863,23 @@
     let rowKey = this.temp.rowKey
 
     var status = row.txState
-    if (status === 'shutdown') {
+    if (status === '0') {
+      this.temp.txState = "关机"
+    }
+    if (status === '1') {
       this.temp.txState = "停止"
     }
-    if (status === 'running') {
+    if (status === '2') {
       this.temp.txState = "运行"
     }
-    if (status === 'updating') {
-      this.temp.txState = "升级"
+    if (status === '3') {
+      this.temp.txState = "故障"
     }
-    if (status === 'backups') {
+    if (status === '4') {
       this.temp.txState = "备用"
     }
-    if (status === 'warning') {
-      this.temp.txState = "警告"
-    }
-    if (status === 'breakdown') {
-      this.temp.txState = "故障"
+    if (status === '5') {
+      this.temp.txState = "升级"
     }
 
     if (this.temp.cDRadioEnable === '00') {
@@ -2109,7 +2111,7 @@
     this.downloadLoading = true
     import('@/vendor/Export2Excel').then(excel => {
       const tHeader = ['部署地点', '激活时间', '发射频点', '频谱模式', '发射功率', '状态']
-      const filterVal = ['location', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
+      const filterVal = ['city', 'updateTime', 'freq', 'service1SealMode', 'avgPower', 'txState']
       const data = this.formatJson(filterVal, this.list)
       excel.export_json_to_excel({
         header: tHeader,
