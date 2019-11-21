@@ -24,7 +24,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              运行中的激励器
+              关机/停止的激励器
             </div>
             <div class="running-num-color">
               <count-to :start-val="0" :end-val="25" :duration="3000" class="card-panel-num" />
@@ -39,7 +39,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              停止的激励器
+              运行/故障的激励器
             </div>
             <div class="stop-num-color">
               <count-to :start-val="0" :end-val="4" :duration="3200" class="card-panel-num" />
@@ -54,7 +54,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              异常的激励器
+              备份/升级的激励器
             </div>
             <div class="warning-num-color">
               <count-to :start-val="0" :end-val="2" :duration="3600" class="card-panel-num" />

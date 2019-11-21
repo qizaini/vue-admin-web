@@ -135,7 +135,7 @@ var json = [
     "citys": [
       {
         "cityName": "长沙",
-        "txId": "0009",
+        "txId": ["0009"],
         "total": 20,
         "running": 20,
         "warning": 0,

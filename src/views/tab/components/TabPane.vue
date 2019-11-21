@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       list: null,
-      listQuery: {
+      params: {
         page: 1,
         limit: 5,
         type: this.type,
@@ -92,7 +92,7 @@ export default {
     getList() {
       this.loading = true
       this.$emit('create') // for test
-      fetchList(this.listQuery).then(response => {
+      fetchList(this.params).then(response => {
         this.list = response.data.items
         this.loading = false
       })

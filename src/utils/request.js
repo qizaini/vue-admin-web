@@ -6,9 +6,6 @@ import { getTokenType, getToken, getIdentity } from '@/utils/auth'
 
 // 创建一个axios实例
 const service = axios.create({
-  headers:{
-    'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-  },
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // baseURL: "/", // url = base url + request url
   // withCredentials: true, // 跨域请求时发送Cookie

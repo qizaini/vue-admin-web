@@ -4,11 +4,11 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="6">
           <span class="demonstration">部署地点</span>&nbsp;
-          <el-input v-model="listQuery.city" placeholder="请输入部署地点" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="getList" @change="getList"/>
+          <el-input v-model="params.city" placeholder="请输入部署地点" size="medium" style="width: 200px;" class="filter-item" @keyup.enter.native="getList" @change="getList"/>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="5">
           <span class="demonstration">状态</span>&nbsp;
-          <el-select v-model="listQuery.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="getList">
+          <el-select v-model="params.txState" placeholder="请选择" size="medium" clearable style="width: 170px" class="filter-item" @change="getList">
             <el-option v-for="item in txState" :key="item" :label="item.name" :value="item.value">
             </el-option>
           </el-select>
@@ -19,7 +19,7 @@
           <span class="demonstration">激活时间</span>&nbsp;
           <!--validate-event="true" 输入时是否触发表单的校验	-->
           <el-date-picker
-            v-model="listQuery.activeTime"
+            v-model="params.activeTime"
             type="daterange"
             align="right"
             size="medium"
@@ -172,7 +172,7 @@
       </template>
     </el-table>
 
-    <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
+    <!--<pagination v-show="total>0" :total="total" :page.sync="params.page" :limit.sync="params.limit" @pagination="getList" />-->
 
     <!--查看日志-->
     <el-dialog
@@ -272,7 +272,7 @@
                   </template>
                   <el-row :gutter="32">
                     <el-col :xs="24" :sm="24" :lg="12">
-                      <el-form-item label="FM:" prop="fMEnable">
+                      <el-form-item label="FM开关:" prop="fMEnable">
                         {{temp.fMEnable}}
                       </el-form-item>
                       <el-form-item label="FM声道:" prop="vocalTract">
@@ -527,7 +527,7 @@
 
       <!--编辑信息-->
       <el-dialog :title="textMap[dialogStatus]+this.temp.txId" :visible.sync="dialogFormVisible" custom-class="editMessage" v-dialogDrag :close-on-click-modal="false" width="45%">
-        <div style="height: 330px;">
+        <div style="height: 380px;">
             <el-form ref="dataForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="120px">
 
             <el-tabs :tab-position="tabPosition">
@@ -563,7 +563,7 @@
                         <el-radio v-model="temp.specMode" label="1">SBM1</el-radio>
                         <el-radio v-model="temp.specMode" label="2">SBM2</el-radio>
                         <el-radio v-model="temp.specMode" label="3">SBM3</el-radio>
-                        <el-radio v-model="temp.specMode" label="4">SBM4</el-radio>
+                        <el-radio v-model="temp.specMode" label="4">SBM4</el-radio><br>
                         <el-radio v-model="temp.specMode" label="5">FBM1</el-radio>
                         <el-radio v-model="temp.specMode" label="6">FBM2</el-radio>
                         <el-radio v-model="temp.specMode" label="7">FBM3</el-radio>
@@ -572,6 +572,7 @@
                     </el-col>
 
                   </el-row>
+
               </el-tab-pane>
 
               <!--第二个tabs-->
@@ -660,7 +661,7 @@
               <el-tab-pane label="FM    配置">
                 <el-row :gutter="32">
                   <el-col :xs="24" :sm="24" :lg="24">
-                    <el-form-item label="FM" prop="power">
+                    <el-form-item label="FM开关" prop="power">
                       <el-tooltip :content="'Switch value: ' + temp.fMEnable" placement="top">
                         <el-switch
                           v-model="temp.fMEnable"
@@ -682,8 +683,8 @@
                     </el-form-item>
                     <!--暂定只有以下值可选：自动（01），数字（01），模拟（00）;自动：不可选，手动：可选数字、模拟-->
                     <el-form-item label="FM音频输入源" prop="power">
-                      <el-radio v-if="((temp.audioSource === '0101') || (temp.audioSource === '0000') || (temp.audioSource === '0001'))" v-model="temp.audioSource" label="0101" @change="audioSourceEvent" :disabled="closePre" >自动</el-radio>
-                      <el-radio v-if="temp.audioSource === '0100'" v-model="temp.audioSource" label="0100" @change="audioSourceEvent" :disabled="closePre" >自动</el-radio>
+                      <el-radio v-if="((temp.audioSource === '0101') || (temp.audioSource === '0000') || (temp.audioSource === '0001'))" v-model="temp.audioSource" label="0101" :disabled="closePre" >自动</el-radio>
+                      <el-radio v-if="temp.audioSource === '0100'" v-model="temp.audioSource" label="0100" :disabled="closePre" >自动</el-radio>
                       <el-radio v-model="temp.audioSource" label="0001" :disabled="closePre" >数字</el-radio>
                       <el-radio v-model="temp.audioSource" label="0000" :disabled="closePre" >模拟</el-radio>
                     </el-form-item>
@@ -1091,16 +1092,18 @@
             </el-tabs>
 
           </el-form>
+
+          <div slot="footer" class="dialog-footer" style="margin: 10px 0 20px 80%">
+            <el-button @click="dialogFormVisible = false">
+              取消
+            </el-button>
+            <el-button type="primary" @click="dialogStatus===updateData()">
+              确定
+            </el-button>
+          </div>
+
         </div>
 
-       <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">
-            取消
-          </el-button>
-          <el-button type="primary" @click="dialogStatus===updateData()">
-            确定
-          </el-button>
-        </div>
     </el-dialog>
 
   </div>
@@ -1336,7 +1339,7 @@
         }],
         updateTime: [],
         listLoading: true,
-        listQuery: {
+        params: {
           // page: 1,
           // limit: 20,
           city: '',
@@ -1344,7 +1347,7 @@
           avgPower: '',
           freq: '',
           service1SealMode: '',
-          txState: '',
+          txState: [],
           updateTime: '',
           sort: '+rowKey'
         },
@@ -1550,7 +1553,7 @@
                     message: '停止激励器服务成功!'
                   });
                   //改变状态为停止
-                  this.listQuery.txState = 'shutdown'
+                  this.params.txState = 'shutdown'
                 }else{
                   this.$message({
                     type: 'info',
@@ -1618,22 +1621,23 @@
         },
       getList() {
         this.listLoading = false
-        if (this.listQuery.updateTime !== '') {
-          var time_arr = this.listQuery.updateTime.toString().split(',')
+        if (this.params.updateTime !== '') {
+          var time_arr = this.params.updateTime.toString().split(',')
           var start_time = new Date(time_arr[0]).getTime() / 1000
           var end_time = new Date(time_arr[1]).getTime() / 1000
-          this.listQuery.updateTime = [start_time, end_time]
+          this.params.updateTime = [start_time, end_time]
         }
-        fetchList(this.listQuery).then(response => {
+        fetchList({"params": this.params}).then(response => {
           // this.list = response.result
           // this.total = response.result.length
-          this.list = response
-          this.total = response.length
+          this.list = response.data.content
+          this.total = response.data.content.length
 
           this.$set(response, 'edit', false)
-          this.listQuery.city = response.city
-          console.log(this.listQuery)
-          var result = response
+          let city = this.params.city
+          this.params.city = city
+
+          var result = response.data.content
           var state_arr = []
           var news_arr = []
           for (let i in result) {
@@ -1644,7 +1648,7 @@
           }
 
           for (let i = 0; i < state_arr.length; i++) {
-            var s = state_arr[i]
+            let s = state_arr[i]
             if (s === '0') {
               news_arr.push({ name: '关机', value: s })
               continue
@@ -1669,8 +1673,10 @@
               news_arr.push({ name: '升级', value: s })
             }
           }
+
           //绑定txState下拉框
           this.txState = news_arr
+
           // Just to simulate the time of the request
           setTimeout(() => {
             this.listLoading = false
@@ -1709,16 +1715,16 @@
       },
       sortByID(order) {
         if (order === 'ascending') {
-          this.listQuery.sort = '+id'
+          this.params.sort = '+id'
         } else {
-          this.listQuery.sort = '-id'
+          this.params.sort = '-id'
         }
         this.handleFilter()
       },
       //搜索
       handleFilter() {
-        // this.listQuery.page = 1
-        if (this.listQuery.updateTime === '' && this.listQuery.city === '' && this.listQuery.txState === '' ){
+        // this.params.page = 1
+        if (this.params.updateTime === '' && this.params.city === '' && this.params.txState === '' ){
           // 后期可以提醒用户输入查询条件
         }else {
           this.getList()
@@ -1755,7 +1761,6 @@
         this.closePre = true
       }else {
         this.closePre = false
-
       }
     },
   //进入编辑信息dialog
@@ -1777,6 +1782,12 @@
     this.temp.adPowerRatio = parseInt(ad)//发射功率
     this.temp.subFrameNum = parseInt(sub)//子帧长度
     this.temp.modulation = parseInt(mo)  //调制度
+
+    if (this.temp.fMEnable === '00'){
+      this.closePre = true
+    }else {
+      this.closePre = false
+    }
 
     //备份一份原始数据
     this.cloneTemp = Object.assign({}, row)
@@ -2131,7 +2142,7 @@
     }))
   },
   getSortClass: function(key) {
-    const sort = this.listQuery.sort
+    const sort = this.params.sort
     return sort === `+${key}`
       ? 'ascending'
       : sort === `-${key}`

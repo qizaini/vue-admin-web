@@ -152,7 +152,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/formAdress',
+    path: '/productForm',
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
@@ -164,6 +164,12 @@ export const constantRoutes = [
         component: () => import('@/views/form/monitoring'),
         meta: { title: '物联网节点监控', icon: 'home page' }
       },
+      {
+        path: 'parking',
+        name: 'parking',
+        component: () => import('@/views/form/monitoring'),
+        meta: { title: '停车服务', icon: 'car' }
+      }
     ]
   },
 

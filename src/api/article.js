@@ -8,8 +8,8 @@ export function fetchList(query) {
   return request({
     url: 'v1/api-tx/tx/info',
     // url: 'api-tx/tx/info',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
