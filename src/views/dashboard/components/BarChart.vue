@@ -155,11 +155,6 @@ export default {
         }
       })
 
-     /* for (var i = 1; i <= 15; i++) {
-        data1.push((Math.random() * 2).toFixed(2));
-        data2.push(-Math.random().toFixed(2));
-      }*/
-
       var itemStyle = {
         normal: {
         },

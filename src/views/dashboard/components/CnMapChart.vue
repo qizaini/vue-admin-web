@@ -431,11 +431,6 @@ export default {
     this.chart = null
   },
   methods: {
-    // initMapInfo() {
-    //   return fetchMap().then(response => {
-    //     provinceData = response.data
-    //   })
-    // },
 
     // 地图数据转换
     convertData: function(flag) {
@@ -457,7 +452,6 @@ export default {
               value: pGeo.concat(pTotal, shutdown)
             })
           }
-        console.log(resProvince)
         return resProvince
       }
 
@@ -682,7 +676,6 @@ export default {
             normal: {
               show: true,
               formatter: function(params) {
-                console.log(params.data)
                 //负数改为正数
                 if (params.data.value[3] < 0) {
                   return -params.data.value[3];
