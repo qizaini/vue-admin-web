@@ -27,7 +27,9 @@ import '@/permission' // permission control
  */
 /* eslint-disable */
 import { mockXHR } from '../mock'
+import axios from 'axios'
 
+Vue.prototype.$axios = axios
 Vue.prototype.$echarts = echarts;
 
 if (process.env.NODE_ENV === 'production') {

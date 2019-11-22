@@ -1122,7 +1122,7 @@
 
 <script>
 /* eslint-disable */
-  import { fetchList, fetchTx, createArticle, updateArticle, restartArticle, stopArticle } from '@/api/article'
+  import { fetchList, reateArticle, updateArticle, restartArticle, stopArticle } from '@/api/article'
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -1176,7 +1176,7 @@
       return {
         labelPosition: 'left',
         tabPosition: 'left',// tabs位置
-        city: '',
+        // city: '',
         txId: '',
         activeNames: ['1'],
         activeDetails: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],

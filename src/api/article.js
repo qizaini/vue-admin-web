@@ -13,13 +13,13 @@ export function fetchList(query) {
   })
 }
 
-export function fetchTx(id) {
+/*export function fetchTx(id) {
   return request({
     url: 'v1/api-tx/tx/device/' + id,
     // url: 'api-tx/tx/device/' + id,
     method: 'get'
   })
-}
+}*/
 
 export function createArticle(data) {
   return request({
@@ -57,10 +57,10 @@ export function stopArticle(data) {
   })
 }
 
-/*export function fetchArticle(id) {
+export function fetchMap() {
   return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
+    url: 'v1/api-tx/tx/mapInfo',
+    // url: 'api-tx/tx/mapInfo',
+    method: 'get'
   })
-}*/
+}

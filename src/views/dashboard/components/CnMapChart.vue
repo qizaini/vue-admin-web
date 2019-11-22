@@ -17,10 +17,14 @@
 
 <script>
 /* eslint-disable */
+import { fetchMap } from '@/api/article'
+import axios from 'axios'
+
 import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 import 'echarts/map/js/world.js'
 // import 'echarts/map/js/china-contour.js'
+
 
 import 'echarts/map/js/province/shanghai.js'
 import 'echarts/map/js/province/hebei.js'
@@ -59,115 +63,113 @@ import 'echarts/map/js/province/aomen.js'
 const provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen']
 const provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门']
 
-var json = [
-  {
-    "provinceName": "广西",
-    "provinceTotal": 100,
-    "running": 50,
-    "warning": 30,
-    "shutdown": -20,
-    "citys": [
-      {
-        "cityName": "南宁",
-        "txId": "123456789",
-        "total": 50,
-        "running": 30,
-        "warning": 15,
-        "shutdown": 5
-      },
-      {
-        "cityName": "玉林",
-        "txId": "0007",
-        "total": 20,
-        "running": 10,
-        "warning": 5,
-        "shutdown": 5
-      },
-      {
-        "cityName": "柳州",
-        "txId": "0008",
-        "total": 30,
-        "running": 10,
-        "warning": 10,
-        "shutdown": 10
-      }
-    ]
-  },
-  {
-    "provinceName": "北京",
-    "provinceTotal": 36,
-    "running": 30,
-    "warning": 0,
-    "shutdown": -6,
-    "citys": [
-      {
-        "cityName": "朝阳",
-        "txId": "0009",
-        "total": 10,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 6
-      },
-      {
-        "cityName": "海淀",
-        "txId": "0010",
-        "total": 5,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 0
-      },
-      {
-        "cityName": "西域",
-        "txId": "0011",
-        "total": 15,
-        "running": 10,
-        "warning": 0,
-        "shutdown": 0
-      }
-    ]
-  },
-  {
-    "provinceName": "湖南",
-    "provinceTotal": 50,
-    "running": 50,
-    "warning": 0,
-    "shutdown": 0,
-    "citys": [
-      {
-        "cityName": "长沙",
-        "txId": ["0009"],
-        "total": 20,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 0
-      },
-      {
-        "cityName": "株洲",
-        "txId": "0010",
-        "total": 20,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 0
-      },
-      {
-        "cityName": "湘潭",
-        "txId": "0011",
-        "total": 10,
-        "running": 10,
-        "warning": 0,
-        "shutdown": 0
-      }
-    ]
-  }
-]
+// var provinceData = [
+//   {
+//     "provinceName": "广西",
+//     "total": 100,
+//     "running": 50,
+//     "warning": 30,
+//     "shutdown": -20,
+//     "citys": [
+//       {
+//         "cityName": "南宁",
+//         "txId": "123456789",
+//         "total": 50,
+//         "running": 30,
+//         "warning": 15,
+//         "shutdown": 5
+//       },
+//       {
+//         "cityName": "玉林",
+//         "txId": "0007",
+//         "total": 20,
+//         "running": 10,
+//         "warning": 5,
+//         "shutdown": 5
+//       },
+//       {
+//         "cityName": "柳州",
+//         "txId": "0008",
+//         "total": 30,
+//         "running": 10,
+//         "warning": 10,
+//         "shutdown": 10
+//       }
+//     ]
+//   },
+//   {
+//     "provinceName": "北京",
+//     "total": 36,
+//     "running": 30,
+//     "warning": 0,
+//     "shutdown": -6,
+//     "citys": [
+//       {
+//         "cityName": "朝阳",
+//         "txId": "0009",
+//         "total": 10,
+//         "running": 20,
+//         "warning": 0,
+//         "shutdown": 6
+//       },
+//       {
+//         "cityName": "海淀",
+//         "txId": "0010",
+//         "total": 5,
+//         "running": 20,
+//         "warning": 0,
+//         "shutdown": 0
+//       },
+//       {
+//         "cityName": "西域",
+//         "txId": "0011",
+//         "total": 15,
+//         "running": 10,
+//         "warning": 0,
+//         "shutdown": 0
+//       }
+//     ]
+//   },
+//   {
+//     "provinceName": "湖南",
+//     "total": 50,
+//     "running": 50,
+//     "warning": 0,
+//     "shutdown": 0,
+//     "citys": [
+//       {
+//         "cityName": "长沙",
+//         "txId": ["0009"],
+//         "total": 20,
+//         "running": 20,
+//         "warning": 0,
+//         "shutdown": 0
+//       },
+//       {
+//         "cityName": "株洲",
+//         "txId": "0010",
+//         "total": 20,
+//         "running": 20,
+//         "warning": 0,
+//         "shutdown": 0
+//       },
+//       {
+//         "cityName": "湘潭",
+//         "txId": "0011",
+//         "total": 10,
+//         "running": 10,
+//         "warning": 0,
+//         "shutdown": 0
+//       }
+//     ]
+//   }
+// ]
 
-//省份激励器总数
-const sanData = []
-const cityData = []
-const shutdownData = []
+var provinceData = []
 // 中国地图经纬度： https://www.echartsjs.com/examples/zh/editor.html?c=map-polygon
-  const geoCoordMap = {
+const geoCoordMap = {
     '北京': [116.46,39.92],
+    '广东':[113.27324,23.15792],
     '朝阳': [116.46,39.92],
     '海淀': [116.29845,39.95933],
     '西域': [116.32434357617186,39.914025397993264],
@@ -365,11 +367,18 @@ const shutdownData = []
     '大庆':[125.03,46.58]
   }
 
+function initMapInfo() {
+  return fetchMap().then(response => {
+    provinceData = response.data
+  })
+}
+
 export default {
   name: 'CnMapChart',
   // props: ["userJson"],
   data() {
     return {
+      provinceData: [],
       provinceName: '',
       comeBack: '返回',
       myMapName: 'china',
@@ -403,15 +412,18 @@ export default {
       handler(val) {
         this.setOptions(val)
       }
-    }
+    },
   },
-  mounted() {
+
+  async mounted() {
+    await initMapInfo()
     this.$nextTick(() => {
       // this.initChart()
       this.initMap(this.myMapName)
     })
   },
-  beforeDestroy() {
+
+  async beforeDestroy() {
     if (!this.chart) {
       return
     }
@@ -419,51 +431,58 @@ export default {
     this.chart = null
   },
   methods: {
+    // initMapInfo() {
+    //   return fetchMap().then(response => {
+    //     provinceData = response.data
+    //   })
+    // },
 
     // 地图数据转换
     convertData: function(flag) {
-      var res = []
-
+      let resProvince = []
+      let resCity = []
       // 如果flag == true 表示渲染省份
-      if (flag === true) {
-        for (let i = 0; i < json.length; i++) {
-          let province = json[i]
-          // 省份 geo
-          let pGeo = geoCoordMap[province.provinceName]
-          // 省份总数
-          let pTotal = province.provinceTotal
-          // 省份名称
-          let pName = province.provinceName
-          res.push({
-            name: pName,
-            value: pGeo.concat(pTotal)
-          })
-        }
-        return res
+        if (flag === true) {
+          for (let i = 0; i < provinceData.length; i++) {
+            let province = provinceData[i]
+            // 省份 geo
+            let pGeo = geoCoordMap[province.provinceName]
+            // 省份总数
+            let pTotal = province.total
+            let shutdown = province.shutdown
+            // 省份名称
+            let pName = province.provinceName
+            resProvince.push({
+              name: pName,
+              value: pGeo.concat(pTotal, shutdown)
+            })
+          }
+        console.log(resProvince)
+        return resProvince
       }
 
       // 渲染城市
       // 获得当前点击的省份名称
       let currentProvinceName = this.provinceName
-      for (let i = 0; i < json.length; i++) {
-        let province = json[i]
+      for (let i = 0; i < provinceData.length; i++) {
+        let province = provinceData[i]
         if (province.provinceName === currentProvinceName) {
-          for (let j = 0; j < province.citys.length; j++) {
-            let city = province.citys[j]
+          for (let j = 0; j < province.cities.length; j++) {
+            let city = province.cities[j]
             // 城市 geo
             let cityGeo = geoCoordMap[city.cityName]
             // 城市名称
             let cityName = city.cityName
             // 城市总数
             let cityTotal = city.total
-            res.push({
+            resCity.push({
               name: cityName,
               value: cityGeo.concat(cityTotal)
             })
           }
         }
       }
-      return res
+      return resCity
     },
 
       initMap: function(mapName) {
@@ -636,7 +655,6 @@ export default {
               show: true,
               formatter: function(params) {
                 //激励器省份的经纬度
-                var provinceName = params.data.name
                 //激励器省份的总数
                 return params.data.value[2]
               },
@@ -664,16 +682,17 @@ export default {
             normal: {
               show: true,
               formatter: function(params) {
+                console.log(params.data)
                 //负数改为正数
-                if (params.data.value[2] < 0) {
-                  return -params.data.value[2];
+                if (params.data.value[3] < 0) {
+                  return -params.data.value[3];
                 }else {
-                  return params.data.value[2]
+                  return params.data.value[3]
                 }
               },
             }
           },
-          data: this.convertData(shutdownData)
+          data: this.convertData(true)
         }
       ]
     })

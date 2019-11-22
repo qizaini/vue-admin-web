@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { fetchMap } from '@/api/article'
 
 /* eslint-disable */
 var json = [
@@ -107,7 +108,7 @@ var json = [
   }
 ]
 
-var provinceName_arr = []
+/*var provinceName_arr = []
 var shutdown_arr = []
 var running_arr = []
 for (let i in json){
@@ -118,9 +119,17 @@ for (let i in json){
   provinceName_arr.push({name:provinceName, value:provinceName})
   shutdown_arr.push({name:shutdown, value:shutdown})
   running_arr.push({name:running, value:running})
-}
+}*/
 
 export default {
+  data() {
+    return {
+      provinceData: [],
+      xAxisData: [],
+      running: [],
+      shutdown: [],
+    }
+  },
 
   mounted () {
     this.initCharts();
@@ -128,16 +137,28 @@ export default {
 
   methods: {
     initCharts () {
+      let pName_arr = []
+      let shutdown_arr = []
+      let running_arr = []
       let myChart = this.$echarts.init(this.$refs.chart);
-      // console.log(this.$refs.chart)
-      var xAxisData = provinceName_arr
-      var data1 = running_arr;
-      var data2 = shutdown_arr;
+      fetchMap().then(response => {
+        this.provinceData = response.data
+        for (let i = 0; i < this.provinceData.length; i++) {
+          let province = this.provinceData[i]
+          // 省份名称
+          this.xAxisData = province.provinceName
+          // 省份运行总数
+          this.running = province.running
+          // 省份停止总数
+          this.shutdown = province.shutdown
+          // console.log(this.xAxisData, this.running, this.shutdown)
+        }
+      })
 
-      for (var i = 1; i <= 15; i++) {
+     /* for (var i = 1; i <= 15; i++) {
         data1.push((Math.random() * 2).toFixed(2));
         data2.push(-Math.random().toFixed(2));
-      }
+      }*/
 
       var itemStyle = {
         normal: {
@@ -169,7 +190,7 @@ export default {
           }
         },
         xAxis: {
-          data: xAxisData,
+          data: this.xAxisData,
           name: '',
           silent: false,
           axisLine: {onZero: true},
@@ -228,7 +249,7 @@ export default {
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
-            data: data2
+            data: this.shutdown
           },
           {
             name: '正在运行的激励器',
@@ -237,7 +258,7 @@ export default {
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
-            data: data1
+            data: this.running
           }
         ]
       });
