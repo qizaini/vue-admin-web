@@ -6,120 +6,13 @@
 import { fetchMap } from '@/api/article'
 
 /* eslint-disable */
-var json = [
-  {
-    "provinceName": "广西",
-    "provinceTotal": 100,
-    "running": 50,
-    "warning": 30,
-    "shutdown": -20,
-    "citys": [
-      {
-        "cityName": "南宁",
-        "txId": "123456789",
-        "total": 50,
-        "running": 30,
-        "warning": 15,
-        "shutdown": 5
-      },
-      {
-        "cityName": "玉林",
-        "txId": "0007",
-        "total": 20,
-        "running": 10,
-        "warning": 5,
-        "shutdown": 5
-      },
-      {
-        "cityName": "柳州",
-        "txId": "0008",
-        "total": 30,
-        "running": 10,
-        "warning": 10,
-        "shutdown": 10
-      }
-    ]
-  },
-  {
-    "provinceName": "北京",
-    "provinceTotal": 36,
-    "running": 30,
-    "warning": 0,
-    "shutdown": -6,
-    "citys": [
-      {
-        "cityName": "朝阳",
-        "txId": "0009",
-        "total": 10,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 6
-      },
-      {
-        "cityName": "海淀",
-        "txId": "0010",
-        "total": 5,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 0
-      },
-      {
-        "cityName": "西域",
-        "txId": "0011",
-        "total": 15,
-        "running": 10,
-        "warning": 0,
-        "shutdown": 0
-      }
-    ]
-  },
-  {
-    "provinceName": "湖南",
-    "provinceTotal": 50,
-    "running": 50,
-    "warning": 0,
-    "shutdown": 0,
-    "citys": [
-      {
-        "cityName": "长沙",
-        "txId": "0009",
-        "total": 20,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 0
-      },
-      {
-        "cityName": "株洲",
-        "txId": "0010",
-        "total": 20,
-        "running": 20,
-        "warning": 0,
-        "shutdown": 0
-      },
-      {
-        "cityName": "湘潭",
-        "txId": "0011",
-        "total": 10,
-        "running": 10,
-        "warning": 0,
-        "shutdown": 0
-      }
-    ]
-  }
-]
+var provinceData = []
 
-/*var provinceName_arr = []
-var shutdown_arr = []
-var running_arr = []
-for (let i in json){
-  var provinceName = json[i].provinceName
-  var provinceTotal = json[i].provinceTotal
-  var running = json[i].running
-  var shutdown = json[i].shutdown
-  provinceName_arr.push({name:provinceName, value:provinceName})
-  shutdown_arr.push({name:shutdown, value:shutdown})
-  running_arr.push({name:running, value:running})
-}*/
+function initBarChat() {
+  return fetchMap().then(response => {
+    provinceData = response.data
+  })
+}
 
 export default {
   data() {
@@ -128,32 +21,41 @@ export default {
       xAxisData: [],
       running: [],
       shutdown: [],
+      stop: []
     }
   },
 
-  mounted () {
+  async mounted () {
+    await initBarChat()
     this.initCharts();
   },
 
   methods: {
     initCharts () {
-      let pName_arr = []
-      let shutdown_arr = []
-      let running_arr = []
       let myChart = this.$echarts.init(this.$refs.chart);
-      fetchMap().then(response => {
-        this.provinceData = response.data
-        for (let i = 0; i < this.provinceData.length; i++) {
-          let province = this.provinceData[i]
-          // 省份名称
-          this.xAxisData = province.provinceName
-          // 省份运行总数
-          this.running = province.running
-          // 省份停止总数
-          this.shutdown = province.shutdown
-          // console.log(this.xAxisData, this.running, this.shutdown)
-        }
-      })
+      //显示柱状图省份正在运行和停止运行的数量
+      for (let i = 0; i < provinceData.length; i++) {
+        let province = provinceData[i]
+        // 省份名称
+        let xAxisData = province.provinceName
+        // 省份关机总数
+        let shutdown = province.shutdown
+        // 省份停止总数
+        let stop = province.warning
+        // 省份运行总数
+        let running = province.running
+        /*// 省份故障总数
+        let breakdown = province.breakdown
+        // 省份备用总数
+        let backup = province.backup
+        // 省份升级总数
+        let updating = province.updating*/
+        this.xAxisData.push({name: xAxisData, value: xAxisData})
+        this.running.push({name:running, value:running})
+        this.shutdown.push({name:shutdown, value:shutdown})
+        //value:(-(xxx)) 把正数变为负数
+        this.stop.push({name:stop, value:-(stop)})
+      }
 
       var itemStyle = {
         normal: {
@@ -170,7 +72,7 @@ export default {
       // 绘制图表
         myChart.setOption({
         legend: {
-          data: ['正在运行的激励器', '停止运行的激励器'],
+          data: ['正在运行的激励器', '停止运行的激励器', '故障的激励器'],
           align: 'left',
           left: 10
         },
@@ -254,6 +156,15 @@ export default {
             itemStyle: itemStyle,
             barWidth: 50,
             data: this.running
+          },
+          {
+            name: '故障的激励器',
+            type: 'bar',
+            color: '#627380',
+            stack: 'one',
+            itemStyle: itemStyle,
+            barWidth: 50,
+            data: this.stop
           }
         ]
       });
