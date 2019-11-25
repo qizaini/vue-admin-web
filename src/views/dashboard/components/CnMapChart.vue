@@ -1,12 +1,31 @@
 <template>
   <!--PageHeader 页头-->
   <div class="echarts">
-
+    <!--Drawer 抽屉-->
     <el-drawer title="激励器信息" :visible.sync="drawer" :direction="direction" size="50%">
-      <el-table :data="gridData">
-        <el-table-column property="date" label="日期" width="150" />
-        <el-table-column property="name" label="姓名" width="200" />
-        <el-table-column property="address" label="地址" />
+      <el-table :data="list">
+        <el-table-column property="txId" label="激励器" width="150">
+          <template slot-scope="scope">
+            <span>{{ scope.row.rowKey }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column property="location" label="城市" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.location }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column property="activeTime" label="激活时间">
+          <template slot-scope="scope">
+            <span>{{scope.row.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}</span>
+          </template>
+        </el-table-column>
+
+        <template slot="empty">
+          <div class="nodataTip">
+            <img src="#" alt="" />
+            暂无数据
+          </div>
+        </template>
       </el-table>
     </el-drawer>
 
@@ -17,7 +36,7 @@
 
 <script>
 /* eslint-disable */
-import { fetchMap } from '@/api/article'
+import { fetchMap, fetchTx } from '@/api/article'
 import axios from 'axios'
 
 import echarts from 'echarts'
@@ -273,33 +292,51 @@ function initMapInfo() {
 
 export default {
   name: 'CnMapChart',
+  filters: {
+    msgDateFormat: function(msg, pattern = '') {
+      // 将字符串转换为Date类型
+      var mt = new Date(msg * 1000)
+      if (mt.toString() === 'Invalid Date') {
+        return ''
+      }
+      // 获取年份
+      var y = mt.getFullYear()
+      // 获取月份 从0开始
+      var m = (mt.getMonth() + 1).toString().padStart(2, '0')
+      // 获取天数
+      var d = mt.getDate()
+      if (pattern === 'yyyy-mm-dd') {
+        return y + '-' + m + '-' + d
+      }
+      // 获取小时
+      var h = mt.getHours().toString().padStart(2, '0')
+      // 获取分钟
+      var mi = mt.getMinutes().toString().padStart(2, '0')
+      // 获取秒
+      var s = mt.getSeconds().toString().padStart(2, '0')
+
+      // 拼接为我们需要的各式
+      return y + '-' + m + '-' + d + ' ' + h + ':' + mi + ':' + s
+    }
+  },
   // props: ["userJson"],
   data() {
     return {
       provinceData: [],
+      list: [],
+      txList: [],
       provinceName: '',
+      cityName: '',
       comeBack: '返回',
       myMapName: 'china',
       drawer: false, // 抽屉
       direction: 'rtl', // 方位 ltr从左到右，rtl从右到左
       chart: null,
-      gridData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }]
+      params: {
+        txId: '',
+        location: '',
+        activeTime: ''
+      }
     }
   },
 
@@ -367,6 +404,12 @@ export default {
             let cityName = city.cityName
             // 城市总数
             let cityTotal = city.total
+            //根据城市cityName找到相应的txList
+            let data = province.cities.filter(function (item) {
+              return item.cityName === cityName
+            })
+            //激励器id
+            // this.txList = data[0].txList
             resCity.push({
               name: cityName,
               value: cityGeo.concat(cityTotal)
@@ -381,6 +424,7 @@ export default {
         this.chart = echarts.init(this.$refs.myEchart, 'macarons')
         if (mapName === 'china') {
           this.setOptions(this.myMapName)
+          //单击省份进入该省份城市
           this.chart.on('click', (params) => {
             var pName = params.name
             // 给省份名称赋值
@@ -392,13 +436,33 @@ export default {
           })
         } else {
           this.setOptionsSub(this.myMapName)
+          //双击城市返回中国地图
           this.chart.on('dblclick', () => {
             this.chart.dispose()
             this.$options.methods.openSubMap.bind(this)('china')
             this.$options.methods.initMap.bind(this)('china')
           })
+          //单击城市数量打开抽屉(openDrawer)
           this.chart.on('click', 'series', (params) => {
             // this.$options.methods.openDrawer.bind(this)()
+            this.cityName = params.name
+            for (let i = 0; i < provinceData.length; i++) {
+              let province = provinceData[i]
+              for (let j = 0; j < province.cities.length; j++) {
+                let city = province.cities[j]
+                //如果点击的城市名等于数据的城市名，则根据点击的城市名找到对应的txId
+                if (this.cityName === city.cityName) {
+                  this.txList = city.txList
+                  let txIds = this.txList.join()
+                  //条件查询数组转字符串9999,123456789,1570758003，根据的得到的txId，显示激励器详细信息
+                  fetchTx(txIds).then(response => {
+                    this.list = response.data
+                    console.log(this.list.rowKey, this.list.location, this.list.activeTime)
+                  })
+                }
+              }
+            }
+            //打开抽屉
             this.drawer = true
           })
         }
@@ -707,7 +771,7 @@ export default {
           }
         ]
       })
-    }
+    },
 
   }// End methods
 }// End export

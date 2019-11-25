@@ -24,12 +24,13 @@
     </el-row>
 
     <el-row :gutter="32">
-      <!--<el-col :xs="24" :sm="24" :lg="9">
+      <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <raddar-chart />
         </div>
-      </el-col>-->
-      <el-col :xs="24" :sm="24" :lg="16">
+      </el-col>
+      <!--激励器省份总数-->
+      <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <pie-chart />
         </div>

@@ -1490,9 +1490,6 @@
     created() {
       this.getList()
     },
-    mounted() {
-
-    },
     methods: {
       /* txList(){
       let that = this;
@@ -1628,8 +1625,6 @@
           this.params.updateTime = [start_time, end_time]
         }
         fetchList({"params": this.params}).then(response => {
-          // this.list = response.result
-          // this.total = response.result.length
           this.list = response.data.content
           this.total = response.data.content.length
 

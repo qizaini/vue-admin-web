@@ -4,6 +4,7 @@ import qs from 'qs'
 /* eslint-disable */
 
 //url: 'v1/xxx'本地路径，url: 'xxx'nginx服务器路径
+//查询激励器列表
 export function fetchList(query) {
   return request({
     url: 'v1/api-tx/tx/info',
@@ -13,23 +14,24 @@ export function fetchList(query) {
   })
 }
 
-/*export function fetchTx(id) {
+//根据{txId}查询单个或多个激励器信息
+export function fetchTx(id) {
   return request({
-    url: 'v1/api-tx/tx/device/' + id,
-    // url: 'api-tx/tx/device/' + id,
+    url: 'v1/api-tx/tx/info/batch/' + id,
+    // url: 'tx/info' + id,
     method: 'get'
   })
-}*/
-
-export function createArticle(data) {
+}
+/*export function createArticle(data) {
   return request({
     url: 'v1/api-tx/tx/device',
     // url: 'api-tx/tx/device',
     method: 'post',
     data
   })
-}
+}*/
 
+//修改激励器信息
 export function updateArticle(data) {
   return request({
     url: 'v1/api-tx/tx/config/restart',
@@ -39,6 +41,7 @@ export function updateArticle(data) {
   })
 }
 
+//重启激励器服务
 export function restartArticle(data) {
   return request({
     url: 'v1/api-tx/tx/service/restart',
@@ -48,6 +51,7 @@ export function restartArticle(data) {
   })
 }
 
+//停止激励器服务
 export function stopArticle(data) {
   return request({
     url: 'v1/api-tx/tx/service/stop',
@@ -57,6 +61,7 @@ export function stopArticle(data) {
   })
 }
 
+//地图统计信息
 export function fetchMap() {
   return request({
     url: 'v1/api-tx/tx/mapInfo',
@@ -64,3 +69,4 @@ export function fetchMap() {
     method: 'get'
   })
 }
+
