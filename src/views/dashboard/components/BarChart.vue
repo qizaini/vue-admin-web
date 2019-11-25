@@ -72,7 +72,7 @@ export default {
       // 绘制图表
         myChart.setOption({
         legend: {
-          data: ['正在运行的激励器', '停止运行的激励器', '故障的激励器'],
+          data: ['正在运行的激励器', '停止运行的激励器', '发生故障的激励器'],
           align: 'left',
           left: 10
         },
@@ -82,7 +82,7 @@ export default {
             if (value.data.name < 0) {
                 return '停止运行的激励器：' + -value.data.name;
             }else {
-                return '正在运行的激励器：' + value.data.name;
+                return '发生故障的激励器：' + value.data.name;
             }
           }
         },
@@ -158,7 +158,7 @@ export default {
             data: this.running
           },
           {
-            name: '故障的激励器',
+            name: '发生故障的激励器',
             type: 'bar',
             color: '#627380',
             stack: 'one',
