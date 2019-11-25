@@ -79,10 +79,10 @@ export default {
         tooltip: {
           formatter:function(value) {
             //负数改为正数
-            if (value.data.name < 0) {
-                return '停止运行的激励器：' + -value.data.name;
-            }else {
+            if (value.data.value < 0) {
                 return '发生故障的激励器：' + value.data.name;
+            }else {
+                return '正在运行的激励器：' + value.data.name;
             }
           }
         },
