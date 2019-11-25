@@ -457,7 +457,6 @@ export default {
                   //条件查询数组转字符串9999,123456789,1570758003，根据的得到的txId，显示激励器详细信息
                   fetchTx(txIds).then(response => {
                     this.list = response.data
-                    console.log(this.list.rowKey, this.list.location, this.list.activeTime)
                   })
                 }
               }

@@ -14,7 +14,7 @@ export function fetchList(query) {
   })
 }
 
-//根据{txId}查询单个或多个激励器信息
+//根据{txId}(9999,123456789,1570758003)查询单个或多个激励器信息
 export function fetchTx(id) {
   return request({
     url: 'v1/api-tx/tx/info/batch/' + id,
