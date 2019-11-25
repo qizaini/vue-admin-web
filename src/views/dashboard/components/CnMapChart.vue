@@ -2,20 +2,48 @@
   <!--PageHeader 页头-->
   <div class="echarts">
     <!--Drawer 抽屉-->
-    <el-drawer title="激励器信息" :visible.sync="drawer" :direction="direction" size="50%">
+    <el-drawer title="激励器信息" :visible.sync="drawer" :direction="direction" size="40%">
       <el-table :data="list">
-        <el-table-column property="txId" label="激励器" width="150">
+        <el-table-column property="txId" label="激励器" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.rowKey }}</span>
           </template>
         </el-table-column>
-        <el-table-column property="location" label="城市" width="200">
+        <el-table-column property="location" label="部署城市" width="100" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.location }}</span>
           </template>
         </el-table-column>
-        <el-table-column property="activeTime" label="激活时间">
+        <el-table-column prop="freq" label="频点(MHz)" width="100" align="center" >
           <template slot-scope="scope">
+            {{ scope.row.freq }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="avgPower" label="功率(w)" width="100" align="center" >
+          <template slot-scope="scope">
+            <span>{{ scope.row.avgPower }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="specMode" label="频谱模式" width="100" align="center" >
+          <template slot-scope="scope">
+            <span>{{ scope.row.specMode }}</span>
+          </template>
+
+          <template slot-scope="scope" prop="specMode" width="100" align="center">
+            <span v-if="scope.row.specMode === '1'" :type="'info'" disable-transitions>A1</span>
+            <span v-else-if="scope.row.specMode === '2'">A2</span>
+            <span v-else-if="scope.row.specMode === '3'">A3</span>
+            <span v-else-if="scope.row.specMode === '4'">A4</span>
+            <span v-else-if="scope.row.specMode === '5'">B1</span>
+            <span v-else-if="scope.row.specMode === '6'">B2</span>
+            <span v-else-if="scope.row.specMode === '7'">B3</span>
+            <span v-else-if="scope.row.specMode === '8'">B4</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column property="activeTime" label="激活时间">
+          <template slot-scope="scope" width="100" align="center">
             <span>{{scope.row.activeTime | msgDateFormat('yyyy-mm-dd HH:mm:ss')}}</span>
           </template>
         </el-table-column>
