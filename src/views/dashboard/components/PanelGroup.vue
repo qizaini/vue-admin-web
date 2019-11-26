@@ -12,13 +12,13 @@
               激励器总数
             </div>
             <div class="sum-num-color">
-              <count-to :start-val="0" :end-val="50" :duration="5000" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="total" :duration="5000" class="card-panel-num" />
             </div>
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSetBarChartData('messages')">
+        <div class="card-panel" @click="handleSetBarChartData('breakdown')">
           <div class="card-panel-icon-wrapper icon-message">
             <svg-icon icon-class="tx-running" class-name="card-panel-icon" />
           </div>
@@ -27,13 +27,15 @@
               关机/停止的激励器
             </div>
             <div class="running-num-color">
-              <count-to :start-val="0" :end-val="25" :duration="3000" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="shutdown" :duration="3000" class="card-panel-num" />
+              <span>/</span>
+              <count-to :start-val="0" :end-val="breakdown" :duration="3000" class="card-panel-num" />
             </div>
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSetBarChartData('purchases')">
+        <div class="card-panel" @click="handleSetBarChartData('running')">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon icon-class="tx-stop" class-name="card-panel-icon" />
           </div>
@@ -42,13 +44,15 @@
               运行/故障的激励器
             </div>
             <div class="stop-num-color">
-              <count-to :start-val="0" :end-val="4" :duration="3200" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="running" :duration="3200" class="card-panel-num" />
+              <span>/</span>
+              <count-to :start-val="0" :end-val="warning" :duration="3200" class="card-panel-num" />
             </div>
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSetBarChartData('shoppings')">
+        <div class="card-panel" @click="handleSetBarChartData('backup')">
           <div class="card-panel-icon-wrapper icon-shopping">
             <svg-icon icon-class="tx-warning" class-name="card-panel-icon" />
           </div>
@@ -57,7 +61,9 @@
               备份/升级的激励器
             </div>
             <div class="warning-num-color">
-              <count-to :start-val="0" :end-val="2" :duration="3600" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="backup" :duration="3600" class="card-panel-num" />
+              <span>/</span>
+              <count-to :start-val="0" :end-val="updating" :duration="3600" class="card-panel-num" />
             </div>
           </div>
         </div>
@@ -67,16 +73,23 @@
 
 <script>
 /* eslint-disable */
-  import CountTo from 'vue-count-to'
+import CountTo from 'vue-count-to'
 import PieChart from './PieChart'
+import { fetchMap } from '@/api/article'
 
 export default {
   name: 'ScrollTop',
   data() {
     return {
+      total: '',
+      running: '',
+      warning: '',
+      shutdown: '',
+      breakdown: '',
+      backup: '',
+      updating: '',
       // 定义滚动条默认位置
       scrollTop: null,
-
       // 定义按钮默认状态
       isScrollTop: false
     }
@@ -87,6 +100,9 @@ export default {
   components: {
     CountTo,
     PieChart
+  },
+  created() {
+    this.getList()
   },
   mounted() {
     // 监听滚动事件
@@ -105,12 +121,23 @@ export default {
     }, true);
   },
   methods: {
+    getList(){
+      fetchMap().then(response => {
+        this.total = response.data[0].total
+        this.running = response.data[0].running
+        this.warning = response.data[0].warning
+        this.shutdown = response.data[0].shutdown
+        this.breakdown = response.data[0].breakdown
+        this.backup = response.data[0].backup
+        this.updating = response.data[0].updating
+      })
+    },
     handleSetBarChartData(type) {
+      //$emit:触发自定义事件 'handleSetBarChartData',type为参数
       this.$emit('handleSetBarChartData', type)
     },
-    /**
-     * 滚动到顶部
-     */
+
+    //滚动到顶部
    /* scrollBottom() {
       let $this = this;
       // 返回顶部动画特效

@@ -17,7 +17,8 @@
         </div>
       </el-col>-->
       <el-col :xs="24" :sm="24" :lg="24">
-        <div class="chart-wrapper" style="padding-top: 55px">
+        <div class="chart-wrapper" id="lineMain" style="padding-top: 55px">
+          <!-- <bar-chart :chart-data="lineChartData" />-->
           <bar-chart :chart-data="lineChartData" />
         </div>
       </el-col>
@@ -61,22 +62,36 @@ import PieChart from './components/PieChart'
 import RaddarChart from './components/RaddarChart'
 import BoxCard from './components/BoxCard'
 
+import { fetchMap } from '@/api/article'
+
+var provinceData = []
+
+function initBarChat() {
+  return fetchMap().then(response => {
+    provinceData = response.data
+  })
+}
+
+//PanelGroup card-panel 点击事件
 const lineChartData = {
-  newVisitis: {
-    txData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+  total: {
+    txData: [],
+    actualData: []
   },
-  messages: {
-    txData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
+  //关机/停止
+  breakdown: {
+    txData: [],
+    actualData: []
   },
-  purchases: {
-    txData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
+  //运行/故障
+  running: {
+    txData: [],
+    actualData: []
   },
-  shoppings: {
-    txData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
+  //备份/升级
+  backup: {
+    txData: [],
+    actualData: []
   }
 }
 
@@ -95,7 +110,7 @@ export default {
 
   data() {
     return {
-      lineChartData: lineChartData.newVisitis,
+      lineChartData: lineChartData.total,
     }
   },
   methods: {

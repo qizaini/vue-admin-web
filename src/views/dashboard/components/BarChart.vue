@@ -3,9 +3,9 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { fetchMap } from '@/api/article'
 
-/* eslint-disable */
 var provinceData = []
 
 function initBarChat() {
@@ -20,8 +20,11 @@ export default {
       provinceData: [],
       xAxisData: [],
       running: [],
+      warning: [],
       shutdown: [],
-      stop: []
+      breakdown: [],
+      backup: [],
+      updating: []
     }
   },
 
@@ -40,21 +43,24 @@ export default {
         let xAxisData = province.provinceName
         // 省份关机总数
         let shutdown = province.shutdown
-        // 省份停止总数
-        let stop = province.warning
+        // 省份故障总数
+        let warning = province.warning
         // 省份运行总数
         let running = province.running
-        /*// 省份故障总数
+        // 省份停止总数
         let breakdown = province.breakdown
         // 省份备用总数
         let backup = province.backup
         // 省份升级总数
-        let updating = province.updating*/
+        let updating = province.updating
         this.xAxisData.push({name: xAxisData, value: xAxisData})
         this.running.push({name:running, value:running})
         this.shutdown.push({name:shutdown, value:shutdown})
+        this.backup.push({name:backup, value:backup})
         //value:(-(xxx)) 把正数变为负数
-        this.stop.push({name:stop, value:-(stop)})
+        this.warning.push({name:warning, value:-(warning)})
+        this.breakdown.push({name:breakdown, value:-(breakdown)})
+        this.updating.push({name:updating, value:-(updating)})
       }
 
       var itemStyle = {
@@ -72,7 +78,7 @@ export default {
       // 绘制图表
         myChart.setOption({
         legend: {
-          data: ['正在运行的激励器', '停止运行的激励器', '发生故障的激励器'],
+          data: ['已经关机的激励器','停止运行的激励器', '正在运行的激励器', '发生故障的激励器',  '正在备份的激励器', '正在升级的激励器'],
           align: 'left',
           left: 10
         },
@@ -146,7 +152,7 @@ export default {
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
-            data: this.shutdown
+            data: this.breakdown
           },
           {
             name: '正在运行的激励器',
@@ -164,7 +170,34 @@ export default {
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
-            data: this.stop
+            data: this.warning
+          },
+          {
+            name: '已经关机的激励器',
+            type: 'bar',
+            color: '#f4516c',
+            stack: 'one',
+            itemStyle: itemStyle,
+            barWidth: 50,
+            data: this.shutdown
+          },
+          {
+            name: '正在备份的激励器',
+            type: 'bar',
+            color: '#E6A23C',
+            stack: 'one',
+            itemStyle: itemStyle,
+            barWidth: 50,
+            data: this.backup
+          },
+          {
+            name: '正在升级的激励器',
+            type: 'bar',
+            color: '#E6A23C',
+            stack: 'one',
+            itemStyle: itemStyle,
+            barWidth: 50,
+            data: this.updating
           }
         ]
       });
