@@ -18,7 +18,7 @@
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSetBarChartData('breakdown')">
+        <div class="card-panel" @click="handleSetBarChartData('running')">
           <div class="card-panel-icon-wrapper icon-message">
             <svg-icon icon-class="tx-running" class-name="card-panel-icon" />
           </div>
@@ -35,7 +35,7 @@
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSetBarChartData('running')">
+        <div class="card-panel" @click="handleSetBarChartData('breakdown')">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon icon-class="tx-stop" class-name="card-panel-icon" />
           </div>
@@ -132,6 +132,7 @@ export default {
         this.updating = response.data[0].updating
       })
     },
+
     handleSetBarChartData(type) {
       //$emit:触发自定义事件 'handleSetBarChartData',type为参数
       this.$emit('handleSetBarChartData', type)

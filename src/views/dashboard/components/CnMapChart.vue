@@ -436,8 +436,6 @@ export default {
             let data = province.cities.filter(function (item) {
               return item.cityName === cityName
             })
-            //激励器id
-            // this.txList = data[0].txList
             resCity.push({
               name: cityName,
               value: cityGeo.concat(cityTotal)

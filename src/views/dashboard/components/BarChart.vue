@@ -1,9 +1,10 @@
 <template>
-  <div style="height:700px" ref="chart"></div>
+    <div style="height:700px" ref="chart"></div>
 </template>
 
 <script>
 /* eslint-disable */
+import PanelGroup from './PanelGroup'
 import { fetchMap } from '@/api/article'
 
 var provinceData = []
@@ -27,13 +28,25 @@ export default {
       updating: []
     }
   },
-
+  components: {
+    PanelGroup
+  },
+  // created(){
+  //   this.handleSetBarChartData()
+  // },
   async mounted () {
     await initBarChat()
     this.initCharts();
   },
 
   methods: {
+    handleSetBarChartData(){
+      // PanelGroup.$on('handleSetBarChartData', function (msg) {
+      //   console.log(msg)
+      // })
+      // PanelGroup.$emit('handleSetBarChartData')
+      // => "hi"*/
+    },
     initCharts () {
       let myChart = this.$echarts.init(this.$refs.chart);
       //显示柱状图省份正在运行和停止运行的数量
@@ -146,15 +159,6 @@ export default {
         },
         series: [
           {
-            name: '停止运行的激励器',
-            type: 'bar',
-            color: '#f4516c',
-            stack: 'one',
-            itemStyle: itemStyle,
-            barWidth: 50,
-            data: this.breakdown
-          },
-          {
             name: '正在运行的激励器',
             type: 'bar',
             color: '#36a3f7',
@@ -182,9 +186,18 @@ export default {
             data: this.shutdown
           },
           {
+            name: '停止运行的激励器',
+            type: 'bar',
+            color: '#f4516c',
+            stack: 'one',
+            itemStyle: itemStyle,
+            barWidth: 50,
+            data: this.breakdown
+          },
+          {
             name: '正在备份的激励器',
             type: 'bar',
-            color: '#E6A23C',
+            color: '#fab041',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
@@ -193,7 +206,7 @@ export default {
           {
             name: '正在升级的激励器',
             type: 'bar',
-            color: '#E6A23C',
+            color: '#fab041',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
@@ -227,7 +240,6 @@ export default {
         });
       }
     },
-
   },
 
 }
