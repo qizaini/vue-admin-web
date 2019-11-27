@@ -24,12 +24,12 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              关机/停止的激励器
-            </div>
+              运行/故障的激励器
+          </div>
             <div class="running-num-color">
-              <count-to :start-val="0" :end-val="shutdown" :duration="3000" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="running" :duration="3000" class="card-panel-num" />
               <span>/</span>
-              <count-to :start-val="0" :end-val="breakdown" :duration="3000" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="warning" :duration="3000" class="card-panel-num" />
             </div>
           </div>
         </div>
@@ -41,12 +41,12 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              运行/故障的激励器
+              关机/停止的激励器
             </div>
             <div class="stop-num-color">
-              <count-to :start-val="0" :end-val="running" :duration="3200" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="shutdown" :duration="3200" class="card-panel-num" />
               <span>/</span>
-              <count-to :start-val="0" :end-val="warning" :duration="3200" class="card-panel-num" />
+              <count-to :start-val="0" :end-val="breakdown" :duration="3200" class="card-panel-num" />
             </div>
           </div>
         </div>

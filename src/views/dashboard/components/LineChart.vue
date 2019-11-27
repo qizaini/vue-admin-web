@@ -63,7 +63,7 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ actualData, txData } = {}) {
+    setOptions({ runningData, warningData } = {}) {
       this.chart.setOption({
         xAxis: {
           data: ['南宁', '柳州', '北海', '桂林', '崇左', '百色', '钦州'],
@@ -106,7 +106,7 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: actualData,
+          data: runningData,
           animationEasing: 'cubicInOut',
           animationDuration
         },
@@ -126,7 +126,7 @@ export default {
               }
             }
           },
-          data: txData,
+          data: warningData,
           animationEasing: 'quadraticOut',
           animationDuration
         }

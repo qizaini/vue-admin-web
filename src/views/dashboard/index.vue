@@ -18,8 +18,8 @@
       </el-col>-->
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper" id="lineMain" style="padding-top: 55px">
-          <!-- <bar-chart :chart-data="lineChartData" />-->
-          <bar-chart :chart-data="lineChartData" />
+          <!-- <bar-chart :chart-data="barChartData" />-->
+          <bar-chart :chart-data="barChartData" />
         </div>
       </el-col>
     </el-row>
@@ -73,25 +73,37 @@ function initBarChat() {
 }
 
 //PanelGroup card-panel 点击事件
-const lineChartData = {
+const barChartData = {
   total: {
     txData: [],
     actualData: []
   },
   //关机/停止
   breakdown: {
-    txData: [],
-    actualData: []
+    shutdownData: [],
+    breakdownData: [],
+    runningData: [10, 10, 10],
+    warningData: [],
+    backupData: [],
+    updatingData: []
   },
   //运行/故障
   running: {
-    txData: [],
-    actualData: []
+    shutdownData: [],
+    breakdownData: [],
+    runningData: [10, 10, 10],
+    warningData: [],
+    backupData: [],
+    updatingData: []
   },
   //备份/升级
   backup: {
-    txData: [],
-    actualData: []
+    shutdownData: [],
+    breakdownData: [],
+    runningData: [10, 10, 10],
+    warningData: [],
+    backupData: [],
+    updatingData: []
   }
 }
 
@@ -110,12 +122,12 @@ export default {
 
   data() {
     return {
-      lineChartData: lineChartData.total,
+      barChartData: '',
     }
   },
   methods: {
     handleSetBarChartData(type) {
-      this.lineChartData = lineChartData[type]
+      this.barChartData = barChartData[type]
     },
   },
 

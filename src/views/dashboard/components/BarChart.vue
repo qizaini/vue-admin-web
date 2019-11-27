@@ -78,7 +78,7 @@ export default {
       // 绘制图表
         myChart.setOption({
         legend: {
-          data: ['已经关机的激励器','停止运行的激励器', '正在运行的激励器', '发生故障的激励器',  '正在备份的激励器', '正在升级的激励器'],
+          data: ['正在运行的激励器', '发生故障的激励器', '已经关机的激励器', '停止运行的激励器',  '正在备份的激励器', '正在升级的激励器'],
           align: 'left',
           left: 10
         },
@@ -166,7 +166,7 @@ export default {
           {
             name: '发生故障的激励器',
             type: 'bar',
-            color: '#627380',
+            color: '#36a3f7',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
@@ -227,6 +227,7 @@ export default {
         });
       }
     },
+
   },
 
 }
