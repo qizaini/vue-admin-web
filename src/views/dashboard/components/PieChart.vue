@@ -1,12 +1,23 @@
 <template>
+  <!--饼状图-->
   <div :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
+/* eslint-disable */
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
+import { fetchMap } from '@/api/article'
+
+var provinceData = []
+
+function initPieChat() {
+  return fetchMap().then(response => {
+    provinceData = response.data
+  })
+}
 export default {
   mixins: [resize],
   props: {
@@ -25,10 +36,13 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      provinceName: '',
+      total: ''
     }
   },
-  mounted() {
+  async mounted() {
+    await initPieChat()
     this.$nextTick(() => {
       this.initChart()
     })
@@ -44,6 +58,15 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
+      for (let i = 0; i < provinceData.length; i++) {
+        let province = provinceData[i]
+        // 省份名称
+        let provinceName = province.provinceName
+        // 激励器省份总数
+        let total = province.total
+        this.provinceName = provinceName
+        this.total = total
+      }
       this.chart.setOption({
         tooltip: {
           trigger: 'item',
@@ -52,21 +75,17 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['南宁', '柳州', '北海', '桂林', '崇左']
+          data: [this.provinceName]
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '激励器总数',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: '南宁' },
-              { value: 240, name: '柳州' },
-              { value: 149, name: '北海' },
-              { value: 100, name: '桂林' },
-              { value: 59, name: '崇左' }
+              {name:this.provinceName, value:this.total}
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

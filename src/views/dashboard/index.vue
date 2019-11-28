@@ -19,6 +19,7 @@
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper" id="lineMain" style="padding-top: 55px">
           <!-- <bar-chart :chart-data="barChartData" />-->
+          <!--柱状图-->
           <div style="height:700px" ref="chart" :chart-data="barChartData"></div>
         </div>
       </el-col>
