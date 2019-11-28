@@ -17,19 +17,16 @@
         </div>
       </el-col>-->
       <el-col :xs="24" :sm="24" :lg="24">
-        <div class="chart-wrapper" id="lineMain" style="padding-top: 55px">
-          <!-- <bar-chart :chart-data="barChartData" />-->
-          <!--柱状图-->
-          <div style="height:700px" ref="chart" :chart-data="barChartData"></div>
-        </div>
+        <!-- <bar-chart :chart-data="barChartData" />-->
+        <!--柱状图-->
+        <div style="height:700px" ref="chart" :chart-data="barChartData"></div>
       </el-col>
     </el-row>
 
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart />
-        </div>
+<!--        <div style="height:500px" ref="raddarChart" ></div>-->
+        <raddar-chart />
       </el-col>
       <!--激励器省份总数-->
       <el-col :xs="24" :sm="24" :lg="8">

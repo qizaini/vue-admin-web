@@ -31,22 +31,11 @@ export default {
   components: {
     PanelGroup
   },
-  // created(){
-  //   this.handleSetBarChartData()
-  // },
   async mounted () {
     await initBarChat()
     this.initCharts();
   },
 
-  methods: {
-    handleSetBarChartData(){
-      // PanelGroup.$on('handleSetBarChartData', function (msg) {
-      //   console.log(msg)
-      // })
-      // PanelGroup.$emit('handleSetBarChartData')
-      // => "hi"*/
-    },
     initCharts () {
       let myChart = this.$echarts.init(this.$refs.chart);
       //显示柱状图省份正在运行和停止运行的数量
@@ -238,7 +227,9 @@ export default {
             }
           }
         });
+
       }
+
     },
   },
 

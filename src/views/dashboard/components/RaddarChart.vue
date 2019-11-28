@@ -1,116 +1,98 @@
 <template>
+  <!--饼状图-->
   <div :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
+/* eslint-disable */
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
-const animationDuration = 3000
+import { fetchMap } from '@/api/article'
 
-export default {
-  mixins: [resize],
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '300px'
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart()
+  var provinceData = []
+
+  function initPieChat() {
+    return fetchMap().then(response => {
+      provinceData = response.data
     })
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        radar: {
-          radius: '66%',
-          center: ['50%', '42%'],
-          splitNumber: 8,
-          splitArea: {
-            areaStyle: {
-              color: 'rgba(127,95,132,.3)',
-              opacity: 1,
-              shadowBlur: 45,
-              shadowColor: 'rgba(0,0,0,.5)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 15
-            }
-          },
-          indicator: [
-            { name: 'Sales', max: 10000 },
-            { name: 'Administration', max: 20000 },
-            { name: 'Information Techology', max: 20000 },
-            { name: 'Customer Support', max: 20000 },
-            { name: 'Development', max: 20000 },
-            { name: 'Marketing', max: 20000 }
-          ]
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['广西', '北京', '内蒙古']
-        },
-        series: [{
-          type: 'radar',
-          symbolSize: 0,
-          areaStyle: {
-            normal: {
-              shadowBlur: 13,
-              shadowColor: 'rgba(0,0,0,.2)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 10,
-              opacity: 1
-            }
-          },
-          data: [
-            {
-              value: [5000, 7000, 12000, 11000, 15000, 14000],
-              name: '广西'
-            },
-            {
-              value: [4000, 9000, 15000, 15000, 13000, 11000],
-              name: '北京'
-            },
-            {
-              value: [5500, 11000, 12000, 15000, 12000, 12000],
-              name: '内蒙古'
-            }
-          ],
-          animationDuration: animationDuration
-        }]
+  }
+  export default {
+    mixins: [resize],
+    props: {
+      className: {
+        type: String,
+        default: 'chart'
+      },
+      width: {
+        type: String,
+        default: '100%'
+      },
+      height: {
+        type: String,
+        default: '300px'
+      }
+    },
+    data() {
+      return {
+        chart: null,
+        provinceName: '',
+        total: ''
+      }
+    },
+    async mounted() {
+      await initPieChat()
+      this.$nextTick(() => {
+        this.initChart()
       })
+    },
+    beforeDestroy() {
+      if (!this.chart) {
+        return
+      }
+      this.chart.dispose()
+      this.chart = null
+    },
+    methods: {
+      initChart() {
+        this.chart = echarts.init(this.$el, 'macarons')
+
+        for (let i = 0; i < provinceData.length; i++) {
+          let province = provinceData[i]
+          // 省份名称
+          let provinceName = province.provinceName
+          // 激励器省份总数
+          let total = province.total
+          this.provinceName = provinceName
+          this.total = total
+        }
+        this.chart.setOption({
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            left: 'center',
+            bottom: '10',
+            data: [this.provinceName]
+          },
+          series: [
+            {
+              name: '激励器总数',
+              type: 'pie',
+              roseType: 'radius',
+              radius: [15, 95],
+              center: ['50%', '38%'],
+              data: [
+                {name:this.provinceName, value:this.total}
+              ],
+              animationEasing: 'cubicInOut',
+              animationDuration: 2600
+            }
+          ]
+        })
+      }
     }
   }
-}
 </script>
