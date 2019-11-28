@@ -9,9 +9,9 @@
             <span>{{ scope.row.rowKey }}</span>
           </template>
         </el-table-column>
-        <el-table-column property="location" label="部署城市" width="100" align="center">
+        <el-table-column property="city" label="部署城市" width="100" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.location }}</span>
+            <span>{{ scope.row.city }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="freq" label="频点(MHz)" width="100" align="center" >
@@ -71,7 +71,6 @@ import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 import 'echarts/map/js/world.js'
 // import 'echarts/map/js/china-contour.js'
-
 
 import 'echarts/map/js/province/shanghai.js'
 import 'echarts/map/js/province/hebei.js'
@@ -362,7 +361,7 @@ export default {
       chart: null,
       params: {
         txId: '',
-        location: '',
+        city: '',
         activeTime: ''
       }
     }

@@ -5,9 +5,10 @@
 
 <script>
 /* eslint-disable */
+// 所有数据的更新都通过 setOption实现，你只需要定时获取数据，setOption 填入数据，
+// 而不用考虑数据到底产生了那些变化，ECharts 会找到两组数据之间的差异然后通过合适的动画去表现数据的变化。
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
 
 var base = +new Date(2014, 9, 3);
 var oneDay = 24 * 3600 * 1000;
