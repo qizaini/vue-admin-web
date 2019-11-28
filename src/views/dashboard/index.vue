@@ -131,11 +131,9 @@ export default {
         this.backup = []
         this.updating = []
         this.xAxisData.push({name: xAxisData, value: xAxisData})
-        this.running.push({name:running, value:running})
-        this.warning.push({name:warning, value:-(warning)})
+        this.warning.push({name:warning, value:warning})
         //value:(-(xxx)) 把正数变为负数
-        // this.running.push({name:running, value:running})
-        // this.warning.push({name:warning, value:-(warning)})
+        this.running.push({name:running, value:-(running)})
         if (this.type === 'running') {
           this.xAxisData = []
           this.breakdown = []
@@ -143,8 +141,8 @@ export default {
           this.backup = []
           this.updating = []
           this.xAxisData.push({name: xAxisData, value: xAxisData})
-          this.running.push({name:running, value:running})
-          this.warning.push({name:warning, value:-(warning)})
+          this.warning.push({name:warning, value:warning})
+          this.running.push({name:running, value:-(running)})
         }
         if (this.type === 'breakdown') {
           this.xAxisData = []
@@ -163,8 +161,8 @@ export default {
           this.shutdown = []
           this.breakdown = []
           this.xAxisData.push({name: xAxisData, value: xAxisData})
-          this.backup.push({name:backup, value:backup})
-          this.updating.push({name:updating, value:-(updating)})
+          this.updating.push({name:updating, value:updating})
+          this.backup.push({name:backup, value:-(backup)})
         }
       }
 
@@ -189,11 +187,23 @@ export default {
         },
         tooltip: {
           formatter:function(value) {
-            //负数改为正数
-            if (value.data.value < 0) {
-              return '发生故障的激励器：' + value.data.name;
-            }else {
+            if (value.seriesName === '正在运行的激励器'){
               return '正在运行的激励器：' + value.data.name;
+            }
+            if (value.seriesName === '发生故障的激励器'){
+              return '发生故障的激励器：' + value.data.name;
+            }
+            if (value.seriesName === '已经关机的激励器'){
+              return '已经关机的激励器：' + value.data.name;
+            }
+            if (value.seriesName === '停止运行的激励器'){
+              return '停止运行的激励器：' + value.data.name;
+            }
+            if (value.seriesName === '正在备份的激励器'){
+              return '正在备份的激励器：' + value.data.name;
+            }
+            if (value.seriesName === '正在升级的激励器'){
+              return '正在升级的激励器：' + value.data.name;
             }
           }
         },
@@ -271,7 +281,7 @@ export default {
           {
             name: '已经关机的激励器',
             type: 'bar',
-            color: '#f4516c',
+            color: '#36a3f7',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
@@ -280,7 +290,7 @@ export default {
           {
             name: '停止运行的激励器',
             type: 'bar',
-            color: '#36a3f7',
+            color: '#f4516c',
             stack: 'one',
             itemStyle: itemStyle,
             barWidth: 50,
