@@ -24,21 +24,20 @@
     </el-row>
 
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-<!--        <div style="height:500px" ref="raddarChart" ></div>-->
-        <raddar-chart />
+      <el-col :xs="24" :sm="24" :lg="16">
+        <raddar-chart  style="height:400px;margin-top: -40px"/>
       </el-col>
       <!--激励器省份总数-->
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="6">
         <div class="chart-wrapper">
           <pie-chart />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="6">
+      <!--<el-col :xs="24" :sm="24" :lg="6">
         <div class="chart-wrapper">
           <box-card />
         </div>
-      </el-col>
+      </el-col>-->
     </el-row>
 
     <!--<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->

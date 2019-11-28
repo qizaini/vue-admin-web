@@ -1,6 +1,6 @@
 <template>
-  <!--饼状图-->
-  <div :class="className" :style="{height:height,width:width}" />
+  <!--柱状图：数据的动态更新-->
+  <div style="height:400px" ref="chart"></div>
 </template>
 
 <script>
@@ -9,90 +9,77 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
-import { fetchMap } from '@/api/article'
+var base = +new Date(2014, 9, 3);
+var oneDay = 24 * 3600 * 1000;
+var date = [];
 
-  var provinceData = []
+var data = [Math.random() * 150];
+var now = new Date(base);
 
-  function initPieChat() {
-    return fetchMap().then(response => {
-      provinceData = response.data
+export default {
+
+  mounted() {
+    this.$nextTick(() => {
+      this.initChart()
     })
-  }
-  export default {
-    mixins: [resize],
-    props: {
-      className: {
-        type: String,
-        default: 'chart'
-      },
-      width: {
-        type: String,
-        default: '100%'
-      },
-      height: {
-        type: String,
-        default: '300px'
-      }
-    },
-    data() {
-      return {
-        chart: null,
-        provinceName: '',
-        total: ''
-      }
-    },
-    async mounted() {
-      await initPieChat()
-      this.$nextTick(() => {
-        this.initChart()
-      })
-    },
-    beforeDestroy() {
-      if (!this.chart) {
-        return
-      }
-      this.chart.dispose()
-      this.chart = null
-    },
-    methods: {
-      initChart() {
-        this.chart = echarts.init(this.$el, 'macarons')
+  },
+  methods: {
+    initChart() {
+      let myChart = this.$echarts.init(this.$refs.chart);
 
-        for (let i = 0; i < provinceData.length; i++) {
-          let province = provinceData[i]
-          // 省份名称
-          let provinceName = province.provinceName
-          // 激励器省份总数
-          let total = province.total
-          this.provinceName = provinceName
-          this.total = total
+      function addData(shift) {
+        now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/');
+        date.push(now);
+        data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
+        if (shift) {
+          date.shift();
+          data.shift();
         }
-        this.chart.setOption({
-          tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
-          },
-          legend: {
-            left: 'center',
-            bottom: '10',
-            data: [this.provinceName]
-          },
-          series: [
-            {
-              name: '激励器总数',
-              type: 'pie',
-              roseType: 'radius',
-              radius: [15, 95],
-              center: ['50%', '38%'],
-              data: [
-                {name:this.provinceName, value:this.total}
-              ],
-              animationEasing: 'cubicInOut',
-              animationDuration: 2600
-            }
-          ]
-        })
+        now = new Date(+new Date(now) + oneDay);
       }
-    }
-  }
+      for (var i = 1; i < 100; i++) {
+        addData();
+      }
+
+      myChart.setOption({
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: date
+        },
+        yAxis: {
+          boundaryGap: [0, '50%'],
+          type: 'value'
+        },
+        series: [
+          {
+            name:'成交',
+            type:'line',
+            smooth:true,
+            symbol: 'none',
+            stack: 'a',
+            areaStyle: {
+              normal: {}
+            },
+            data: data
+          }
+        ]
+      });
+
+      setInterval(function() {
+        addData(true);
+        myChart.setOption({
+          xAxis: {
+            data: date
+          },
+          series: [{
+            name: '成交',
+            data: data
+          }]
+        });
+      }, 800);
+    },
+  },
+
+}
 </script>
