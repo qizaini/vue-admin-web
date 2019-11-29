@@ -1649,7 +1649,8 @@
       //1.根据rowKey得到日志信息
       //2.'\n'改成<br/>,'\t'改成&nbsp;&nbsp;&nbsp;&nbsp;,以html页面形式显示在dialog框内
       handleFetchLogs(){
-        fetchLogs(this.logsId).then(response => {
+        let time = '1574064901'
+        fetchLogs({id: this.logsId, time: time}).then(response => {
           console.log(response.data)
           this.dialogVisible = true;
         })

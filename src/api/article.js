@@ -13,7 +13,6 @@ export function fetchList(query) {
   })
 }
 
-//根据{txId}(9999,123456789,1570758003)查询单个或多个激励器信息
 export function fetchTx(id) {
   return request({
     url: 'v1/api-tx/tx/info/batch/' + id,
@@ -23,11 +22,12 @@ export function fetchTx(id) {
 }
 
 //查看日志
-export function fetchLogs(id) {
+export function fetchLogs(query) {
   return request({
-    url: 'v1/api-tx/tx/logs/' + id,
+    url: 'v1/api-tx/tx/logs/' + query.id,
     // url: 'api-tx/tx/logs/' + id,
-    method: 'get'
+    method: 'get',
+    params: { time: query.time }
   })
 }
 
