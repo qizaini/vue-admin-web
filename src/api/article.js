@@ -18,10 +18,20 @@ export function fetchList(query) {
 export function fetchTx(id) {
   return request({
     url: 'v1/api-tx/tx/info/batch/' + id,
-    // url: 'tx/info' + id,
+    // url: 'api-tx/tx/info/batch/' + id,
     method: 'get'
   })
 }
+
+//查看日志
+export function fetchLogs(id) {
+  return request({
+    url: 'v1/api-tx/tx/logs/' + id,
+    // url: 'api-tx/tx/logs/' + id,
+    method: 'get'
+  })
+}
+
 /*export function createArticle(data) {
   return request({
     url: 'v1/api-tx/tx/device',

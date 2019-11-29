@@ -192,7 +192,7 @@
 
         <div slot="footer" style="margin: -70px 0 10px  85%;">
           <!--<el-button @click="outerVisible = false">取消</el-button>-->
-          <el-button type="primary" @click="dialogVisible = true">查看日志</el-button>
+          <el-button type="primary" @click="handleFetchLogs()">查看日志</el-button>
         </div>
 
         <el-form :rules="rules" :model="temp" label-width="120px" :label-position="labelPosition" fullscreen="true">
@@ -1116,13 +1116,12 @@
 
   .el-table .success-row {
     background: #f0f9eb;
-    /*background: linear-gradient(#f0f9eb, #d5ebc6, #c7e7c4);*/
   }
 </style>
 
 <script>
 /* eslint-disable */
-  import { fetchList, reateArticle, updateArticle, restartArticle, stopArticle } from '@/api/article'
+  import { fetchList, reateArticle, updateArticle, restartArticle, stopArticle, fetchLogs } from '@/api/article'
   import waves from '@/directive/waves'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -1176,8 +1175,8 @@
       return {
         labelPosition: 'left',
         tabPosition: 'left',// tabs位置
-        // city: '',
         txId: '',
+        logsId: '',
         activeNames: ['1'],
         activeDetails: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
         dialogVisible: false,
@@ -1678,6 +1677,17 @@
           }, 1.5 * 1000)
         })
       },
+
+      //查看日志
+      //1.根据rowKey得到日志信息
+      //2.'\n'改成<br/>,'\t'改成&nbsp;&nbsp;&nbsp;&nbsp;,以html页面形式显示在dialog框内
+      handleFetchLogs(){
+        fetchLogs(this.logsId).then(response => {
+          console.log(response.data)
+          this.dialogVisible = true;
+        })
+      },
+
       querySearch(queryString, cb) {
         var city = this.city
         var results = queryString ? city.filter(this.createFilter(queryString)) : city
@@ -1765,12 +1775,6 @@
     var ad = this.temp.adPowerRatio
     var sub = this.temp.subFrameNum
     var mo = this.temp.modulation
-    var s1sRow = row.service1SealMode
-    var s1sRow_arr = []
-    var s1mRow = row.service1MapMode
-    var s1mRow_arr = []
-    var s1lRow = row.service1LdpcRate
-    var s1lRow_arr = []
 
     //将滑块字符串转int类型
     this.temp.avgPower = parseInt(avg)   //模数功率比
@@ -1790,31 +1794,6 @@
     // 乘以1000让组件日期显示正常
     var nowTime = this.temp.startTimeStamp
     this.temp.startTimeStamp = nowTime * 1000
-
-    //service1SealMode为1业务流，service1SealMode为2业务包
-    /*if (s1sRow === '2'){
-      s1sRow_arr.push({name:'业务包', value:s1sRow})
-    }else if (s1sRow === '1') {
-      s1sRow_arr.push({name:'业务流', value:s1sRow})
-    }
-
-    if (s1mRow === '0'){
-      s1mRow_arr.push({name:'0', value:s1mRow})
-    }else if (s1mRow === 'QPSK') {
-      s1mRow_arr.push({name:'QPSK', value:s1mRow})
-    }
-
-    if (s1lRow === '0.4'){
-      s1mRow_arr.push({name:'0.4', value:s1lRow})
-    }else if (s1lRow === '0.5') {
-      s1lRow_arr.push({name:'0.5', value:s1lRow})
-    } else if (s1lRow === '0.6') {
-      s1lRow_arr.push({name:'0.6', value:s1lRow})
-    }
-
-    this.service1SealMode = s1sRow_arr
-    this.service1MapMode = s1mRow_arr
-    this.service1LdpcRate = s1lRow_arr*/
 
     this.dialogStatus = 'update'
     this.dialogFormVisible = true
@@ -1868,6 +1847,7 @@
     this.temp = Object.assign({}, row)
     let rowKey = this.temp.rowKey
 
+    this.logsId = rowKey
     var status = row.txState
     if (status === '0') {
       this.temp.txState = "关机"
@@ -2108,7 +2088,6 @@
     }else if (this.temp.service7SealMode === '2') {
       this.temp.service7SealMode = "业务包"
     }
-
 
     this.dialogStatus = 'detail'
     this.outerVisible = true
