@@ -4,7 +4,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 // 所有数据的更新都通过 setOption实现，你只需要定时获取数据，setOption 填入数据，
 // 而不用考虑数据到底产生了那些变化，ECharts 会找到两组数据之间的差异然后通过合适的动画去表现数据的变化。
 import echarts from 'echarts'

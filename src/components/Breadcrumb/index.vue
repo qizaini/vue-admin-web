@@ -12,7 +12,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import pathToRegexp from 'path-to-regexp'
 
 export default {

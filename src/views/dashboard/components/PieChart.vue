@@ -4,9 +4,8 @@
 </template>
 
 <script>
-/* eslint-disable */
 import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
+require('echarts/theme/macarons')
 import resize from './mixins/resize'
 
 import { fetchMap } from '@/api/article'

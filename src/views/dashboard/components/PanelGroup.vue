@@ -72,7 +72,6 @@
   </template>
 
 <script>
-/* eslint-disable */
 import CountTo from 'vue-count-to'
 import PieChart from './PieChart'
 import { fetchMap } from '@/api/article'

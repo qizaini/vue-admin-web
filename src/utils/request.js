@@ -1,4 +1,3 @@
-/* eslint-disable */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
@@ -81,7 +80,7 @@ service.interceptors.response.use(
           })
         })
       }
-    //token过期重新跳到登录的页面
+    //token过期重新跳到登录的页面'/login'
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res

@@ -59,7 +59,6 @@
 </template>
 
 <script>
-/* eslint-disable */
   import { validUsername } from '@/utils/validate'
 // import { setToken, setIdentity } from '@/utils/auth'
 

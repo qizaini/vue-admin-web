@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 // qs请求数据转表单格式
 import qs from 'qs'
-/* eslint-disable */
 
 //url: 'v1/xxx'本地路径，url: 'xxx'nginx服务器路径
 //查询激励器列表

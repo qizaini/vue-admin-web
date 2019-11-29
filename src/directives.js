@@ -1,5 +1,4 @@
 import Vue from 'vue'
-/* eslint-disable */
 
 /*
 

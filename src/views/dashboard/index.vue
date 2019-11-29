@@ -49,7 +49,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { mapGetters } from 'vuex'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'

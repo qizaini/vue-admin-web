@@ -63,7 +63,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { fetchMap, fetchTx } from '@/api/article'
 import axios from 'axios'
 

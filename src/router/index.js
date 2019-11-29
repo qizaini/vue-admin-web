@@ -35,7 +35,6 @@ import Layout from '@/layout'
  * 没有权限要求的基本页面
  * 可以访问所有角色
  */
-/* eslint-disable */
 export const constantRoutes = [
   {
     path: '/login',

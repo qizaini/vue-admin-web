@@ -3,7 +3,6 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Cookies from 'js-cookie'
 import { getIdentity } from '../../utils/auth'
-/* eslint-disable */
 
 const state = {
   token: getToken(),
@@ -41,7 +40,7 @@ const actions = {
       })
     })
   },
- 
+
   // 获取用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
